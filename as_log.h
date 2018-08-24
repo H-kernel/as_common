@@ -21,6 +21,11 @@
 #define _AS_LOG_H_
 
 #include <stdarg.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+
+
 
 #define ASLOG_API
 

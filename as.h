@@ -10,6 +10,8 @@ extern "C"{
 #include "as_thread.h"
 #include "as_time.h"
 #include "as_json.h"
+#include "as_http_digest.h"
+#include "as_base64.h"
 }
 #include "as_ini_config.h"
 #include "as_lock_guard.h"
@@ -18,6 +20,6 @@ extern "C"{
 #include "as_timer.h"
 #include "as_tinyxml2.h"
 #include "as_mem.h"
-#include "as_conn_manage.h"
+#include "as_daemon.h"
 using namespace tinyxml2;
 #endif

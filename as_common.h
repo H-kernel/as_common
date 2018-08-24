@@ -7,8 +7,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <signal.h>
+#include <errno.h>
+#include <memory.h>
 
-#define  AS_DEFAULT_STACK_SIZE (128*1024)
+
 
 enum AS_ERROR_CODE {
     AS_ERROR_CODE_FAIL        = -1,
