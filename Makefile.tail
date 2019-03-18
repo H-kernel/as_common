@@ -4,10 +4,12 @@ NAME = libcommon
 ALL = $(NAME).$(LIB_SUFFIX)
 all:	$(ALL)
 
+COMMON_FLAGS = -DENV_LINUX -D_GNU_SOURCE
+
 .$(C).$(OBJ):
-	$(C_COMPILER) -c $(C_FLAGS) -DENV_LINUX $<
+	$(C_COMPILER) -c $(C_FLAGS) $(COMMON_FLAGS) $<
 .$(CPP).$(OBJ):
-	$(CPLUSPLUS_COMPILER) -c $(CPLUSPLUS_FLAGS) -DENV_LINUX $<
+	$(CPLUSPLUS_COMPILER) -c $(CPLUSPLUS_FLAGS) $(COMMON_FLAGS) $<
 
 COMMON_LIB_OBJS = as_mutex.$(OBJ) as_thread.$(OBJ) as_event.$(OBJ) \
                   as_json.$(OBJ) as_queue.$(OBJ) as_time.$(OBJ) as_conn_manage.$(OBJ) \
@@ -44,7 +46,7 @@ clean:
 install: install1 $(INSTALL2)
 install1: $(NAME).$(LIB_SUFFIX)
 	  install -d $(DESTDIR)$(PREFIX)/include/common $(DESTDIR)$(LIBDIR)
-	  install -m 644 include/*.hh include/*.h $(DESTDIR)$(PREFIX)/include/common
+	  install -m 644 *.h $(DESTDIR)$(PREFIX)/include/common
 	  install -m 644 $(NAME).$(LIB_SUFFIX) $(DESTDIR)$(LIBDIR)
 install_shared_libraries: $(NAME).$(LIB_SUFFIX)
 	  ln -fs $(NAME).$(LIB_SUFFIX) $(DESTDIR)$(LIBDIR)/$(NAME).$(SHORT_LIB_SUFFIX)

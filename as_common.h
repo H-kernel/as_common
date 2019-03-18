@@ -3,13 +3,19 @@
 #include "as_config.h"
 #include "as_thread.h"
 #include "as_mutex.h"
+#include "as_event.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <signal.h>
 #include <errno.h>
 #include <memory.h>
-
+#if AS_APP_OS == AS_OS_WIN32
+#define snprintf _snprintf
+#define strcasecmp stricmp
+#define strncasecmp strnicmp
+#define vsnprintf _vsnprintf
+#endif
 
 
 enum AS_ERROR_CODE {
