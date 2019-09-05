@@ -215,7 +215,7 @@ int32_t as_destroy_event(as_event_t *pstASEvent )
 #elif AS_APP_OS == AS_OS_WIN32
     (void)CloseHandle(pstASEvent->EventHandle);
 #endif
-
+    free(pstASEvent);
     return AS_ERROR_CODE_OK;
 }
 
