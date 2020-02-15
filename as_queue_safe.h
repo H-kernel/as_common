@@ -1,5 +1,11 @@
 #ifndef __AS_MEDIA_KENERL_SAFE_QUEUE_H__
 #define __AS_MEDIA_KENERL_SAFE_QUEUE_H__
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 #include "as_config.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -16,12 +22,19 @@ typedef struct as_safe_queue_s {
     uint32_t     size;
 }as_safe_queue_t;
 
-as_safe_queue_t* as_safe_queue_create();
-void    as_safe_queue_destory(as_safe_queue_t* queue);
-int32_t as_safe_queue_push_back(as_safe_queue_t* queue,void* data);
-int32_t as_safe_queue_pop_back(as_safe_queue_t* queue,void** data);
-int32_t as_safe_queue_push_front(as_safe_queue_t* queue,void* data);
-int32_t as_safe_queue_pop_front(as_safe_queue_t* queue,void** data);
 
+as_safe_queue_t* as_safe_queue_create();
+void     as_safe_queue_destory(as_safe_queue_t* s_queue);
+int32_t  as_safe_queue_push_back(as_safe_queue_t* s_queue,void* data);
+int32_t  as_safe_queue_pop_back(as_safe_queue_t* s_queue,void** data);
+int32_t  as_safe_queue_push_front(as_safe_queue_t* s_queue,void* data);
+int32_t  as_safe_queue_pop_front(as_safe_queue_t* s_queue,void** data);
+uint32_t as_safe_queue_size(as_safe_queue_t* s_queue);
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
 
 #endif /* __AS_MEDIA_KENERL_SAFE_QUEUE_H__ */

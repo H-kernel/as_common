@@ -1,5 +1,11 @@
 #ifndef __AS_MEDIA_KENERL_BUFFER_QUEUE_H__
 #define __AS_MEDIA_KENERL_BUFFER_QUEUE_H__
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 #include "as_config.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -97,7 +103,7 @@ struct as_queue_s {
 
 
 #define as_queue_data(q, type, link)                                          \
-    (type *) ((u_char *) q - offsetof(type, link))
+    (type *) ((char *) q - offsetof(type, link))
 
 
 as_queue_t *as_queue_middle(as_queue_t *queue);
@@ -105,5 +111,10 @@ void as_queue_sort(as_queue_t *queue,
     int32_t (*cmp)(const as_queue_t *, const as_queue_t *));
 
 
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
 
 #endif /* __AS_MEDIA_KENERL_BUFFER_QUEUE_H__ */

@@ -17,7 +17,7 @@ extern "C" {
 
 #if AS_APP_OS == AS_OS_LINUX
 typedef  void* ( * AS_THREAD_FUNC)(void *);
-typedef struct tagMKThread
+typedef struct tagASThread
 {
     pthread_attr_t attr;
     pthread_t pthead;
@@ -25,7 +25,7 @@ typedef struct tagMKThread
 
 #elif AS_APP_OS == AS_OS_WIN32
 typedef  uint32_t (__stdcall * AS_THREAD_FUNC)(void *);
-typedef struct tagMKThread
+typedef struct tagASThread
 {
     uint32_t ptheadID;
     HANDLE pthead;

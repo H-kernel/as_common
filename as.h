@@ -1,7 +1,12 @@
 #ifndef __AS_SYSTEM_H__
 #define __AS_SYSTEM_H__
 
-extern "C"{
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 #include "as_config.h"
 #include "as_basetype.h"
 #include "as_common.h"
@@ -14,7 +19,15 @@ extern "C"{
 #include "as_base64.h"
 #include "as_queue.h"
 #include "as_queue_safe.h"
+
+#ifdef __cplusplus
+#if __cplusplus
 }
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
+#ifdef __cplusplus
+#if __cplusplus
 #include "as_ini_config.h"
 #include "as_lock_guard.h"
 #include "as_log.h"
@@ -25,5 +38,8 @@ extern "C"{
 #include "as_daemon.h"
 #include "as_conn_manage.h"
 using namespace tinyxml2;
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 #endif
 

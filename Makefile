@@ -5,7 +5,7 @@ ifneq ("as","as${prefix}")
 endif
 LIBDIR = $(PREFIX)/lib
 ##### Change the following for your environment:
-COMPILE_OPTS =		$(INCLUDES) -I. -O2 -fPIC -DSOCKLEN_T=socklen_t -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
+COMPILE_OPTS =		$(INCLUDES) -I. -O2  -fPIC -DSOCKLEN_T=socklen_t -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
 C =			c
 C_COMPILER =		cc
 C_FLAGS =		$(COMPILE_OPTS) $(CPPFLAGS) $(CFLAGS)
