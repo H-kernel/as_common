@@ -1,27 +1,26 @@
-INCLUDES = -I./
-PREFIX = /usr/local
-ifneq ("as","as${prefix}")
-        PREFIX =${prefix}
+EXTENDS = /usr/local
+ifneq ("as","as${with-extends}")
+        EXTENDS =${with-extends}
 endif
-LIBDIR = $(PREFIX)/lib
+INSTALL_ROOT = $(EXTENDS)
+ifneq ("as","as${prefix}")
+        INSTALL_ROOT =${prefix}
+endif
 ##### Change the following for your environment:
-COMPILE_OPTS =		$(INCLUDES) -I. -O2  -fPIC -DSOCKLEN_T=socklen_t -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
-C =			c
-C_COMPILER =		cc
-C_FLAGS =		$(COMPILE_OPTS) $(CPPFLAGS) $(CFLAGS)
-CPP =			cpp
+COMPILE_OPTS       =	-I./ -I. -O2  -fPIC -DSOCKLEN_T=socklen_t -D_LARGEFILE_SOURCE=1 -D_FILE_OFFSET_BITS=64
+C                  =	c
+C_COMPILER         =	cc
+C_FLAGS            =	$(COMPILE_OPTS) $(CPPFLAGS) $(CFLAGS)
+CPP                =	cpp
 CPLUSPLUS_COMPILER =	c++
-CPLUSPLUS_FLAGS =	$(COMPILE_OPTS) -Wall -DBSD=1 $(CPPFLAGS) $(CXXFLAGS)
-OBJ =			o
-LINK =			c++ -o
-LINK_OPTS =		-L. $(LDFLAGS)
-CONSOLE_LINK_OPTS =	$(LINK_OPTS)
-LIBRARY_LINK =		ar cr 
-LIBRARY_LINK_OPTS =	
-LIB_SUFFIX =			a
-LIBS_FOR_CONSOLE_APPLICATION =
-LIBS_FOR_GUI_APPLICATION =
-EXE =
+CPLUSPLUS_FLAGS    =	$(COMPILE_OPTS) -Wall -DBSD=1 $(CPPFLAGS) $(CXXFLAGS)
+OBJ                =	o
+LINK               =	c++ -o
+LINK_OPTS          =	-L. $(LDFLAGS)
+CONSOLE_LINK_OPTS  =	$(LINK_OPTS)
+LIBRARY_LINK       =	ar cr 
+LIBRARY_LINK_OPTS  =	
+LIB_SUFFIX         =	a
 ##### End of variables to change
 
 NAME = libcommon
@@ -68,13 +67,18 @@ $(NAME).$(LIB_SUFFIX): $(COMMON_LIB_OBJS) \
 clean:
 	-rm -rf *.$(OBJ) $(ALL) core *.core *~ include/*~
 
-install: install1 $(INSTALL2)
-install1: $(NAME).$(LIB_SUFFIX)
-	  install -d $(DESTDIR)$(PREFIX)/include/common $(DESTDIR)$(LIBDIR)
-	  install -m 644 *.h $(DESTDIR)$(PREFIX)/include/common
-	  install -m 644 $(NAME).$(LIB_SUFFIX) $(DESTDIR)$(LIBDIR)
-install_shared_libraries: $(NAME).$(LIB_SUFFIX)
-	  ln -fs $(NAME).$(LIB_SUFFIX) $(DESTDIR)$(LIBDIR)/$(NAME).$(SHORT_LIB_SUFFIX)
-	  ln -fs $(NAME).$(LIB_SUFFIX) $(DESTDIR)$(LIBDIR)/$(NAME).so
+install: 
+	mkdir -p ${EXTENDS}/include/
+	mkdir -p ${EXTENDS}/include/common
+	mkdir -p ${EXTENDS}/sbin/
+	mkdir -p ${EXTENDS}/lib/
+	cp *.h   ${EXTENDS}/include/common/
+	cp    -d $(NAME).$(LIB_SUFFIX) ${EXTENDS}/lib/
 
+	mkdir -p ${INSTALL_ROOT}/include/
+	mkdir -p ${INSTALL_ROOT}/include/common
+	mkdir -p ${INSTALL_ROOT}/sbin/
+	mkdir -p ${INSTALL_ROOT}/lib/
+	cp *.h   ${INSTALL_ROOT}/include/common/
+	cp    -d $(NAME).$(LIB_SUFFIX) ${INSTALL_ROOT}/lib/
 ##### Any additional, platform-specific rules come here:
