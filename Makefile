@@ -54,7 +54,6 @@ as_daemon.$(CPP):	as_daemon.h as_config.h as_common.h
 as_ini_config.$(CPP):	as_ini_config.h as_config.h as_common.h
 as_lock_guard.$(CPP):	as_lock_guard.h as_config.h as_common.h
 as_log.$(CPP):	as_log.h as_config.h as_common.h
-as_onlyone_process.$(CPP):	as_onlyone_process.h as_config.h as_common.h
 as_ring_cache.$(CPP):	as_ring_cache.h as_config.h as_common.h
 as_timer.$(CPP):	as_timer.h as_config.h as_common.h
 as_tinyxml2.$(CPP):	as_tinyxml2.h as_config.h as_common.h
