@@ -12,6 +12,12 @@
 #include <syslog.h>
 #include <sys/types.h>
 
+
+#include <as_log.h>
+#include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
+
 #ifndef uint32_t
 typedef u_int32_t  uint32_t;
 
@@ -27,7 +33,18 @@ typedef u_int16_t uint16_t;
 #endif
 
 
-#include "as_onlyone_process.h"
+#if AS_APP_OS == AS_OS_LINUX
+#include <sys/types.h>
+#include <sys/ipc.h>
+#include <sys/sem.h>
+//#include <linux/sem.h>
+#endif
+
+#if AS_APP_OS == AS_OS_WIN32
+#include "Winbase.h"
+#include "Windows.h"
+#endif
+
 #include "as_daemon.h"
 
 using namespace std;
@@ -39,6 +56,74 @@ uint32_t g_ulReStartTime   = 0;
 
 
 #define RLIMIT (1024 * 1024)
+
+
+AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
+{
+#if AS_APP_OS == AS_OS_WIN32
+    SECURITY_ATTRIBUTES eventAtrributes;
+    eventAtrributes.nLength = sizeof(SECURITY_ATTRIBUTES);
+    eventAtrributes.bInheritHandle = FALSE;
+    eventAtrributes.lpSecurityDescriptor = NULL;
+
+    HANDLE handle = ::CreateEvent(&eventAtrributes, TRUE, FALSE, strFileName);
+    if(NULL == handle || (ERROR_ALREADY_EXISTS == ::GetLastError()))
+    {
+        AS_LOG(AS_LOG_ERROR, "A instance is running");
+        return AS_FALSE;
+    }
+
+    return AS_TRUE;
+#elif AS_APP_OS == AS_OS_LINUX
+    key_t   key_    = 0;
+    int32_t sem_id_ = -1;
+    const char *fileName = "/dev";
+    if(-1 == (key_ = ftok(fileName, key)))
+    {
+        exit(1);
+    }
+
+    sem_id_ = semget(key_, 0, 0);
+    if (sem_id_ == -1)
+    {
+        return AS_FALSE;
+    }
+
+    //union semun semctl_arg;
+    unsigned short array = NULL;
+    if(semctl(sem_id_, 0, GETVAL, array) > 0)
+    {
+        AS_LOG(AS_LOG_ERROR, "A instance is running, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        return AS_FALSE;
+    }
+
+    sem_id_ = semget(key_, 0, 0);
+    if (sem_id_ == -1)
+    {
+        sem_id_ = semget(key_, 1, IPC_CREAT | IPC_EXCL | SEM_PRMS);
+    }
+
+    struct sembuf buf[2];
+
+    buf[0].sem_num = 0;
+    buf[0].sem_op = 0;
+    buf[0].sem_flg = IPC_NOWAIT;
+    buf[1].sem_num = 0;
+    buf[1].sem_op = 1;
+    buf[1].sem_flg = SEM_UNDO;//进程退出时自动回滚
+
+    return semop(sem_id_, &buf[0], 2) == 0;
+
+    if (0 != semop(sem_id_, &buf[0], 2))
+    {
+        AS_LOG(AS_LOG_ERROR, "Fail to create semaphore to avoid re-run, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        return AS_FALSE;
+    }
+#endif
+
+    return AS_TRUE;
+}
+
 
 int32_t setResourceLimit()
 {
@@ -287,7 +372,7 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
         }
     }
 
-    if(!as_onlyone_process::onlyone( service_conf_path, service_id))  //保证只有一个实例运行
+    if(AS_TRUE != onlyone_process( service_conf_path, service_id))  //保证只有一个实例运行
     {
         printf( "\nA instance is running[%s].\n\n", service_conf_path );
         exit(0);
@@ -435,7 +520,7 @@ void as_run_service(void (*pWorkFunc)(),
     }
     else
     {
-         if(!as_onlyone_process::onlyone( service_conf_path, service_id))  //保证只有一个实例运行
+         if(AS_TRUE !=  onlyone_process( service_conf_path, service_id))  //保证只有一个实例运行
          {
              printf( "\nA instance is running[%s].\n\n", service_conf_path );
              exit(0);
