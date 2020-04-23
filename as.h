@@ -19,6 +19,7 @@ extern "C" {
 #include "as_base64.h"
 #include "as_queue.h"
 #include "as_queue_safe.h"
+#include "as_daemon.h"
 
 #ifdef __cplusplus
 #if __cplusplus
@@ -35,7 +36,6 @@ extern "C" {
 #include "as_timer.h"
 #include "as_tinyxml2.h"
 #include "as_mem.h"
-#include "as_daemon.h"
 #include "as_conn_manage.h"
 using namespace tinyxml2;
 #endif /* __cpluscplus */
