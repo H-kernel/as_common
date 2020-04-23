@@ -114,7 +114,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
 
     if (0 != semop(sem_id_, &buf[0], 2))
     {
-        syslog(LOG_USER|LOG_WARNING,"Fail to create semaphore to avoid re-run, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        syslog(LOG_USER|LOG_WARNING,"Fail to create semaphore to avoid re-run, semaphore ID[%d].", sem_id_);
         return AS_FALSE;
     }
 #endif
