@@ -37,7 +37,7 @@ COMMON_FLAGS = -DENV_LINUX -D_GNU_SOURCE
 COMMON_LIB_OBJS = as_mutex.$(OBJ) as_thread.$(OBJ) as_event.$(OBJ) as_json.$(OBJ) \
                   as_queue.$(OBJ) as_queue_safe.$(OBJ) as_time.$(OBJ) as_conn_manage.$(OBJ) \
                   as_daemon.$(OBJ) as_ini_config.$(OBJ) as_lock_guard.$(OBJ) \
-                  as_log.$(OBJ) as_onlyone_process.$(OBJ) as_ring_cache.$(OBJ) \
+                  as_log.$(OBJ) as_ring_cache.$(OBJ) \
                   as_timer.$(OBJ) as_tinyxml2.$(OBJ) as_http_digest.$(OBJ) as_base64.$(OBJ)
 
 as_mutex.$(C):	as_mutex.h as_config.h as_common.h
