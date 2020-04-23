@@ -12,8 +12,6 @@
 #include <syslog.h>
 #include <sys/types.h>
 
-
-#include <as_log.h>
 #include "as_config.h"
 #include "as_basetype.h"
 #include "as_common.h"
@@ -69,7 +67,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     HANDLE handle = ::CreateEvent(&eventAtrributes, TRUE, FALSE, strFileName);
     if(NULL == handle || (ERROR_ALREADY_EXISTS == ::GetLastError()))
     {
-        AS_LOG(AS_LOG_ERROR, "A instance is running");
+        printf("A instance is running");
         return AS_FALSE;
     }
 
@@ -93,7 +91,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     unsigned short array = NULL;
     if(semctl(sem_id_, 0, GETVAL, array) > 0)
     {
-        AS_LOG(AS_LOG_ERROR, "A instance is running, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        syslog(LOG_USER|LOG_WARNING,"A instance is running, semaphore ID[%d].", onlyoneProcess.sem_id_);
         return AS_FALSE;
     }
 
@@ -116,7 +114,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
 
     if (0 != semop(sem_id_, &buf[0], 2))
     {
-        AS_LOG(AS_LOG_ERROR, "Fail to create semaphore to avoid re-run, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        syslog(LOG_USER|LOG_WARNING,"Fail to create semaphore to avoid re-run, semaphore ID[%d].", onlyoneProcess.sem_id_);
         return AS_FALSE;
     }
 #endif
