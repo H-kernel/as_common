@@ -45,8 +45,6 @@ typedef u_int16_t uint16_t;
 
 #include "as_daemon.h"
 
-using namespace std;
-
 int32_t g_iCfgDaemonlize = 1;
 int32_t g_iReStartTimes  = 0;
 uint32_t g_ulReStartTime   = 0;
@@ -54,6 +52,8 @@ uint32_t g_ulReStartTime   = 0;
 
 
 #define RLIMIT (1024 * 1024)
+
+#define SEM_PRMS  0644 //信号量操作权限，0644即主用户(属主)可读写、组成员及其它成员可读不可写
 
 
 AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
@@ -91,7 +91,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     unsigned short array = NULL;
     if(semctl(sem_id_, 0, GETVAL, array) > 0)
     {
-        syslog(LOG_USER|LOG_WARNING,"A instance is running, semaphore ID[%d].", onlyoneProcess.sem_id_);
+        syslog(LOG_USER|LOG_WARNING,"A instance is running, semaphore ID[%d].", sem_id_);
         return AS_FALSE;
     }
 
