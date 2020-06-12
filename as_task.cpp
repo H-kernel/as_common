@@ -1,5 +1,4 @@
 #include "as_task.h"
-#include "as_log.h"
 
 as_task::as_task()
 {
