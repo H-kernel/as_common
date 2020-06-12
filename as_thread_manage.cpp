@@ -322,7 +322,7 @@ void as_task_manage::close()
 {
     m_nThreadFlag = false;
     as_sleep(1000);
-    AS_LOG(AS_LOG_INFO, "[deamon thread]close deamon thread, flags[%d]", flags);
+    AS_LOG(AS_LOG_INFO, "[deamon thread]close deamon thread");
     return ;
 }
 
