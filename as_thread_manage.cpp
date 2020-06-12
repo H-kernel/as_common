@@ -1,6 +1,13 @@
 #include "as_thread_manage.h"
 #include "as_lock_guard.h"
 #include "as_log.h"
+#include <time.h>
+#if AS_APP_OS == AS_OS_LINUX
+#include <sys/time.h>
+#include <pthread.h>
+#include <errno.h>
+#endif
+
 
 as_task_manage::as_task_manage()
 {
