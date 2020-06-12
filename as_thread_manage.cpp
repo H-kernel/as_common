@@ -1,4 +1,4 @@
-#include "as_thread_mamage.h"
+#include "as_thread_manage.h"
 #include "as_lock_guard.h"
 #include "as_log.h"
 
