@@ -2,7 +2,11 @@
 
 #include "as.h"
 #include "as_synchronized.h"
-
+#if AS_APP_OS == AS_OS_LINUX
+#include <sys/time.h>
+#include <pthread.h>
+#include <errno.h>
+#endif
 
 #ifdef WIN32
 long as_synchronized::start()

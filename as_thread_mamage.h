@@ -62,16 +62,6 @@ private:
     uint32_t            m_ulProcessNum;
 };
 
-class as_task
-{
-public:
-    as_task();
-    virtual ~as_task();
-    virtual int32_t activate(uint32_t ulThreadCount,uint32_t ulStackSize = AS_THREAD_STACK_DEFAULT);
-    virtual void    svc() = 0;
-protected:
-};
-
 class as_task_manage
 {
 public:
