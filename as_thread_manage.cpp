@@ -2,6 +2,7 @@
 #include "as_lock_guard.h"
 #include "as_log.h"
 #include <time.h>
+#include <process.h>
 #if AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #include <pthread.h>
@@ -76,7 +77,7 @@ int32_t as_task_manage::Init(uint32_t ulMaxCheckInterval,
         m_FreeIndexList.push_back(i);
     }
 
-    int32_t nRet = open(NULL);
+    int32_t nRet = open();
     if (0 != nRet)
     {
         AS_LOG(AS_LOG_ERROR, "[deamon thread]Init SVS_Daemon_Thread fail.");
