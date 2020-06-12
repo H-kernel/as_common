@@ -37,6 +37,9 @@ extern "C" {
 #include "as_tinyxml2.h"
 #include "as_mem.h"
 #include "as_conn_manage.h"
+#include "as_synchronized.h"
+#include "as_task.h"
+#include "as_thread_mamage.h"
 using namespace tinyxml2;
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
