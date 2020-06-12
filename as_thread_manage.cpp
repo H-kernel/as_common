@@ -1,6 +1,7 @@
 #include "as_thread_manage.h"
 #include "as_lock_guard.h"
 #include "as_log.h"
+#include "as_time.h"
 #include <time.h>
 #include <unistd.h>
 #if AS_APP_OS == AS_OS_LINUX
