@@ -2,8 +2,9 @@
 #include "as_lock_guard.h"
 #include "as_log.h"
 #include <time.h>
-#include <process.h>
+#include <unistd.h>
 #if AS_APP_OS == AS_OS_LINUX
+#include <sys/types.h>
 #include <sys/time.h>
 #include <pthread.h>
 #include <errno.h>
