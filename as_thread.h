@@ -34,6 +34,7 @@ typedef struct tagASThread
 
 int32_t  as_create_thread( AS_THREAD_FUNC pfnThread, void *args,
           as_thread_t **pstMKThread,uint32_t ulStackSize);
+void     as_destory_thread(as_thread_t *pstMKThread);
 
 int32_t  as_join_thread(as_thread_t *pstMKThread);
 void     as_thread_exit(void *retval);

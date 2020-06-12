@@ -53,7 +53,13 @@ int32_t  as_create_thread( AS_THREAD_FUNC pfnThread, void *args, as_thread_t **p
 
     return AS_ERROR_CODE_OK;
 }
-
+void  as_destory_thread(as_thread_t *pstMKThread)
+{
+    if(NULL != pstMKThread) {
+        free(pstMKThread);
+    }
+    return;
+}
 int32_t as_join_thread(as_thread_t *pstMKThread)
 {
 #if AS_APP_OS == AS_OS_LINUX

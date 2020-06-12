@@ -9,7 +9,7 @@ extern "C"{
 #include  "as_thread.h"
 }
 
-#define AS_THREAD_STACK_DEFAULT       (2*1024*1024) 
+#define AS_THREAD_STACK_DEFAULT       (128*1024) 
 
 #include <list>
 
@@ -46,7 +46,7 @@ public:
 
     virtual ~as_thread_reporter();
 
-    ACE_Time_Value getLastReportTime()const;
+    time_t getLastReportTime()const;
 
     uint32_t getProcessNum()const;
 
@@ -92,12 +92,18 @@ public:
 
     int32_t UnregistThread(int32_t nThreadIndex);
 
-    int32_t close(u_long);
+    void    close();
 
-    int32_t  svc(void);
+    void    svc(void);
 
-    int32_t open(void *);
-public:
+    int32_t open();
+protected:
+#if AS_APP_OS == AS_OS_LINUX
+    static  void* deamon_monitor_thread(void *arg);
+#elif AS_APP_OS == AS_OS_WIN32
+    static  uint32_t __stdcall deamon_monitor_thread(void *arg);
+#endif
+private:
     typedef struct tagThreadInfo
     {
         int32_t             m_nThreadIndex;
