@@ -8,6 +8,8 @@ extern "C"{
 #include  "as_mutex.h"
 #include  "as_thread.h"
 }
+#include <list>
+#include <map>
 
 class as_data
 {
@@ -15,48 +17,110 @@ public:
    friend class as_cache;
 public:
     virtual ~as_data();
-    void*    base();
-    void*    rd_ptr();
-    void*    wr_ptr();
+    char*    base();
+    char*    rd_ptr();
+    char*    wr_ptr();
     void     rd_ptr(int32_t len);
     void     wr_ptr(int32_t len);
     uint32_t size();
     uint32_t length();
-    int32_t  copy(void* data,uint32_t len);
+    int32_t  copy(char* data,uint32_t len);
 protected:
     as_data(uint32_t size);
     as_data();
+    void inc_ref();
+    void dec_ref();
+    uint32_t get_ref();
 private:
-    void*    m_pData;
-    void*    m_rd_ptr;
-    void*    m_wr_ptr;
+    char*    m_pData;
+    char*    m_rd_ptr;
+    char*    m_wr_ptr;
     uint32_t m_ulSize;
     uint32_t m_ulRefCount;
 };
-
+class as_thread_allocator;
 class as_cache
 {
 public:
     as_cache(uint32_t size);
     virtual ~as_cache();
-    void*    base();
-    void*    rd_ptr();
-    void*    wr_ptr();
+    char*    base();
+    char*    rd_ptr();
+    char*    wr_ptr();
     void     rd_ptr(int32_t len);
     void     wr_ptr(int32_t len);
     uint32_t size();
     uint32_t length();
-    int32_t  copy(void* data,uint32_t len);
+    int32_t  copy(char* data,uint32_t len);
     int32_t  copy(as_cache* pCache);
+    as_cache* duplicate();
+    void     release();
 protected:
     as_cache();
+    as_cache(as_data* pData,as_thread_allocator* pAllocator);
+    void set_allocator(as_thread_allocator* pAllocator);
+protected:
+    as_data*             m_pData;
+    as_thread_allocator* m_pAllocator;
+};
+
+enum AS_CACHE_SIZE_DEFINE
+{
+    AS_CACHE_SIZE_DEFINE_128BYTE     = 0,
+    AS_CACHE_SIZE_DEFINE_256BYTE     = 1,
+    AS_CACHE_SIZE_DEFINE_512BYTE     = 2,
+    AS_CACHE_SIZE_DEFINE_1KBYTE      = 3,
+    AS_CACHE_SIZE_DEFINE_2KBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_4KBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_16KBYTE     = 4,
+    AS_CACHE_SIZE_DEFINE_32KBYTE     = 4,
+    AS_CACHE_SIZE_DEFINE_64KBYTE     = 4,
+    AS_CACHE_SIZE_DEFINE_128KBYTE    = 4,
+    AS_CACHE_SIZE_DEFINE_256KBYTE    = 4,
+    AS_CACHE_SIZE_DEFINE_512KBYTE    = 4,
+    AS_CACHE_SIZE_DEFINE_1MBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_2MBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_4MBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_MAX
+};
+
+typedef std::list<as_cache*>     AS_CACHE_LIST;
+typedef AS_CACHE_LIST::iterator  AS_CACHE_LIST_ITER;
+
+class as_thread_allocator
+{
+public:
+    friend class as_buffer_cache;
+    friend class as_buffer_allocator;
+    friend class as_cache;
+public:
+    virtual ~as_thread_allocator();
+protected:
+    as_thread_allocator(uint32_t ulThreadId);
+    uint32_t  threadId();
+    as_cache* allocate(uint32_t ulSize);
+    void      free(as_cache* cache);
 private:
-    as_data*    m_pData;
+    uint32_t               m_ulThreadId;
+    uint32_t               m_ulRefCount;
+    AS_CACHE_LIST          m_Cachelist[AS_CACHE_SIZE_DEFINE_MAX];
+};
+
+class as_buffer_allocator
+{
+public:
+    as_buffer_allocator();
+    virtual ~as_buffer_allocator();
+    as_cache* allocate(uint32_t ulSize);
+private:
+    as_thread_allocator* m_pThreadAllocator;
 };
 
 
 class as_buffer_cache
 {
+public:
+    friend class as_buffer_allocator;
 public:
     static as_buffer_cache& instance()
     {
@@ -64,22 +128,18 @@ public:
         return objBufferCache;
     };
     virtual ~as_buffer_cache();
-    /*
-     * uint32_t config [][] = {
-     *     {128  byte, count},
-     *     {512  byte, count},
-     *     {1024 byte, count},
-     *     {2048 byte, count},
-     *     ...........
-     * }
-     * 
-     */
-    int32_t   init(uint32_t array,uint32_t** config);
+    int32_t   init(uint32_t config[],uint32_t size = AS_CACHE_SIZE_DEFINE_MAX);
     void      release();
-    as_cache* allocate();
-    void      free(as_cache* cache);
 protected:
     as_buffer_cache();
+    as_cache* allocate(uint32_t ulSize);
+    void      free(as_cache* cache);
+    as_thread_allocator* find_thread_allocator();
+    void release_thread_allocator(as_thread_allocator* pAllocator);
+private:
+    AS_CACHE_LIST          m_CachePool[AS_CACHE_SIZE_DEFINE_MAX];
+    typedef std::map<uint32_t,as_thread_allocator*>     THREAD_ALLOCATOR_MAP;
+    THREAD_ALLOCATOR_MAP   m_ThreadAllocMap;
 };
 
 
