@@ -9,6 +9,31 @@ extern "C"{
 #include  "as_thread.h"
 }
 
+class as_data
+{
+public:
+   friend class as_cache;
+public:
+    virtual ~as_data();
+    void*    base();
+    void*    rd_ptr();
+    void*    wr_ptr();
+    void     rd_ptr(int32_t len);
+    void     wr_ptr(int32_t len);
+    uint32_t size();
+    uint32_t length();
+    int32_t  copy(void* data,uint32_t len);
+protected:
+    as_data(uint32_t size);
+    as_data();
+private:
+    void*    m_pData;
+    void*    m_rd_ptr;
+    void*    m_wr_ptr;
+    uint32_t m_ulSize;
+    uint32_t m_ulRefCount;
+};
+
 class as_cache
 {
 public:
@@ -26,11 +51,7 @@ public:
 protected:
     as_cache();
 private:
-    void*    m_pData;
-    void*    m_rd_ptr;
-    void*    m_wr_ptr;
-    uint32_t m_ulSize;
-    uint32_t m_ulRefCount;
+    as_data*    m_pData;
 };
 
 
