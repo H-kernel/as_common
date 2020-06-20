@@ -217,19 +217,24 @@ as_cache* as_cache::duplicate()
     }
     return pCache;
 }
+uint32_t as_cache::get_ref()
+{
+    if(NULL == m_pData) {
+        0;
+    }
+    return m_pData->get_ref();
+}
 void as_cache::release()
 {
     if(NULL == m_pData) {
         return;
     }
 
-    m_pData->dec_ref();
     if(NULL !=m_pAllocator) {
-        /* 分配器分配的则由分配器释放 */
         m_pAllocator->free(this);
     }
     else {
-        /* 非分配器分配的直接采用逻辑释放 */
+        m_pData->dec_ref();
         if(0 ==  m_pData->get_ref()) {
             try {
                 delete m_pData;
@@ -256,10 +261,17 @@ as_thread_allocator::as_thread_allocator(uint32_t ulThreadId)
 }
 as_thread_allocator::~as_thread_allocator()
 {
+    as_cache* pCache = NULL;
     for(uint32_t i = 0 ; i < AS_CACHE_SIZE_DEFINE_MAX;i++) {
         while (0 < m_Cachelist[i].size())
         {
-            /* code */
+            pCache = m_Cachelist[i].front();
+            m_Cachelist[i].pop_front();
+            if(NULL != pCache) {
+                //pCache->release();
+                //TODO: free back to pool
+            }
+            pCache = NULL;
         }
         
     }
@@ -271,10 +283,56 @@ uint32_t  as_thread_allocator::threadId()
 
 as_cache* as_thread_allocator::allocate(uint32_t ulSize)
 {
+    as_cache* pCache = NULL;
+    uint32_t ulMin = 0;
+    uint32_t ulMax = 0;
+    uint32_t i = 0;
+    uint32_t index = AS_CACHE_SIZE_DEFINE_MAX;
+    for(i = 0;i  < AS_CACHE_SIZE_DEFINE_MAX;i++) {
+        ulMax = as_cache_size_array[i];
+        if((ulMin < ulSize)&&(ulMax >= ulSize)) {
+            index = i;
+            break;
+        }
+        ulMin = ulMax;
+    }
+    if(AS_CACHE_SIZE_DEFINE_MAX == index) {
+        return NULL;
+    }
+
+    if(0 == m_Cachelist[index].size()) {
+        return NULL;
+    }
+
+    pCache = m_Cachelist[index].front();
+    m_Cachelist[index].pop_front();
+    pCache->set_allocator(this);
+    return pCache;
 }
 void      as_thread_allocator::free(as_cache* cache)
 {
-
+    if(1 != cache->get_ref()) {
+        cache->set_allocator(NULL);
+        cache->release();
+        return;
+    }
+    uint32_t ulSize = cache->size();
+    uint32_t ulMin = 0;
+    uint32_t ulMax = 0;
+    uint32_t i = 0;
+    uint32_t index = AS_CACHE_SIZE_DEFINE_MAX;
+    for(i = 0;i  < AS_CACHE_SIZE_DEFINE_MAX;i++) {
+        ulMax = as_cache_size_array[i];
+        if((ulMin < ulSize)&&(ulMax >= ulSize)) {
+            index = i;
+            break;
+        }
+        ulMin = ulMax;
+    }
+    if(AS_CACHE_SIZE_DEFINE_MAX == index) {
+        return;
+    }
+    m_Cachelist[index].push_back(cache);
 }
 
 as_buffer_allocator::as_buffer_allocator()
@@ -319,11 +377,11 @@ void      as_buffer_cache::release()
     return;
 }
 
-as_cache* as_buffer_cache::allocate(uint32_t ulSize)
+as_cache* as_buffer_cache::allocate(uint32_t ulIndex)
 {
     return NULL;
 }
-void      as_buffer_cache::free(as_cache* cache)
+void      as_buffer_cache::free(uint32_t ulIndex,as_cache* cache)
 {
     return;
 }

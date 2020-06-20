@@ -42,6 +42,8 @@ class as_thread_allocator;
 class as_cache
 {
 public:
+    friend  class as_thread_allocator;    
+public:
     as_cache(uint32_t size);
     virtual ~as_cache();
     char*    base();
@@ -59,6 +61,7 @@ protected:
     as_cache();
     as_cache(as_data* pData,as_thread_allocator* pAllocator);
     void set_allocator(as_thread_allocator* pAllocator);
+    uint32_t get_ref();
 protected:
     as_data*             m_pData;
     as_thread_allocator* m_pAllocator;
@@ -71,19 +74,38 @@ enum AS_CACHE_SIZE_DEFINE
     AS_CACHE_SIZE_DEFINE_512BYTE     = 2,
     AS_CACHE_SIZE_DEFINE_1KBYTE      = 3,
     AS_CACHE_SIZE_DEFINE_2KBYTE      = 4,
-    AS_CACHE_SIZE_DEFINE_4KBYTE      = 4,
-    AS_CACHE_SIZE_DEFINE_16KBYTE     = 4,
-    AS_CACHE_SIZE_DEFINE_32KBYTE     = 4,
-    AS_CACHE_SIZE_DEFINE_64KBYTE     = 4,
-    AS_CACHE_SIZE_DEFINE_128KBYTE    = 4,
-    AS_CACHE_SIZE_DEFINE_256KBYTE    = 4,
-    AS_CACHE_SIZE_DEFINE_512KBYTE    = 4,
-    AS_CACHE_SIZE_DEFINE_1MBYTE      = 4,
-    AS_CACHE_SIZE_DEFINE_2MBYTE      = 4,
-    AS_CACHE_SIZE_DEFINE_4MBYTE      = 4,
+    AS_CACHE_SIZE_DEFINE_4KBYTE      = 5,
+    AS_CACHE_SIZE_DEFINE_8KBYTE      = 6,
+    AS_CACHE_SIZE_DEFINE_16KBYTE     = 7,
+    AS_CACHE_SIZE_DEFINE_32KBYTE     = 8,
+    AS_CACHE_SIZE_DEFINE_64KBYTE     = 9,
+    AS_CACHE_SIZE_DEFINE_128KBYTE    = 10,
+    AS_CACHE_SIZE_DEFINE_256KBYTE    = 11,
+    AS_CACHE_SIZE_DEFINE_512KBYTE    = 12,
+    AS_CACHE_SIZE_DEFINE_1MBYTE      = 13,
+    AS_CACHE_SIZE_DEFINE_2MBYTE      = 14,
+    AS_CACHE_SIZE_DEFINE_4MBYTE      = 15,
     AS_CACHE_SIZE_DEFINE_MAX
 };
 
+static uint32_t as_cache_size_array [] = {
+       128,
+       256,
+       512,
+      1024,
+      2048,
+      4096,
+      8192,
+     16384,
+     32768,
+     65536,
+    131072,
+    262144,
+    524288,
+   1048576,
+   2097152,
+   4194304
+};
 typedef std::list<as_cache*>     AS_CACHE_LIST;
 typedef AS_CACHE_LIST::iterator  AS_CACHE_LIST_ITER;
 
@@ -132,8 +154,8 @@ public:
     void      release();
 protected:
     as_buffer_cache();
-    as_cache* allocate(uint32_t ulSize);
-    void      free(as_cache* cache);
+    as_cache* allocate(uint32_t ulIndex);
+    void      free(uint32_t ulIndex,as_cache* cache);
     as_thread_allocator* find_thread_allocator();
     void release_thread_allocator(as_thread_allocator* pAllocator);
 private:
