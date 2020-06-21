@@ -11,6 +11,9 @@ extern "C"{
 #include <list>
 #include <map>
 
+#define AS_CACHE_MIN_ALLOC_COUNT   100
+#define AS_CACHE_MAX_ALLOC_COUNT   150
+
 class as_data
 {
 public:
@@ -123,6 +126,9 @@ protected:
     as_cache* allocate(uint32_t ulSize);
     void      free(as_cache* cache);
 private:
+    void      alloc_from_pool(uint32_t index);
+    void      free_to_pool(uint32_t index);
+private:
     uint32_t               m_ulThreadId;
     uint32_t               m_ulRefCount;
     AS_CACHE_LIST          m_Cachelist[AS_CACHE_SIZE_DEFINE_MAX];
@@ -142,6 +148,7 @@ private:
 class as_buffer_cache
 {
 public:
+    friend class as_thread_allocator;
     friend class as_buffer_allocator;
 public:
     static as_buffer_cache& instance()

@@ -270,6 +270,7 @@ as_thread_allocator::~as_thread_allocator()
             if(NULL != pCache) {
                 //pCache->release();
                 //TODO: free back to pool
+                as_buffer_cache::instance().free(i,pCache);
             }
             pCache = NULL;
         }
@@ -333,6 +334,34 @@ void      as_thread_allocator::free(as_cache* cache)
         return;
     }
     m_Cachelist[index].push_back(cache);
+    if(AS_CACHE_MAX_ALLOC_COUNT <= m_Cachelist[index].size()) {
+        free_to_pool(index);
+    }
+}
+void  as_thread_allocator::alloc_from_pool(uint32_t index)
+{
+    as_cache* pCache = NULL;
+    for(uint32_t i = 0 ;i < AS_CACHE_MIN_ALLOC_COUNT;i++) {
+        pCache = as_buffer_cache::instance().allocate(index);
+        if(NULL == pCache) {
+            break;
+        }
+        m_Cachelist[index].push_back(pCache);
+        pCache->set_allocator(this);
+    }
+}
+
+void  as_thread_allocator::free_to_pool(uint32_t index)
+{
+    as_cache* pCache = NULL;
+    for(uint32_t i = 0 ;i < AS_CACHE_MIN_ALLOC_COUNT;i++) {
+        if( 0 == m_Cachelist[index].size()) {
+            break;
+        }
+        pCache = m_Cachelist[index].front();
+        m_Cachelist[index].pop_front();
+        as_buffer_cache::instance().free(index,pCache);
+    }
 }
 
 as_buffer_allocator::as_buffer_allocator()
@@ -370,20 +399,61 @@ as_buffer_cache::~as_buffer_cache()
 }
 int32_t   as_buffer_cache::init(uint32_t config[],uint32_t size)
 {
+    as_cache* pCache = NULL;
+    if(size > AS_CACHE_SIZE_DEFINE_MAX) {
+        return AS_ERROR_CODE_PARAM;
+    }
+    for(uint32_t i = 0;i < size;i++) {
+        uint32_t size = as_cache_size_array[i];
+        for(uint32_t j = 0; j< config[i];j++) {
+            try {
+                pCache = new as_cache(size);
+            }
+            catch(...) {
+                return AS_ERROR_CODE_MEM;
+            }
+            m_CachePool[i].push_back(pCache);
+        }
+    }
     return AS_ERROR_CODE_OK;
 }
 void      as_buffer_cache::release()
 {
+    as_cache* pCache = NULL;
+    for(uint32_t i = 0 ; i < AS_CACHE_SIZE_DEFINE_MAX;i++) {
+        while (0 < m_CachePool[i].size())
+        {
+            pCache = m_CachePool[i].front();
+            m_CachePool[i].pop_front();
+            pCache->release();
+            pCache = NULL;
+        }
+        
+    }
     return;
 }
 
 as_cache* as_buffer_cache::allocate(uint32_t ulIndex)
 {
-    return NULL;
+    as_cache* pCache = NULL;
+    if(ulIndex >= AS_CACHE_SIZE_DEFINE_MAX) {
+        return NULL;
+    }
+    if(0 == m_CachePool[ulIndex].size()) {
+        return NULL;
+    }
+    pCache = m_CachePool[ulIndex].front();
+    m_CachePool[ulIndex].pop_front();
+
+    return pCache;
 }
 void      as_buffer_cache::free(uint32_t ulIndex,as_cache* cache)
 {
-    return;
+    if(ulIndex >= AS_CACHE_SIZE_DEFINE_MAX) {
+        return;
+    }
+    m_CachePool[ulIndex].push_back(cache);
+    return ;
 }
 as_thread_allocator* as_buffer_cache::find_thread_allocator()
 {
