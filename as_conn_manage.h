@@ -1,18 +1,18 @@
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2001-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2001-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : as_conn_manage.h
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            : hexin
-  Éú³ÉÈÕÆÚ        : 2007-4-02
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        :
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          : 2007-4-02
-    ×÷Õß          : hexin
-    ÐÞ¸ÄÄÚÈÝ      : Éú³É
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : as_conn_manage.h
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            : hexin
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2007-4-02
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          : 2007-4-02
+    ï¿½ï¿½ï¿½ï¿½          : hexin
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      : ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 
 
@@ -51,17 +51,17 @@
 #define DEFAULT_TCP_SENDRECV_SIZE (1024 * 1024)
 #define DEFAULT_UDP_SENDRECV_SIZE (2 * 1024)
 
-#define SendRecvError       -1//·¢ËÍ»ò½ÓÊÕ´íÎó
-#define SendRecvErrorTIMEO  -2//·¢ËÍ»ò½ÓÊÕ³¬Ê±
-#define SendRecvErrorEBADF  -3//socket¾ä±ú´íÎó
-#define SendRecvErrorEOF    -4//tcp¶ÏÁ¬
+#define SendRecvError       -1//ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½Õ´ï¿½ï¿½ï¿½
+#define SendRecvErrorTIMEO  -2//ï¿½ï¿½ï¿½Í»ï¿½ï¿½ï¿½Õ³ï¿½Ê±
+#define SendRecvErrorEBADF  -3//socketï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define SendRecvErrorEOF    -4//tcpï¿½ï¿½ï¿½ï¿½
 
 #define MAX_LISTEN_QUEUE_SIZE 2000
 #define EPOLL_MAX_EVENT (MAX_LISTEN_QUEUE_SIZE + 1000)
 #define MAX_EPOLL_FD_SIZE 3000
-#define LINGER_WAIT_SECONDS 1 //LINGERµÈ´ýÊ±¼ä(seconds)
+#define LINGER_WAIT_SECONDS 1 //LINGERï¿½È´ï¿½Ê±ï¿½ï¿½(seconds)
 
-//¶¨ÒåÁ¬½Ó¹ÜÀíÆ÷µÃ´íÎóÂë
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã´ï¿½ï¿½ï¿½ï¿½ï¿½
 #if AS_APP_OS == AS_OS_LINUX
 #define CONN_ERR_TIMEO      ETIMEDOUT
 #define CONN_ERR_EBADF      EBADF
@@ -218,7 +218,7 @@ class as_network_handle : public as_handle
 
   public:
     virtual long initHandle(void);
-    long getSockFD(void) const    /*lint -e1714*///½Ó¿Úº¯Êý£¬±¾Àà²»µ÷ÓÃ
+    long getSockFD(void) const    /*lint -e1714*///ï¿½Ó¿Úºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à²»ï¿½ï¿½ï¿½ï¿½
     {
         return m_lSockFD;
     };
@@ -321,12 +321,12 @@ class  as_handle_manager
     as_mutex_t *m_pMutexListOfHandle;
 
 #if AS_APP_OS == AS_OS_LINUX
-    long m_lEpfd; //ÓÃÓÚepollµÄ¾ä±ú
+    long m_lEpfd; //ï¿½ï¿½ï¿½ï¿½epollï¿½Ä¾ï¿½ï¿½
     struct epoll_event m_epEvents[EPOLL_MAX_EVENT];
 #elif AS_APP_OS == AS_OS_WIN32
     fd_set m_readSet;
     fd_set m_writeSet;
-    timeval m_stSelectPeriod;            //selectÖÜÆÚ
+    timeval m_stSelectPeriod;            //selectï¿½ï¿½ï¿½ï¿½
 #endif
 
     ULONG m_ulSelectPeriod;
@@ -347,7 +347,7 @@ class as_tcp_conn_mgr : public as_handle_manager
 
   protected:
     virtual void checkSelectResult(const EpollEventType enEpEvent,
-                            as_handle *pHandle);  /*lint !e1768*///ÐèÒª¶ÔÍâÆÁ±Î¸Ã½Ó¿Ú
+                            as_handle *pHandle);  /*lint !e1768*///ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¸Ã½Ó¿ï¿½
 };
 
 class as_udp_sock_mgr : public as_handle_manager
@@ -360,7 +360,7 @@ class as_udp_sock_mgr : public as_handle_manager
 
   protected:
     virtual void checkSelectResult(const EpollEventType enEpEvent,
-        as_handle *pHandle);  /*lint !e1768*///ÐèÒª¶ÔÍâÆÁ±Î¸Ã½Ó¿Ú
+        as_handle *pHandle);  /*lint !e1768*///ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¸Ã½Ó¿ï¿½
 };
 
 class as_tcp_server_mgr : public as_handle_manager
@@ -380,7 +380,7 @@ class as_tcp_server_mgr : public as_handle_manager
 
   protected:
     virtual void checkSelectResult(const EpollEventType enEpEvent,
-        as_handle *pHandle);  /*lint !e1768*///ÐèÒª¶ÔÍâÆÁ±Î¸Ã½Ó¿Ú
+        as_handle *pHandle);  /*lint !e1768*///ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î¸Ã½Ó¿ï¿½
 
   protected:
     as_tcp_conn_mgr *m_pTcpConnMgr;
@@ -388,14 +388,14 @@ class as_tcp_server_mgr : public as_handle_manager
 
 #define DEFAULT_SELECT_PERIOD 20
 
-// 4ÖÖÈÕÖ¾²Ù×÷
+// 4ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 #define    CONN_OPERATOR_LOG    16
 #define    CONN_RUN_LOG         17
 #define    CONN_SECURITY_LOG    20
 #define    CONN_USER_LOG        19
 
 
-// 4ÖÖÈÕÖ¾¼¶±ð
+// 4ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 enum CONN_LOG_LEVEL
 {
     CONN_EMERGENCY = 0,
@@ -416,12 +416,7 @@ extern as_conn_mgr_log *g_pAsConnMgrLog;
 class as_conn_mgr
 {
   public:
-    static as_conn_mgr& Instance()
-    {
-      static as_conn_mgr objas_conn_mgr;
-      return objas_conn_mgr;
-    }
-
+    as_conn_mgr();
     virtual ~as_conn_mgr();
 protected:
     as_conn_mgr();
