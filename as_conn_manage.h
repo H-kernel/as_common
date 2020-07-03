@@ -379,8 +379,7 @@ class as_tcp_server_mgr : public as_handle_manager
     };
 
   protected:
-    virtual void checkSelectResult(const EpollEventType enEpEvent,
-        as_handle *pHandle);  /*lint !e1768*///��Ҫ�������θýӿ�
+    virtual void checkSelectResult(const EpollEventType enEpEvent,as_handle *pHandle);
 
   protected:
     as_tcp_conn_mgr *m_pTcpConnMgr;
@@ -388,14 +387,12 @@ class as_tcp_server_mgr : public as_handle_manager
 
 #define DEFAULT_SELECT_PERIOD 20
 
-// 4����־����
 #define    CONN_OPERATOR_LOG    16
 #define    CONN_RUN_LOG         17
 #define    CONN_SECURITY_LOG    20
 #define    CONN_USER_LOG        19
 
 
-// 4����־����
 enum CONN_LOG_LEVEL
 {
     CONN_EMERGENCY = 0,

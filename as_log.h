@@ -1,19 +1,19 @@
 
 /******************************************************************************
-   ╟Фх╗кЫсп (C), 2008-2011, M.Kernel
+   О©╫О©╫х╗О©╫О©╫О©╫О©╫ (C), 2008-2011, M.Kernel
 
  ******************************************************************************
-  нд╪ЧцШ          : ASLog.h
-  ╟Ф╠╬╨е          : 1.0
-  вВуъ            :
-  иЗЁихуфз        : 2008-8-17
-  вН╫Эпч╦д        :
-  ╧╕дэцХйЖ        : ASхуж╬дё©Исц╩╖╫с©з
-  ╨╞йЩап╠М        :
-  пч╦дюЗй╥        :
-  1 хуфз          :
-    вВуъ          :
-    пч╦ддзхщ      :
+  О©╫д╪О©╫О©╫О©╫          : ASLog.h
+  О©╫Ф╠╬О©╫О©╫          : 1.0
+  О©╫О©╫О©╫О©╫            :
+  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫        : 2008-8-17
+  О©╫О©╫О©╫О©╫ч╦О©╫        :
+  О©╫О©╫О©╫О©╫О©╫О©╫О©╫О©╫        : ASО©╫О©╫ж╬дёО©╫О©╫О©╫ц╩О©╫О©╫с©О©╫
+  О©╫О©╫О©╫О©╫О©╫п╠О©╫        :
+  О©╫ч╦О©╫О©╫О©╫й╥        :
+  1 О©╫О©╫О©╫О©╫          :
+    О©╫О©╫О©╫О©╫          :
+    О©╫ч╦О©╫О©╫О©╫О©╫О©╫      :
 *******************************************************************************/
 
 
@@ -24,45 +24,32 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-
-
 #define ASLOG_API
 
-//хуж╬╣х╪╤
 typedef enum _ASLogLevel
 {
-    AS_LOG_EMERGENCY   = 0,    //о╣мЁ╡╩©исц
-    AS_LOG_ALERT       = 1,    //╠ьпКа╒©л╡их║пп╤╞ё╛╥ЯтРо╣мЁ╡╩©исц
-    AS_LOG_CRITICAL    = 2,    //яожь╢МнС
-    AS_LOG_ERROR       = 3,    //р╩╟Ц╢МнС
-    AS_LOG_WARNING     = 4,    //╬╞╦Ф
-    AS_LOG_NOTICE      = 5,    //жьр╙╣дуЩЁёпео╒
-    AS_LOG_INFO        = 6,    //р╩╟Ц╣дуЩЁёпео╒
-    AS_LOG_DEBUG       = 7,    //╣Вйтпео╒
+    AS_LOG_EMERGENCY   = 0,
+    AS_LOG_ALERT       = 1, 
+    AS_LOG_CRITICAL    = 2,
+    AS_LOG_ERROR       = 3,
+    AS_LOG_WARNING     = 4, 
+    AS_LOG_NOTICE      = 5,
+    AS_LOG_INFO        = 6, 
+    AS_LOG_DEBUG       = 7
 }ASLogLevel;
 
-//иХжцхуж╬╪╤╠Пё╛д╛хойг:LOG_INFO
 ASLOG_API void ASSetLogLevel(long lLevel);
 
-//иХжц╣╠г╟п╢╣дхуж╬нд╪Чб╥╬╤цШ(мЙуШб╥╬╤╩РоЮ╤тб╥╬╤)
-//д╛хойг╣╠г╟б╥╬╤об:exename.log
 ASLOG_API bool ASSetLogFilePathName(const char* szPathName);
 
-//иХжцхуж╬нд╪ЧЁ╓╤хочжфё╛Ё╛╧Щ╢кЁ╓╤хй╠иЗЁипбнд╪Чё╛╣╔н╩KB(100K-100M,д╛хойг10M)
 ASLOG_API void ASSetLogFileLengthLimit(unsigned long ulLimitLengthKB);
 
-//иоцФхЩоНиХжцмЙЁи╨Сё╛©иртфТ╤╞ASхуж╬дё©И
 ASLOG_API void ASStartLog(void);
 
-//п╢р╩лУхуж╬(сцобцФ╤╗рЕ╣дASWriteLog╨Йю╢п╢хуж╬)
 ASLOG_API void __ASWriteLog(const char* szFileName, long lLine,
                              long lLevel, const char* format, va_list argp);
-//мёж╧ASхуж╬дё©И
 ASLOG_API void ASStopLog(void);
 
-//vc6рт╪╟vc7.1╤╪╡╩ж╖ЁжC99(╣╚g++ж╖Ёж)
-//кЫртуБюО╡╩дэй╧сц©и╠Д╡нйЩ╨Й╤╗рЕё╛юШсц╤т()╡ывВ╥Ш╣джьтьй╣ож
 class CWriter
 {
     public:
@@ -79,7 +66,7 @@ class CWriter
             va_end(argp);
         }
     private:
-        CWriter()   //╧ЩPC-LINT
+        CWriter()   //О©╫О©╫PC-LINT
         {
             m_file_ = NULL;
             m_line_ = 0;
@@ -88,10 +75,7 @@ class CWriter
         long m_line_;
 };
 
-//ЁлпРжпй╧сцхГоб╨Йп╢хуж╬
 #define AS_LOG (CWriter(__FILE__, __LINE__))
-//юЩхГё╨AS_LOG(LOG_INFO, "Recv=%d,Send=%d", nRecv,nSend);
-
 
 #endif//_AS_LOG_H_
 
