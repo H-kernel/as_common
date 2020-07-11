@@ -1,5 +1,13 @@
 #include "as_url.h"
-
+void       as_init_url(as_url_t* url)
+{
+    url->protocol[0] = '\0';
+    url->host[0]     = '\0';
+    url->port        = 0;
+    url->uri[0]      = '\0';
+    url->args[0]     = '\0';
+    
+}
 int32_t    as_parse_url(const char* url,as_url_t* info)
 {
     if(NULL == url) {

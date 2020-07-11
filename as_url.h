@@ -32,7 +32,7 @@ typedef struct tagASUrlArg
     char*    next;
 }as_url_arg_t;
 
-
+void       as_init_url(as_url_t* url);
 int32_t    as_parse_url(const char* url,as_url_t* info);
 int32_t    as_first_arg(as_url_t* url,as_url_arg_t* arg);
 int32_t    as_next_arg(as_url_arg_t* arg,as_url_arg_t* next);
