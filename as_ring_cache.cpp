@@ -1,19 +1,19 @@
 
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2008-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2008-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : as_ring_cache.cpp
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            : hexin
-  Éú³ÉÈÕÆÚ        : 2008-08-07
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        : »·ÐÎ»º³åÇø
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          :
-    ×÷Õß          :
-    ÐÞ¸ÄÄÚÈÝ      :
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : as_ring_cache.cpp
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            : hexin
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2008-08-07
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : ï¿½ï¿½ï¿½Î»ï¿½ï¿½ï¿½ï¿½ï¿½
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      :
 *******************************************************************************/
 
 
@@ -63,24 +63,24 @@ as_ring_cache::~as_ring_cache()
     as_destroy_mutex(m_pMutex);
 }
 
-//ÉèÖÃ»º³åÇø´óÐ¡£¬·µ»ØÉèÖÃÍê³Éºó»º³åµÄ´óÐ¡
-unsigned long as_ring_cache::SetCacheSize(unsigned long ulCacheSize)
+//ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éºó»º³ï¿½Ä´ï¿½Ð¡
+uint32_t as_ring_cache::SetCacheSize(uint32_t ulCacheSize)
 {
     as_mutex_lock(m_pMutex);
-    //Çå¿ÕÊý¾Ý
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     m_ulReader = 0;
     m_ulWriter = 0;
     m_ulDataSize = 0;
 
-    //»º³åÇø´óÐ¡Î´·¢Éú±ä»¯£¬²»ÐèÒªÖØÐÂÉêÇëÄÚ´æ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Î´ï¿½ï¿½ï¿½ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½
     if(ulCacheSize == m_ulBufferSize)
     {
         as_mutex_unlock(m_pMutex);
         return m_ulBufferSize;
     }
 
-    //»º³åÇø´óÐ¡·¢Éú±ä»¯£¬ÐèÒªÖØÐÂÉêÇëÄÚ´æ
-    //ÊÍ·Åµ±Ç°»º³åÄÚ´æ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½ï¿½ä»¯ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½
+    //ï¿½Í·Åµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½Ú´ï¿½
     if(NULL != m_pBuffer)
     {
         try
@@ -95,7 +95,7 @@ unsigned long as_ring_cache::SetCacheSize(unsigned long ulCacheSize)
         m_pBuffer = NULL;
     }
 
-    //ÉêÇëÐÂ»º³åÄÚ´æ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½Ú´ï¿½
     m_ulBufferSize = ulCacheSize;
     if(m_ulBufferSize > 0)
     {
@@ -108,7 +108,7 @@ unsigned long as_ring_cache::SetCacheSize(unsigned long ulCacheSize)
         }
 
         if(NULL == m_pBuffer)
-        {//ÉêÇëÊ§°Ü
+        {//ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
             m_ulBufferSize = 0;
         }
     }
@@ -117,21 +117,21 @@ unsigned long as_ring_cache::SetCacheSize(unsigned long ulCacheSize)
     return m_ulBufferSize;
 }
 
-//»ñµÃµ±Ç°»º³åÇø´óÐ¡
-unsigned long as_ring_cache::GetCacheSize() const
+//ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡
+uint32_t as_ring_cache::GetCacheSize() const
 {
     return m_ulBufferSize;
 }
 
-//²é¿´Ö¸¶¨³¤¶ÈÊý¾Ý£¬µ«»º³åÖÐÈÔÈ»±£´æÕâÐ©Êý¾Ý£¬·µ»ØÊµ¼Ê¶ÁÈ¡Êý¾Ý³¤¶È
-//PCLINT×¢ÊÍËµÃ÷£º¸Ãº¯ÊýÔÚ±¾ÀàÄÚ²¿²»Ê¹ÓÃ
-unsigned long as_ring_cache::Peek(char* pBuf, unsigned long ulPeekLen)/*lint -e1714*/
+//ï¿½é¿´Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð©ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê¶ï¿½È¡ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
+//PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½Ú±ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½
+uint32_t as_ring_cache::Peek(char* pBuf, uint32_t ulPeekLen)/*lint -e1714*/
 {
-    unsigned long ulResult = 0;
+    uint32_t ulResult = 0;
 
     as_mutex_lock(m_pMutex);
 
-    //¼ÆËãÊµ¼Ê¿É¶ÁÈ¡µÄ³¤¶È
+    //ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê¿É¶ï¿½È¡ï¿½Ä³ï¿½ï¿½ï¿½
     ulResult = m_ulDataSize>ulPeekLen?ulPeekLen:m_ulDataSize;
     if(0 == ulResult)
     {
@@ -139,27 +139,27 @@ unsigned long as_ring_cache::Peek(char* pBuf, unsigned long ulPeekLen)/*lint -e1
         return ulResult;
     }
 
-    //Êý¾Ý³Êµ¥¶Î·Ö²¼
-    //PCLINT×¢ÊÍËµÃ÷£º±¾º¯ÊýÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬¹Ê²»×ö¹ý¶àµÄ²ÎÊý¼ì²é£¬ÓÉµ÷ÓÃÕß±£Ö¤
+    //ï¿½ï¿½ï¿½Ý³Êµï¿½ï¿½Î·Ö²ï¿½
+    //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½Ê²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½Éµï¿½ï¿½ï¿½ï¿½ß±ï¿½Ö¤
     if(m_ulReader < m_ulWriter)/*lint -e613*/
     {//ooo********ooooo
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulResult);/*lint -e670*/
         as_mutex_unlock(m_pMutex);
         return ulResult;
     }
 
-    //Êý¾Ý³ÊÁ½¶Î·Ö²¼£¬m_ulReaderµÈÓÚm_ulWriterÊ±Êý¾ÝÂú£¬Ò²ÊÇÁ½¶Î
+    //ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½ï¿½Î·Ö²ï¿½ï¿½ï¿½m_ulReaderï¿½ï¿½ï¿½ï¿½m_ulWriterÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //*B*oooooooo**A**
-    unsigned long ulASectionLen = m_ulBufferSize - m_ulReader;//A¶ÎÊý¾Ý³¤¶È
-    if(ulResult <= ulASectionLen)//A¶ÎÊý¾Ý³¤¶È×ã¹»
+    uint32_t ulASectionLen = m_ulBufferSize - m_ulReader;//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
+    if(ulResult <= ulASectionLen)//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½ï¿½ã¹»
     {
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulResult);
     }
-    else//A¶ÎÊý¾Ý³¤¶È²»¹»£¬»¹ÐèÒª´ÓB¶Î¶ÁÈ¡
+    else//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Bï¿½Î¶ï¿½È¡
     {/*lint -e668*/
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é
-        //ÏÈ¶ÁA¶Î£¬ÔÙ´ÓB¶Î²¹¶Á
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        //ï¿½È¶ï¿½Aï¿½Î£ï¿½ï¿½Ù´ï¿½Bï¿½Î²ï¿½ï¿½ï¿½
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulASectionLen);
         ::memcpy(pBuf+ulASectionLen, m_pBuffer, ulResult-ulASectionLen);
     }
@@ -168,14 +168,14 @@ unsigned long as_ring_cache::Peek(char* pBuf, unsigned long ulPeekLen)/*lint -e1
     return ulResult;
 }
 
-//¶ÁÈ¡Ö¸¶¨³¤¶ÈÊý¾Ý£¬·µ»ØÊµ¼Ê¶ÁÈ¡Êý¾Ý³¤¶È
-unsigned long as_ring_cache::Read(char* pBuf, unsigned long ulReadLen)
+//ï¿½ï¿½È¡Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê¶ï¿½È¡ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
+uint32_t as_ring_cache::Read(char* pBuf, uint32_t ulReadLen)
 {
-    unsigned long ulResult = 0;
+    uint32_t ulResult = 0;
 
     as_mutex_lock(m_pMutex);
 
-    //¼ÆËãÊµ¼Ê¿É¶ÁÈ¡µÄ³¤¶È
+    //ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê¿É¶ï¿½È¡ï¿½Ä³ï¿½ï¿½ï¿½
     ulResult = m_ulDataSize>ulReadLen?ulReadLen:m_ulDataSize;
     if(0 == ulResult)
     {
@@ -183,57 +183,57 @@ unsigned long as_ring_cache::Read(char* pBuf, unsigned long ulReadLen)
         return ulResult;
     }
 
-    //Êý¾Ý³Êµ¥¶Î·Ö²¼
+    //ï¿½ï¿½ï¿½Ý³Êµï¿½ï¿½Î·Ö²ï¿½
     if(m_ulReader < m_ulWriter)
     {//ooo********ooooo
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulResult);
 
-        //Êý¾Ý±»¶ÁÈ¡£¬¸üÐÂ¶ÁÈ¡Î»ÖÃ
+        //ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½È¡Î»ï¿½ï¿½
         m_ulReader += ulResult;/*lint -e414*/
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         m_ulReader %= m_ulBufferSize;
-        //Êý¾ÝÒÑ±»¶ÁÈ¡£¬¸üÐÂ»º³åÇøÊý¾Ý³¤¶È
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
         m_ulDataSize -= ulResult;
 
         as_mutex_unlock(m_pMutex);
         return ulResult;
     }
 
-    //Êý¾Ý³ÊÁ½¶Î·Ö²¼£¬m_ulReaderµÈÓÚm_ulWriterÊ±Êý¾ÝÂú£¬Ò²ÊÇÁ½¶Î
+    //ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½ï¿½Î·Ö²ï¿½ï¿½ï¿½m_ulReaderï¿½ï¿½ï¿½ï¿½m_ulWriterÊ±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     //*B*oooooooo**A**
-    unsigned long ulASectionLen = m_ulBufferSize - m_ulReader;//A¶ÎÊý¾Ý³¤¶È
-    if(ulResult <= ulASectionLen)//A¶ÎÊý¾Ý³¤¶È×ã¹»
+    uint32_t ulASectionLen = m_ulBufferSize - m_ulReader;//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
+    if(ulResult <= ulASectionLen)//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½ï¿½ã¹»
     {
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×÷¹ý¶à¼ì²é£¬Ö¸ÕëÊ¹ÓÃÎÞÎÊÌâ
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é£¬Ö¸ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulResult);/*lint -e826*/
 
-        //Êý¾Ý±»¶ÁÈ¡£¬¸üÐÂ¶ÁÈ¡Î»ÖÃ
+        //ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½È¡Î»ï¿½ï¿½
         m_ulReader += ulResult;
         m_ulReader %= m_ulBufferSize;
     }
-    else//A¶ÎÊý¾Ý³¤¶È²»¹»£¬»¹ÐèÒª´ÓB¶Î¶ÁÈ¡
+    else//Aï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Bï¿½Î¶ï¿½È¡
     {
-        //ÏÈ¶ÁA¶Î£¬ÔÙ´ÓB¶Î²¹¶Á
+        //ï¿½È¶ï¿½Aï¿½Î£ï¿½ï¿½Ù´ï¿½Bï¿½Î²ï¿½ï¿½ï¿½
         ::memcpy(pBuf, m_pBuffer+m_ulReader, ulASectionLen);
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é£¬ÒÔÈ·±£µ÷ÓÃÐ§ÂÊ
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é£¬ï¿½ï¿½È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð§ï¿½ï¿½
         ::memcpy(pBuf+ulASectionLen, m_pBuffer, ulResult-ulASectionLen);/*lint -e429*/
-        m_ulReader = ulResult - ulASectionLen;//Êý¾Ý±»¶ÁÈ¡£¬¸üÐÂ¶ÁÈ¡Î»ÖÃ
+        m_ulReader = ulResult - ulASectionLen;//ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â¶ï¿½È¡Î»ï¿½ï¿½
     }
-    //Êý¾ÝÒÑ±»¶ÁÈ¡£¬¸üÐÂ»º³åÇøÊý¾Ý³¤¶È
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ñ±ï¿½ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
     m_ulDataSize -= ulResult;
 
     as_mutex_unlock(m_pMutex);
     return ulResult;
 }
 
-//Ð´Ö¸¶¨³¤¶ÈÊý¾Ý£¬·µ»ØÊµ¼ÊÐ´Êý¾Ý³¤¶È£¬Èô»º³åÇø¿Õ¼ä²»¹»£¬½ûÖ¹Ð´Èë
-unsigned long as_ring_cache::Write(const char* pBuf, unsigned long ulWriteLen)
+//Ð´Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ý³ï¿½ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Õ¼ä²»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¹Ð´ï¿½ï¿½
+uint32_t as_ring_cache::Write(const char* pBuf, uint32_t ulWriteLen)
 {
-    unsigned long ulResult = 0;
+    uint32_t ulResult = 0;
 
     as_mutex_lock(m_pMutex);
 
-    //¼ÆËãÊµ¼Ê¿ÉÐ´Èë³¤¶È£¬Èô¿ÕÓà»º³åÇø²»¹»£¬Ôò²»Ð´ÈëÊý¾Ý
+    //ï¿½ï¿½ï¿½ï¿½Êµï¿½Ê¿ï¿½Ð´ï¿½ë³¤ï¿½È£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½à»ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     ulResult = (m_ulBufferSize-m_ulDataSize)<ulWriteLen?0:ulWriteLen;
     if(0 == ulResult)
     {
@@ -241,61 +241,61 @@ unsigned long as_ring_cache::Write(const char* pBuf, unsigned long ulWriteLen)
         return ulResult;
     }
 
-    //¿ÕÓà¿Õ¼ä³Êµ¥¶Î·Ö²¼
+    //ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½Êµï¿½ï¿½Î·Ö²ï¿½
     if(m_ulReader > m_ulWriter)
     {//***oooooooo*****
         ::memcpy(m_pBuffer+m_ulWriter, pBuf, ulResult);
 
-        //Êý¾ÝÒÑÐ´Èë£¬¸üÐÂÐ´ÈëÎ»ÖÃ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Î»ï¿½ï¿½
         m_ulWriter += ulResult;
         m_ulWriter %= m_ulBufferSize;
-        //Êý¾ÝÒÑÐ´Èë£¬¸üÐÂ»º³åÇøÊý¾Ý³¤¶È
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë£¬ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
         m_ulDataSize += ulResult;
 
         as_mutex_unlock(m_pMutex);
         return ulResult;
     }
 
-    //¿ÕÓà¿Õ¼ä³ÊÁ½¶Î·Ö²¼£¬m_ulReaderµÈÓÚm_ulWriterÊ±ÎÞÊý¾Ý£¬Ò²ÊÇÁ½¶Î·Ö²¼
+    //ï¿½ï¿½ï¿½ï¿½Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½Î·Ö²ï¿½ï¿½ï¿½m_ulReaderï¿½ï¿½ï¿½ï¿½m_ulWriterÊ±ï¿½ï¿½ï¿½ï¿½ï¿½Ý£ï¿½Ò²ï¿½ï¿½ï¿½ï¿½ï¿½Î·Ö²ï¿½
     //oBo********ooAoo
-    unsigned long ulASectionLen = m_ulBufferSize - m_ulWriter;//A¶Î¿ÕÓà»º³å³¤¶È
-    if(ulResult <= ulASectionLen)//A¶Î¿ÕÓà»º³å³¤¶È×ã¹»
+    uint32_t ulASectionLen = m_ulBufferSize - m_ulWriter;//Aï¿½Î¿ï¿½ï¿½à»ºï¿½å³¤ï¿½ï¿½
+    if(ulResult <= ulASectionLen)//Aï¿½Î¿ï¿½ï¿½à»ºï¿½å³¤ï¿½ï¿½ï¿½ã¹»
     {/*lint -e669*/
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ::memcpy(m_pBuffer+m_ulWriter, pBuf, ulResult);
 
-        //Êý¾ÝÒÑÐ´Èë£¬¸üÐÂÐ´ÈëÎ»ÖÃ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Î»ï¿½ï¿½
         m_ulWriter += ulResult;
         m_ulWriter %= m_ulBufferSize;
     }
-    else//A¶Î¿ÕÓà»º³å³¤¶È²»¹»£¬»¹ÒªÏòB¶ÎÐ´Èë
+    else//Aï¿½Î¿ï¿½ï¿½à»ºï¿½å³¤ï¿½È²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Bï¿½ï¿½Ð´ï¿½ï¿½
     {
         ::memcpy(m_pBuffer+m_ulWriter, pBuf, ulASectionLen);
-        //PCLINT×¢ÊÍËµÃ÷£ºÖ÷Òª¿¼ÂÇµ÷ÓÃÐ§ÂÊ£¬²»×ö¹ý¶à¼ì²é
+        //PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Çµï¿½ï¿½ï¿½Ð§ï¿½Ê£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ::memcpy(m_pBuffer, pBuf+ulASectionLen, ulResult-ulASectionLen);/*lint !e662*/
-        m_ulWriter = ulResult - ulASectionLen;//Êý¾ÝÒÑÐ´Èë£¬¸üÐÂÐ´ÈëÎ»ÖÃ
+        m_ulWriter = ulResult - ulASectionLen;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Î»ï¿½ï¿½
     }
 
-    //Êý¾ÝÒÑÐ´Èë£¬¸üÐÂ»º³åÇøÊý¾Ý³¤¶È
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë£¬ï¿½ï¿½ï¿½Â»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ï¿½
     m_ulDataSize += ulResult;
 
     as_mutex_unlock(m_pMutex);
     return ulResult;
 }
 
-//»ñµÃµ±Ç°»º³åÖÐÊý¾Ý´óÐ¡
-unsigned long as_ring_cache::GetDataSize() const
+//ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý´ï¿½Ð¡
+uint32_t as_ring_cache::GetDataSize() const
 {
     return m_ulDataSize;
 }
 
-//»ñµÃµ±Ç°¿ÕÓà»º³å´óÐ¡
-unsigned long as_ring_cache::GetEmptySize() const
+//ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½à»ºï¿½ï¿½ï¿½Ð¡
+uint32_t as_ring_cache::GetEmptySize() const
 {
     return (m_ulBufferSize - m_ulDataSize);
 }
 
-//Çå¿ÕÊý¾Ý
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 void as_ring_cache::Clear()
 {
     as_mutex_lock(m_pMutex);
@@ -305,16 +305,16 @@ void as_ring_cache::Clear()
     as_mutex_unlock(m_pMutex);
 }
 
-//»ñµÃµ±Ç°»º³åÇøÖÐÊý¾Ý³¤¶ÈºÍ»º³åÇø³¤¶ÈµÄ±ÈÀýµÄ°Ù·ÖÊý
-unsigned long as_ring_cache::GetUsingPercent() const
+//ï¿½ï¿½Ãµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý³ï¿½ï¿½ÈºÍ»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÈµÄ±ï¿½ï¿½ï¿½ï¿½Ä°Ù·ï¿½ï¿½ï¿½
+uint32_t as_ring_cache::GetUsingPercent() const
 {
-    //·ÀÖ¹³ýÊýÎª0£¬Òì³£±£»¤
+    //ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½Îª0ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½
     if (0 == m_ulBufferSize)
     {
         return 0;
     }
 
-    unsigned long ulCurrentUsingPercent = (m_ulDataSize*100)/m_ulBufferSize;
+    uint32_t ulCurrentUsingPercent = (m_ulDataSize*100)/m_ulBufferSize;
 
     return ulCurrentUsingPercent;
 }

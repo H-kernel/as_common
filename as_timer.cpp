@@ -1,18 +1,18 @@
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2001-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2001-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : as_timer.cpp
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            :
-  Éú³ÉÈÕÆÚ        : 2007-4-02
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        :
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          : 2007-4-02
-    ×÷Õß          :
-    ÐÞ¸ÄÄÚÈÝ      : Éú³É
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : as_timer.cpp
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2007-4-02
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          : 2007-4-02
+    ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      : ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 
 #include <stdarg.h>
@@ -28,7 +28,7 @@ extern "C"{
 ITimerLog *g_pTimerLog = NULL;
 #define MAX_TIMER_LOG_LENTH 512
 
-#ifndef WIN32   //¹ýPC-LINT
+#ifndef WIN32   //ï¿½ï¿½PC-LINT
 #define TIMER_SECOND_IN_MS 1000
 #define TIMER_MS_IN_US 1000
 #endif
@@ -36,14 +36,14 @@ ITimerLog *g_pTimerLog = NULL;
 #define _TIMER_FL_ "as_timer.cpp", __LINE__
 /*******************************************************************************
   Function:       TIMER_WRITE_LOG()
-  Description:    ÈÕÖ¾´òÓ¡º¯Êý
+  Description:    ï¿½ï¿½Ö¾ï¿½ï¿½Ó¡ï¿½ï¿½ï¿½ï¿½
   Calls:
   Called By:
-  Input:          ºÍprintfÒ»ÖÂ
-  Output:         ÎÞ
-  Return:         ÎÞ
+  Input:          ï¿½ï¿½printfÒ»ï¿½ï¿½
+  Output:         ï¿½ï¿½
+  Return:         ï¿½ï¿½
 *******************************************************************************/
-void TIMER_WRITE_LOG(long lLevel, const char *format, ...)
+void TIMER_WRITE_LOG(int32_t lLevel, const char *format, ...)
 {
     if(NULL == g_pTimerLog)
     {
@@ -55,15 +55,15 @@ void TIMER_WRITE_LOG(long lLevel, const char *format, ...)
 
     va_list args;
     va_start (args, format);
-    long lPrefix = snprintf (buff, MAX_TIMER_LOG_LENTH, "errno:%d.thread(%u):",
-        errno, (long)as_thread_self());
+    int32_t lPrefix = snprintf (buff, MAX_TIMER_LOG_LENTH, "errno:%d.thread(%u):",
+        errno, (int32_t)as_thread_self());
     if(lPrefix < MAX_TIMER_LOG_LENTH)
     {
         (void)vsnprintf (buff + lPrefix,
-            (unsigned long)(MAX_TIMER_LOG_LENTH - lPrefix), format, args);
+            (uint32_t)(MAX_TIMER_LOG_LENTH - lPrefix), format, args);
     }
     buff[MAX_TIMER_LOG_LENTH] = '\0';
-    g_pTimerLog->writeLog(TIMER_RUN_LOG, lLevel, buff, (long)strlen(buff));
+    g_pTimerLog->writeLog(TIMER_RUN_LOG, lLevel, buff, (int32_t)strlen(buff));
     va_end (args);
 
 };
@@ -79,12 +79,12 @@ as_timer::as_timer()
 
 /*******************************************************************************
   Function:       as_timer::~as_timer()
-  Description:    Îö¹¹º¯Êý
+  Description:    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   Calls:
   Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
+  Input:          ï¿½ï¿½
+  Output:         ï¿½ï¿½
+  Return:         ï¿½ï¿½
 *******************************************************************************/
 as_timer::~as_timer()
 {
@@ -124,16 +124,16 @@ as_timer::~as_timer()
 
 /*******************************************************************************
   Function:       as_timer::init()
-  Description:    ³õÊ¼»¯º¯Êý
+  Description:    ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   Calls:
   Called By:
-  Input:          ulTimerScale: ¶¨Ê±Æ÷¾«¶È
-  Output:         ÎÞ
+  Input:          ulTimerScale: ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  Output:         ï¿½ï¿½
   Return:
   AS_SUCCESS: init success
   AS_FAIL: init fail
 *******************************************************************************/
-long as_timer::init(ULONG ulTimerScale)
+int32_t as_timer::init(ULONG ulTimerScale)
 {
     if (ulTimerScale < MinTimerScale)
     {
@@ -169,16 +169,16 @@ long as_timer::init(ULONG ulTimerScale)
 
 /*******************************************************************************
   Function:       as_timer::run()
-  Description:    Æô¶¯¶¨Ê±¼ì²âÏß³Ì
+  Description:    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ß³ï¿½
   Calls:
   Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
+  Input:          ï¿½ï¿½
+  Output:         ï¿½ï¿½
   Return:
   AS_SUCCESS: init success
   AS_FAIL: init fail
 *******************************************************************************/
-long as_timer::run()
+int32_t as_timer::run()
 {
     errno = 0;
     if (AS_ERROR_CODE_OK != as_create_thread((AS_THREAD_FUNC)invoke, (void *)this,
@@ -198,12 +198,12 @@ long as_timer::run()
 
 /*******************************************************************************
   Function:       as_timer::exit()
-  Description:    ÍË³ö¶¨Ê±¼ì²âÏß³Ì
+  Description:    ï¿½Ë³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ß³ï¿½
   Calls:
   Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
+  Input:          ï¿½ï¿½
+  Output:         ï¿½ï¿½
+  Return:         ï¿½ï¿½
 *******************************************************************************/
 void as_timer::exit()
 {
@@ -220,7 +220,7 @@ void as_timer::exit()
 
 
     errno = 0;
-    long ret_val = as_join_thread(m_pASThread);
+    int32_t ret_val = as_join_thread(m_pASThread);
     if (ret_val != AS_ERROR_CODE_OK)
     {
         TIMER_WRITE_LOG(TIMER_ERROR,
@@ -237,18 +237,18 @@ void as_timer::exit()
 
 /*******************************************************************************
   Function:       as_timer::registerTimer()
-  Description:    ×¢²á¶¨Ê±Æ÷
+  Description:    ×¢ï¿½á¶¨Ê±ï¿½ï¿½
   Calls:
   Called By:
-  Input:          pTrigger: ³¬Ê±´¦Àí¶ÔÏóÊµÀý, void *pArg: ³¬Ê±´¦Àí²ÎÊý,
-                  nScales: ³¬Ê±ÊÂ¼þ(ÒÔinitÊ±Ö¸¶¨µÄscaleÎªµ¥Î»)
-                  enStyle: ¼ì²âÀàÐÍ    enOneShot: ´¥·¢Ò»´Î, enRepeated: Ñ­»·´¥·¢
-  Output:         ÎÞ
+  Input:          pTrigger: ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½, void *pArg: ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½,
+                  nScales: ï¿½ï¿½Ê±ï¿½Â¼ï¿½(ï¿½ï¿½initÊ±Ö¸ï¿½ï¿½ï¿½ï¿½scaleÎªï¿½ï¿½Î»)
+                  enStyle: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    enOneShot: ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½, enRepeated: Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  Output:         ï¿½ï¿½
   Return:
   AS_SUCCESS: init success
   AS_FAIL: init fail
 *******************************************************************************/
-long as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
+int32_t as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
     TriggerStyle enStyle)
 {
     if (NULL == pTrigger )
@@ -294,7 +294,7 @@ long as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
     pTimerItem->m_ullCurScales = m_ullRrsAbsTimeScales + nScales;
     pTimerItem->m_enStyle = enStyle;
 
-    //¼ÓËø(Èç¹ûºÍmainloop²»ÊÇÍ¬Ò»Ïß³Ì²»ÐèÒª¼ÓËø)
+    //ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½mainloopï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ß³Ì²ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
     if (NULL == m_pASThread)
@@ -325,7 +325,7 @@ long as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
 
     (void)(m_plistTrigger->insert(ListOfTriggerPair(pTimerItem->m_ullCurScales, pTimerItem)));
 
-    //½âËø
+    //ï¿½ï¿½ï¿½ï¿½
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfTrigger))
@@ -341,11 +341,11 @@ long as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
 
 /*******************************************************************************
   Function:       as_timer::clearTimer
-  Description:    É¾³ý¶¨Ê±Æ÷ÀïÃæËùÓÐµÄTimerItem
+  Description:    É¾ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½TimerItem
   Calls:
   Called By:
-  Input:         ÎÞ
-  Output:         ÎÞ
+  Input:         ï¿½ï¿½
+  Output:         ï¿½ï¿½
   Return:
 *******************************************************************************/
 void as_timer::clearTimer( )
@@ -377,16 +377,16 @@ void as_timer::clearTimer( )
 
 /*******************************************************************************
   Function:       as_timer::cancelTimer()
-  Description:    ×¢Ïú¶¨Ê±Æ÷
+  Description:    ×¢ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
   Calls:
   Called By:
-  Input:          pTrigger: ³¬Ê±´¦Àí¶ÔÏóÊµÀý
-  Output:         ÎÞ
+  Input:          pTrigger: ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½
+  Output:         ï¿½ï¿½
   Return:
   AS_SUCCESS: init success
   AS_FAIL: init fail
 *******************************************************************************/
-long as_timer::cancelTimer(ITrigger *pTrigger)
+int32_t as_timer::cancelTimer(ITrigger *pTrigger)
 {
     if(NULL == pTrigger)
     {
@@ -396,7 +396,7 @@ long as_timer::cancelTimer(ITrigger *pTrigger)
         return AS_FAIL;
     };
 
-    //¼ÓËø(Èç¹ûºÍmainloop²»ÊÇÍ¬Ò»Ïß³Ì²»ÐèÒª¼ÓËø)
+    //ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½mainloopï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ß³Ì²ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
     if (NULL == m_pASThread)
@@ -438,7 +438,7 @@ long as_timer::cancelTimer(ITrigger *pTrigger)
                 _TIMER_FL_, pTrigger->m_pTimerItem, pTrigger);
 
 
-    //½âËø(Èç¹û²»ÊÇÍ¬Ò»Ïß³Ì)
+    //ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¬Ò»ï¿½ß³ï¿½)
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfTrigger))
@@ -454,12 +454,12 @@ long as_timer::cancelTimer(ITrigger *pTrigger)
 
 /*******************************************************************************
   Function:       as_timer::mainLoop()
-  Description:    Ïß³ÌÖ´ÐÐµÄ¶¨Ê±¼ì²âÖ÷Ñ­»·
+  Description:    ï¿½ß³ï¿½Ö´ï¿½ÐµÄ¶ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½
   Calls:
   Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
+  Input:          ï¿½ï¿½
+  Output:         ï¿½ï¿½
+  Return:         ï¿½ï¿½
 *******************************************************************************/
 void as_timer::mainLoop()
 {
@@ -471,15 +471,15 @@ void as_timer::mainLoop()
         Sleep(m_ulTimerScale);
 #else
         struct timeval tv;
-        tv.tv_sec = (long)(m_ulTimerScale/TIMER_SECOND_IN_MS);
+        tv.tv_sec = (int32_t)(m_ulTimerScale/TIMER_SECOND_IN_MS);
         tv.tv_usec = (m_ulTimerScale%TIMER_SECOND_IN_MS)*TIMER_MS_IN_US;
         (void)select(0, AS_NULL, AS_NULL, AS_NULL, &tv);
 #endif
 
-        //¼ÓËø
+        //ï¿½ï¿½ï¿½ï¿½
         CTimerItem *pTimerItem = NULL;
         ITrigger *pTrigger = NULL;
-        ++m_ullRrsAbsTimeScales ;//ÄÚ²¿Ê±¼ä»ù×¼Ôö¼ÓÒ»¸ö¿Ì¶È
+        ++m_ullRrsAbsTimeScales ;//ï¿½Ú²ï¿½Ê±ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ì¶ï¿½
         ullCurrentScales = m_ullRrsAbsTimeScales;
 
         if (AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfTrigger))
@@ -503,7 +503,7 @@ void as_timer::mainLoop()
 
             pTrigger = (ITrigger *)pTimerItem->m_pTrigger;
 
-            //Èç¹û¶¨Ê±Æ÷ÒÑ×¢Ïú£¬É¾³ý¶¨Ê±Æ÷£¬¼ÌÐø²éÕÒÏÂÒ»¸ö
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
             if((NULL == pTrigger) || (AS_TRUE == pTimerItem->m_bRemoved))
             {
                 TIMER_WRITE_LOG(TIMER_DEBUG,
@@ -524,23 +524,23 @@ void as_timer::mainLoop()
             ++itListOfTrigger;
             (void)(m_plistTrigger->erase(itCurrentTrigger));
 
-            //´¥·¢triggerµÄonTrigger²Ù×÷
+            //ï¿½ï¿½ï¿½ï¿½triggerï¿½ï¿½onTriggerï¿½ï¿½ï¿½ï¿½
             pTrigger->onTrigger(pTimerItem->m_pArg,
                 ullCurrentScales, pTimerItem->m_enStyle);
 
-            //Èç¹ûÖ»´¥·¢Ò»´Î£¬É¾³ý¶¨Ê±Æ÷
+            //ï¿½ï¿½ï¿½Ö»ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Î£ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
             if(enOneShot == pTimerItem->m_enStyle)
             {
                 TIMER_WRITE_LOG(TIMER_DEBUG,
                     "FILE(%s)LINE(%d): Timer(0x%x) remove trigger once timer.",
                     _TIMER_FL_, pTimerItem);
-                //·ÀÖ¹pTrigger->onTriggerºóÉ¾³ý¶¨Ê±Æ÷
+                //ï¿½ï¿½Ö¹pTrigger->onTriggerï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
                 pTrigger->m_pTimerItem = NULL;
                 AS_DELETE(pTimerItem);
                 continue;
             }
 
-            //¶ÔÓÚÖØ¸´´¥·¢¶¨Ê±Æ÷£¬ÐèÒªÐÞ¸ÄÏÂ´Î³¬Ê±ÊÂ¼þ£¬ÖØÐÂ¼ÓÈëmultimap
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½Þ¸ï¿½ï¿½Â´Î³ï¿½Ê±ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½multimap
             pTimerItem->m_ullCurScales = ullCurrentScales
                 + pTimerItem->m_ulInitialScales;
             (void)(m_plistTrigger->insert(ListOfTriggerPair(pTimerItem->m_ullCurScales,

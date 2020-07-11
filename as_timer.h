@@ -1,18 +1,18 @@
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2001-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2001-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : as_timer.h
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            :
-  Éú³ÉÈÕÆÚ        : 2007-4-02
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        :
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          : 2007-4-02
-    ×÷Õß          : hexin
-    ÐÞ¸ÄÄÚÈÝ      : Éú³É
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : as_timer.h
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2007-4-02
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          : 2007-4-02
+    ï¿½ï¿½ï¿½ï¿½          : hexin
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      : ï¿½ï¿½ï¿½ï¿½
 *******************************************************************************/
 
 #ifndef CTIMER_H_INCLUDE
@@ -30,8 +30,8 @@ extern "C"{
 #include "as_common.h"
 }
 
-const ULONG DefaultTimerScale = 100; //È±Ê¡¶¨Ê±¾«¶ÈÎª100ms
-const ULONG MinTimerScale = 1; //¶¨Ê±¾«¶È×îÐ¡Îª1ms
+const ULONG DefaultTimerScale = 100; //È±Ê¡ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½Îª100ms
+const ULONG MinTimerScale = 1; //ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡Îª1ms
 
 class ITrigger;
 class CTimerItem;
@@ -89,13 +89,13 @@ class CTimerItem
     AS_BOOLEAN m_bRemoved;
 };
 
-// 4ÖÖÈÕÖ¾²Ù×÷
+// 4ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 #define    TIMER_OPERATOR_LOG    16
 #define    TIMER_RUN_LOG         17
 #define    TIMER_SECURITY_LOG    20
 #define    TIMER_USER_LOG        19
 
-// 4ÖÖÈÕÖ¾¼¶±ð
+// 4ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 enum TIMER_LOG_LEVEL
 {
     TIMER_EMERGENCY = 0,
@@ -104,12 +104,12 @@ enum TIMER_LOG_LEVEL
     TIMER_DEBUG = 7
 };
 
-//ÈÕÖ¾´òÓ¡½Ó¿Ú
+//ï¿½ï¿½Ö¾ï¿½ï¿½Ó¡ï¿½Ó¿ï¿½
 class ITimerLog
 {
 public:
-    virtual void writeLog(long iType, long ilevel,
-        const char *szLogDetail, const long iLogLen) = 0;
+    virtual void writeLog(int32_t iType, int32_t ilevel,
+        const char *szLogDetail, const int32_t iLogLen) = 0;
 };
 
 extern ITimerLog *g_pTimerLog;
@@ -126,18 +126,18 @@ public:
     virtual ~as_timer();
 
 public:
-    virtual long init(ULONG ulTimerScale);
+    virtual int32_t init(ULONG ulTimerScale);
     void setLogWriter(ITimerLog *pTimerLog)
     {
         g_pTimerLog = pTimerLog;
     };
-    virtual long run();
+    virtual int32_t run();
     void exit();
 
 public:
-     virtual long registerTimer(ITrigger *pRrsTrigger, void *pArg, ULONG nScales,
+     virtual int32_t registerTimer(ITrigger *pRrsTrigger, void *pArg, ULONG nScales,
         TriggerStyle enStyle);
-     virtual long cancelTimer(ITrigger *pRrsTrigger);
+     virtual int32_t cancelTimer(ITrigger *pRrsTrigger);
 
     void clearTimer( );
 protected:

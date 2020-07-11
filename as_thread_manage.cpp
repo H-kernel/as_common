@@ -280,7 +280,7 @@ void as_task_manage::svc(void)
                 if (0 != pThreadInfo->m_tvAliveTime)
                 {
                     AS_LOG(AS_LOG_CRITICAL, "[deamon thread]thread[%s:%u], index[%d] has"
-                               " not update stat too long time, last report[%d],"
+                               " not update stat too int32_t time, last report[%d],"
                                "restart flag[%d] dump flag[%d].",
                                pThreadInfo->m_szThreadName,
                                pThreadInfo->m_ulThreadID,

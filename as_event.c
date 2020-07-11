@@ -107,7 +107,7 @@ int32_t as_wait_event(as_event_t *pstASEvent, int32_t lTimeOut)
         ulWaitTime = INFINITE;
     }
 
-    lResult = (long)WaitForSingleObject(pstASEvent->EventHandle, ulWaitTime);
+    lResult = (int32_t)WaitForSingleObject(pstASEvent->EventHandle, ulWaitTime);
     switch(lResult)
     {
         case WAIT_TIMEOUT:
@@ -136,7 +136,7 @@ int32_t as_wait_event(as_event_t *pstASEvent, int32_t lTimeOut)
 #endif
 
     return lResult;
-/*lint -e818*/ //使用公共平台源代码，是否Const不做要求
+/*lint -e818*/ //使锟矫癸拷锟斤拷平台源锟斤拷锟诫，锟角凤拷Const锟斤拷锟斤拷要锟斤拷
 }
 
 int32_t as_set_event(as_event_t *pstASEvent)

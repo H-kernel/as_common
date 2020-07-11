@@ -38,27 +38,27 @@ typedef enum _ASLogLevel
     AS_LOG_DEBUG       = 7
 }ASLogLevel;
 
-ASLOG_API void ASSetLogLevel(long lLevel);
+ASLOG_API void ASSetLogLevel(int32_t lLevel);
 
 ASLOG_API bool ASSetLogFilePathName(const char* szPathName);
 
-ASLOG_API void ASSetLogFileLengthLimit(unsigned long ulLimitLengthKB);
+ASLOG_API void ASSetLogFileLengthLimit(uint32_t ulLimitLengthKB);
 
 ASLOG_API void ASStartLog(void);
 
-ASLOG_API void __ASWriteLog(const char* szFileName, long lLine,
-                             long lLevel, const char* format, va_list argp);
+ASLOG_API void __ASWriteLog(const char* szFileName, int32_t lLine,
+                             int32_t lLevel, const char* format, va_list argp);
 ASLOG_API void ASStopLog(void);
 
 class CWriter
 {
     public:
-        CWriter(const char* file, long line)
+        CWriter(const char* file, int32_t line)
         {
             m_file_ = file;
             m_line_ = line;
         }
-        void operator()(long level, const char* format, ...)
+        void operator()(int32_t level, const char* format, ...)
         {
             va_list argp;
             va_start(argp, format);
@@ -72,7 +72,7 @@ class CWriter
             m_line_ = 0;
         }
         const char* m_file_;
-        long m_line_;
+        int32_t m_line_;
 };
 
 #define AS_LOG (CWriter(__FILE__, __LINE__))

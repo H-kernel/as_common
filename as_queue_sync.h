@@ -11,14 +11,14 @@ class CSyncQueue:public as_synchronized
 public:
     CSyncQueue( );    
     ~CSyncQueue();
-    long init(long maxQueueLen);
+    int32_t init(int32_t maxQueueLen);
     bool empty(void);
-    long size(void);
-    long pushBackEv(Type *ev,long timeOut = 0,long mode = QUEUE_MODE_NOWAIT );
-    long popFrontEv(Type *&ev,long timeout = 0,long mode = QUEUE_MODE_WAIT );
+    int32_t size(void);
+    int32_t pushBackEv(Type *ev,int32_t timeOut = 0,int32_t mode = QUEUE_MODE_NOWAIT );
+    int32_t popFrontEv(Type *&ev,int32_t timeout = 0,int32_t mode = QUEUE_MODE_WAIT );
 private:    
     queue<Type *> p_Queue;
-    long m_maxQueueLen;
+    int32_t m_maxQueueLen;
 };
 
 template <class Type> 
@@ -32,9 +32,9 @@ CSyncQueue<Type>::~CSyncQueue()
 }
 
 template <class Type>
-long CSyncQueue<Type>::init(long maxQueueLen)
+int32_t CSyncQueue<Type>::init(int32_t maxQueueLen)
 {
-    long result = VOS_OK;
+    int32_t result = VOS_OK;
     
     m_maxQueueLen = maxQueueLen;
     result = start();
@@ -55,9 +55,9 @@ bool CSyncQueue<Type>::empty(void)
 }
 
 template <class Type>
-long CSyncQueue<Type>::size(void)
+int32_t CSyncQueue<Type>::size(void)
 {
-    long sz;
+    int32_t sz;
     
     lock();
     sz = p_Queue.size();
@@ -67,9 +67,9 @@ long CSyncQueue<Type>::size(void)
 }
 
 template <class Type>
-long CSyncQueue<Type>::popFrontEv(Type *&ev,long timeout , long mode )
+int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
 {
-    long result = VOS_OK ;
+    int32_t result = VOS_OK ;
 
     lock();    
     while( VOS_TRUE )
@@ -105,10 +105,10 @@ long CSyncQueue<Type>::popFrontEv(Type *&ev,long timeout , long mode )
 }
 
 template <class Type>
-long  CSyncQueue<Type>::pushBackEv(Type *ev, long timeout,long mode)
+int32_t  CSyncQueue<Type>::pushBackEv(Type *ev, int32_t timeout,int32_t mode)
 {
-    long result = VOS_OK;   
-    long queulen = 0 ;    
+    int32_t result = VOS_OK;   
+    int32_t queulen = 0 ;    
 
     lock();
     queulen = p_Queue.size();        

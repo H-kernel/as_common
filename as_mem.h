@@ -4,7 +4,7 @@
 #include <stdlib.h>
 
 template<class T>
-T* AS_NEW(T* &m, unsigned long ulMuili = 0)
+T* AS_NEW(T* &m, uint32_t ulMuili = 0)
 {
     try
     {
@@ -32,7 +32,7 @@ enum DELETE_MULTI
 };
 
 template<class T>
-void AS_DELETE(T* &m, unsigned long ulMuili = 0)
+void AS_DELETE(T* &m, uint32_t ulMuili = 0)
 {
     if(NULL == m)
     {

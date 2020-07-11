@@ -1,19 +1,19 @@
 
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2008-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2008-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : ASLog.cpp
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            :
-  Éú³ÉÈÕÆÚ        : 2008-08-17
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        : ASÈÕÖ¾Ä£¿é
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          :
-    ×÷Õß          :
-    ÐÞ¸ÄÄÚÈÝ      :
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : ASLog.cpp
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2008-08-17
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : ASï¿½ï¿½Ö¾Ä£ï¿½ï¿½
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      :
 *******************************************************************************/
 
 
@@ -38,118 +38,118 @@ extern "C"{
 
 
 
-//extern HANDLE g_hDLLModule;                     //¶¯Ì¬Á´½Ó¿â¾ä±ú
+//extern HANDLE g_hDLLModule;                     //ï¿½ï¿½Ì¬ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½
 
-/************************** Begin ÈÕÖ¾¶ÔÏóÊµÏÖ ********************************/
+/************************** Begin ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ ********************************/
 
-#define ASLOG_ERROR_OK             0       //³É¹¦
-#define ASLOG_ERROR_INIT_CACHE     (-1)    //³õÊ¼»¯»º³åÇø³ö´í
-#define ASLOG_ERROR_FILE_NAME      (-2)    //×Ô¶¯Éú³ÉÈÕÖ¾ÎÄ¼þÃû³ö´í
-#define ASLOG_ERROR_OPEN_FILE      (-3)    //´ò¿ªÎÄ¼þ³ö´í
-#define ASLOG_ERROR_CREATE_EVENT   (-4)    //´´½¨ÊÂ¼þ³ö´í
-#define ASLOG_ERROR_CREATE_THREAD  (-5)    //´´½¨Ïß³Ì³ö´í
+#define ASLOG_ERROR_OK             0       //ï¿½É¹ï¿½
+#define ASLOG_ERROR_INIT_CACHE     (-1)    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define ASLOG_ERROR_FILE_NAME      (-2)    //ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define ASLOG_ERROR_OPEN_FILE      (-3)    //ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
+#define ASLOG_ERROR_CREATE_EVENT   (-4)    //ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½
+#define ASLOG_ERROR_CREATE_THREAD  (-5)    //ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì³ï¿½ï¿½ï¿½
 
-//Ä¬ÈÏ»º³åÇø´óÐ¡1M
+//Ä¬ï¿½Ï»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡1M
 #define DEFAULT_CACHE_SIZE          (1024*1024)
-//Ä¬ÈÏÎÄ¼þÇÐ»»³¤¶È£¬µ¥Î»Byte
+//Ä¬ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Î»Byte
 #define DEFAULT_CHANGE_FILE_LEN     (10*1024*1024)
-//Ä¬ÈÏ×î´óÎÄ¼þÇÐ»»³¤¶È£¬µ¥Î»Byte
+//Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Î»Byte
 #define MAX_CHANGE_FILE_LEN         (100*1024*1024)
-//Ä¬ÈÏ×îÐ¡ÎÄ¼þÇÐ»»³¤¶È£¬µ¥Î»Byte
+//Ä¬ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½Ä¼ï¿½ï¿½Ð»ï¿½ï¿½ï¿½ï¿½È£ï¿½ï¿½ï¿½Î»Byte
 #define MIN_CHANGE_FILE_LEN         (100*1024)
-//ÈÕÖ¾ÎÄ¼þÂ·¾¶Ãû³¤¶È
+//ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define MAX_LOG_FILE_PATH_NAME_LEN  1024
-//µ¥ÌõÈÕÖ¾×î´ó³¤¶È
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ó³¤¶ï¿½
 #define MAX_LEN_OF_SINGLE_LOG       2048
 
 
-//µÈ´ýÍË³öÊÂ¼þµÄ×ÜÊ±¼ä
+//ï¿½È´ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
 #define LOG_WAIT_FOR_EXIT_EVENT     5000
-//µÈ´ý½áÊø¼ä¸ô
+//ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #define LOG_WAIT_FOR_EXIT_EVENT_INTERVAL 50
-//µÈ´ýÐ´¼ä¸ô
+//ï¿½È´ï¿½Ð´ï¿½ï¿½ï¿½
 #define LOG_WAIT_FOR_WRITE_OVER_INTERVAL 10
 
 
 class as_log
 {
-    private:    //µ¥ÊµÀý
+    private:    //ï¿½ï¿½Êµï¿½ï¿½
         as_log();
     public:
         virtual ~as_log();
 
     public:
-        static as_log* GetASLogInstance();    //»ñÈ¡ÈÕÖ¾¶ÔÏó
-        static void DeleteASLogInstance();        //É¾³ýÈÕÖ¾¶ÔÏó
+        static as_log* GetASLogInstance();    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
+        static void DeleteASLogInstance();        //É¾ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
 
     public:
-        //Æô¶¯ÈÕÖ¾
-        long Start();
-        //ÉèÖÃÈÕÖ¾¼¶±ð
-        void SetLevel(long lLevel);
-        //ÉèÖÃµ±Ç°Ð´µÄÈÕÖ¾ÎÄ¼þÂ·¾¶Ãû
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+        int32_t Start();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
+        void SetLevel(int32_t lLevel);
+        //ï¿½ï¿½ï¿½Ãµï¿½Ç°Ð´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½
         bool SetLogFilePathName(const char* szPathName);
-        //ÉèÖÃÈÕÖ¾ÎÄ¼þ³¤¶ÈÏÞÖÆ£¬³¬¹ý´Ë³¤¶ÈÊ±Éú³ÉÐÂÎÄ¼þ£¬²ÎÊýµ¥Î»KB
-        void SetFileLengthLimit(unsigned long ulLimitLengthKB);
-        //Ð´ÈÕÖ¾
-        long Write(const char* szFile, long lLine,
-            long lLevel, const char* format, va_list argp);
-        //Í£Ö¹ÈÕÖ¾
-        long Stop();
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»KB
+        void SetFileLengthLimit(uint32_t ulLimitLengthKB);
+        //Ð´ï¿½ï¿½Ö¾
+        int32_t Write(const char* szFile, int32_t lLine,
+            int32_t lLevel, const char* format, va_list argp);
+        //Í£Ö¹ï¿½ï¿½Ö¾
+        int32_t Stop();
 
     private:
-        //¶Á»º³åÐ´ÎÄ¼þÏß³Ì
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Ä¼ï¿½ï¿½ß³ï¿½
 #if AS_APP_OS == AS_OS_WIN32
-        //ÈÕÖ¾Ð´Ïß³ÌÈë¿Ú
+        //ï¿½ï¿½Ö¾Ð´ï¿½ß³ï¿½ï¿½ï¿½ï¿½
         static uint32_t __stdcall ThreadEntry(VOID* lpvoid);
 #else
         static VOID* ThreadEntry(VOID* lpvoid);
 #endif
         void WriteLogFileThread();
 
-        const char* GetLevelString(long lLevel) const;
+        const char* GetLevelString(int32_t lLevel) const;
 
     private:
-        //ÈÕÖ¾Ä£¿éÊÇ·ñ±»Æô¶¯
+        //ï¿½ï¿½Ö¾Ä£ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½
         bool    m_bRun;
 
-        //ÊÇ·ñÔÊÐíÐ´ÈÕÖ¾
+        //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Ö¾
         bool    m_bAllowWrite;
 
-        //ÊÇ·ñ´ÅÅÌÂúµ¼ÖÂÈÕÖ¾Í£Ö¹
+        //ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Í£Ö¹
         bool    m_bDiskFull;
-        //µ±¼ì²âµ½´ÅÅÌ¿Õ¼ä´óÓÚ1MÊ±£¬»Ö¸´ÈÕÖ¾´òÓ¡
-        #define MIN_DISK_SPACE_FOR_LOG      (1024*1024) //´ÅÅÌ¿Õ¼ä´óÓÚ1MÊ±»Ö¸´ÈÕÖ¾
-        #define DISK_SPACE_CHECK_INTERVAL   10000       //´ÅÅÌ¿Õ¼ä¼ì²â¼ä¸ô10ÃëÖÓ
-        //ÉÏ´Î¼ì²â´ÅÅÌÂúµÄÊ±¼ä(½öÔÚ´ÅÅÌÂúµ¼ÖÂÈÕÖ¾Í£Ö¹Ê±Æð×÷ÓÃ)
-        unsigned long   m_dwLastCheckDiskSpaceTime;
+        //ï¿½ï¿½ï¿½ï¿½âµ½ï¿½ï¿½ï¿½Ì¿Õ¼ï¿½ï¿½ï¿½ï¿½1MÊ±ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½Ó¡
+        #define MIN_DISK_SPACE_FOR_LOG      (1024*1024) //ï¿½ï¿½ï¿½Ì¿Õ¼ï¿½ï¿½ï¿½ï¿½1MÊ±ï¿½Ö¸ï¿½ï¿½ï¿½Ö¾
+        #define DISK_SPACE_CHECK_INTERVAL   10000       //ï¿½ï¿½ï¿½Ì¿Õ¼ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½
+        //ï¿½Ï´Î¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½(ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Í£Ö¹Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+        uint32_t   m_dwLastCheckDiskSpaceTime;
 
-        //ÈÕÖ¾¼¶±ð£¬Ä¬ÈÏÎªINFO¼¶±ð
-        long    m_lLevel;
+        //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½ÎªINFOï¿½ï¿½ï¿½ï¿½
+        int32_t    m_lLevel;
 
-        //Ð´ÎÄ¼þÏß³ÌµÄ¾ä±ú
+        //Ð´ï¿½Ä¼ï¿½ï¿½ß³ÌµÄ¾ï¿½ï¿½
         as_thread_t* m_hWriteThread;
 
-        //Ð´ÈÕÖ¾ÊÂ¼þµÄ¾ä±ú
+        //Ð´ï¿½ï¿½Ö¾ï¿½Â¼ï¿½ï¿½Ä¾ï¿½ï¿½
         as_event_t*  m_hWriteEvent;
 
-        //Ð´Ïß³ÌÍË³öÊÂ¼þµÄ¾ä±ú
+        //Ð´ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½ï¿½Ä¾ï¿½ï¿½
         as_event_t*    m_hThreadExitEvent;
 
-        //ÈÕÖ¾»º³å
+        //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
         as_ring_cache    m_Cache;
 
-        //ÈÕÖ¾ÎÄ¼þ
+        //ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½
         FILE*    m_pLogFile;
 
-        //ÈÕÖ¾ÎÄ¼þ³¤¶ÈÏÞÖÆ£¬µ¥Î»Byte
-        unsigned long    m_ulFileLenLimit;
+        //ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½Î»Byte
+        uint32_t    m_ulFileLenLimit;
 
-        //ÈÕÖ¾ÎÄ¼þÂ·¾¶ºÍÃû³Æ
+        //ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         char    m_szLogFilePathName[MAX_LOG_FILE_PATH_NAME_LEN];
 
     private:
-        //µ¥ÊµÀýÈÕÖ¾¶ÔÏó
+        //ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
         static as_log*    g_pASLog;
 };
 
@@ -175,10 +175,10 @@ as_log::~as_log()
 {
     try
     {
-        //Í£Ö¹ÈÕÖ¾Ä£¿é
+        //Í£Ö¹ï¿½ï¿½Ö¾Ä£ï¿½ï¿½
         (void)Stop();
 
-        //ÒÔÏÂÊÇÎª¹ýPC-LINT
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½PC-LINT
         if(NULL != m_hWriteThread)
         {
             m_hWriteThread = NULL;
@@ -205,10 +205,10 @@ as_log::~as_log()
     }
 }
 
-//»ñÈ¡ÈÕÖ¾Ä£¿éµÄÎ¨Ò»ÊµÀý
+//ï¿½ï¿½È¡ï¿½ï¿½Ö¾Ä£ï¿½ï¿½ï¿½Î¨Ò»Êµï¿½ï¿½
 as_log* as_log::GetASLogInstance()
 {
-    //ÈôÈÕÖ¾ÊµÀýÎ´Éú³ÉÔòÉêÇë¶ÔÏó
+    //ï¿½ï¿½ï¿½ï¿½Ö¾Êµï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if(NULL == g_pASLog)
     {
         g_pASLog = new as_log;
@@ -217,126 +217,126 @@ as_log* as_log::GetASLogInstance()
     return g_pASLog;
 }
 
-//É¾³ýÈÕÖ¾Ä£¿éµÄÊµÀý
+//É¾ï¿½ï¿½ï¿½ï¿½Ö¾Ä£ï¿½ï¿½ï¿½Êµï¿½ï¿½
 void as_log::DeleteASLogInstance()
 {
-    //ÈôÒÑ¾­ÉêÇë¶ÔÏóÔòÊÍ·Å
+    //ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½
     if(NULL == g_pASLog)
     {
-        //±ØÐëÒªÏÈÍ£Ö¹¶ÔÏó
+        //ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½
         (void)(g_pASLog->Stop());
 
-        //É¾³ý¶ÔÏó
+        //É¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         delete g_pASLog;
         g_pASLog = NULL;
     }
 }
 
-//Æô¶¯ÈÕÖ¾Ä£¿é
-long as_log::Start()
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾Ä£ï¿½ï¿½
+int32_t as_log::Start()
 {
-    //Èç¹ûÒÑ¾­Æô¶¯ÔòÖ±½Ó·µ»Ø
+    //ï¿½ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½Ó·ï¿½ï¿½ï¿½
     if(m_bRun)
     {
         m_bAllowWrite = true;
         return ASLOG_ERROR_OK;
     }
 
-    //³õÊ¼»¯»º³åÇøÎª2M
-    unsigned long ulCacheSize = m_Cache.SetCacheSize(DEFAULT_CACHE_SIZE);
+    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª2M
+    uint32_t ulCacheSize = m_Cache.SetCacheSize(DEFAULT_CACHE_SIZE);
     if(DEFAULT_CACHE_SIZE != ulCacheSize)
     {
-        //»º³åÇøÉêÇëÊ§°Ü
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
         return ASLOG_ERROR_INIT_CACHE;
     }
 
-    //¼ì²éÎÄ¼þÃû
+    //ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     if(::strlen(m_szLogFilePathName) == 0)
     {
 #if AS_APP_OS == AS_OS_WIN32
-        //¸ù¾ÝÖÐ¼ä¼þÄ£¿é¾ä±úµÃµ½Â·¾¶
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ð¼ï¿½ï¿½Ä£ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½Â·ï¿½ï¿½
         (void)::GetModuleFileName(NULL, CA2W(m_szLogFilePathName), MAX_LOG_FILE_PATH_NAME_LEN - 1);
         //    (void)::GetModuleFileName((HMODULE)g_hDLLModule, m_szLogFilePathName, MAX_LOG_FILE_PATH_NAME_LEN-1);
         char* pszFind = ::strrchr(m_szLogFilePathName, '.');
         if (NULL == pszFind)
         {
-            //Òì³£
+            //ï¿½ì³£
             return ASLOG_ERROR_FILE_NAME;
         }
-        //Ìí¼Óºó×º
+        //ï¿½ï¿½ï¿½Óºï¿½×º
         (void)::sprintf(pszFind, ".log");
 #elif AS_APP_OS == AS_OS_LINUX
         (void)::sprintf(m_szLogFilePathName, "AS_Module.log");
 #endif
     }
-    //´ò¿ªÎÄ¼þ
+    //ï¿½ï¿½ï¿½Ä¼ï¿½
     m_pLogFile = ::fopen(m_szLogFilePathName, "a+");
     if(NULL == m_pLogFile)
     {
-        //ÎÄ¼þÎÞ·¨´ò¿ª
+        //ï¿½Ä¼ï¿½ï¿½Þ·ï¿½ï¿½ï¿½
         return ASLOG_ERROR_OPEN_FILE;
     }
 
-    //³õÊ¼»¯Ð´ÊÂ¼þ
+    //ï¿½ï¿½Ê¼ï¿½ï¿½Ð´ï¿½Â¼ï¿½
     m_hWriteEvent = as_create_event();
     if (NULL == m_hWriteEvent)
     {
-        //Ð´ÊÂ¼þ´´½¨Ê§°Ü
+        //Ð´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 
-        //¹Ø±ÕÎÄ¼þ
+        //ï¿½Ø±ï¿½ï¿½Ä¼ï¿½
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
         return ASLOG_ERROR_CREATE_EVENT;
     }
 
-    //³õÊ¼»¯Ð´Ïß³ÌÍË³öÊÂ¼þ
+    //ï¿½ï¿½Ê¼ï¿½ï¿½Ð´ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½
     m_hThreadExitEvent = as_create_event();
     if (NULL == m_hThreadExitEvent)
     {
-        //Ð´Ïß³ÌÍË³öÊÂ¼þ´´½¨Ê§°Ü
+        //Ð´ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
 
-        //¹Ø±ÕÎÄ¼þ
+        //ï¿½Ø±ï¿½ï¿½Ä¼ï¿½
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
 
-        //¹Ø±ÕÐ´ÊÂ¼þ¾ä±ú
+        //ï¿½Ø±ï¿½Ð´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
         as_destroy_event(m_hWriteEvent);
         m_hWriteEvent = NULL;
         return ASLOG_ERROR_CREATE_EVENT;
     }
 
-    //ÉèÖÃÈÕÖ¾Æô¶¯±êÖ¾
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
     m_bRun = true;
 
-    //´´½¨¶Á»º³åÐ´ÎÄ¼þÏß³Ì
-    long lResult = as_create_thread(ThreadEntry, this, &m_hWriteThread, AS_DEFAULT_STACK_SIZE);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Ä¼ï¿½ï¿½ß³ï¿½
+    int32_t lResult = as_create_thread(ThreadEntry, this, &m_hWriteThread, AS_DEFAULT_STACK_SIZE);
     if((AS_ERROR_CODE_OK != lResult)
         ||(NULL == m_hWriteThread))
     {
-        //Ð´Ïß³Ì´´½¨Ê§°Ü£¬ÇåÀí×ÊÔ´
+        //Ð´ï¿½ß³Ì´ï¿½ï¿½ï¿½Ê§ï¿½Ü£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô´
         m_bRun = false;
 
-        //¹Ø±ÕÎÄ¼þ
+        //ï¿½Ø±ï¿½ï¿½Ä¼ï¿½
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
 
-        //¹Ø±ÕÐ´ÊÂ¼þ¾ä±ú
+        //ï¿½Ø±ï¿½Ð´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
         as_destroy_event(m_hWriteEvent);
         m_hWriteEvent = NULL;
 
-        //¹Ø±ÕÐ´Ïß³ÌÍË³öÊÂ¼þ¾ä±ú
+        //ï¿½Ø±ï¿½Ð´ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½
         as_destroy_event(m_hThreadExitEvent);
         m_hThreadExitEvent = NULL;
         return ASLOG_ERROR_CREATE_THREAD;
     }
 
-    //¿ªÊ¼½ÓÊÕÈÕÖ¾
+    //ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
     m_bAllowWrite = true;
 
     return ASLOG_ERROR_OK;
 }
-//ÉèÖÃÈÕÖ¾¼¶±ð
-void as_log::SetLevel(long lLevel)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
+void as_log::SetLevel(int32_t lLevel)
 {
     switch(lLevel)
     {
@@ -355,96 +355,96 @@ void as_log::SetLevel(long lLevel)
     }
 }
 
-//ÉèÖÃµ±Ç°Ð´µÄÈÕÖ¾ÎÄ¼þÂ·¾¶Ãû
+//ï¿½ï¿½ï¿½Ãµï¿½Ç°Ð´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½
 bool as_log::SetLogFilePathName(const char* szPathName)
 {
     bool bSetOk = false;
-    //²ÎÊý¼ì²é
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if((NULL!=szPathName) && ::strlen(szPathName)<MAX_LOG_FILE_PATH_NAME_LEN)
     {
         (void)::sprintf(m_szLogFilePathName, "%s", szPathName);
-        //ÎÄ¼þÄ¿Â¼´´½¨Íê³É
+        //ï¿½Ä¼ï¿½Ä¿Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         bSetOk = true;
     }
 
     return bSetOk;
 }
 
-//ÉèÖÃÈÕÖ¾ÎÄ¼þ³¤¶ÈÏÞÖÆ£¬³¬¹ý´Ë³¤¶ÈÊ±Éú³ÉÐÂÎÄ¼þ£¬²ÎÊýµ¥Î»KB
-void as_log::SetFileLengthLimit(unsigned long ulLimitLengthKB)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»KB
+void as_log::SetFileLengthLimit(uint32_t ulLimitLengthKB)
 {
     //KB×ªÎªByte
-    unsigned long ulNewLimitLength = ulLimitLengthKB * 1024;
+    uint32_t ulNewLimitLength = ulLimitLengthKB * 1024;
 
-    //·¶Î§È·¶¨
+    //ï¿½ï¿½Î§È·ï¿½ï¿½
     if(ulNewLimitLength < MIN_CHANGE_FILE_LEN)
     {
-        //Ð¡ÓÚ×îÐ¡ÖµÊ¹ÓÃ×îÐ¡Öµ
+        //Ð¡ï¿½ï¿½ï¿½ï¿½Ð¡ÖµÊ¹ï¿½ï¿½ï¿½ï¿½Ð¡Öµ
         m_ulFileLenLimit = MIN_CHANGE_FILE_LEN;
     }
     else if(ulNewLimitLength < MAX_CHANGE_FILE_LEN)
     {
-        //Õý³£·¶Î§
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î§
         m_ulFileLenLimit = ulNewLimitLength;
     }
     else
     {
-        //´óÓÚ×î´óÖµÊ¹ÓÃ×î´óÖµ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÖµÊ¹ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
         m_ulFileLenLimit = MAX_CHANGE_FILE_LEN;
     }
 }
 
-//Ð´Ò»ÌõÈÕÖ¾µ½»º³åÇø£¬ÈçÏÂ:
-//2008-08-17 10:45:45.939[DEBUG|Log.cpp:152|PID:772|TID:2342|Err:0]³ÌÐòÆô¶¯...
-long as_log::Write(const char* szFile, long lLine,
-                long lLevel, const char* format, va_list argp)
+//Ð´Ò»ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:
+//2008-08-17 10:45:45.939[DEBUG|Log.cpp:152|PID:772|TID:2342|Err:0]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½...
+int32_t as_log::Write(const char* szFile, int32_t lLine,
+                int32_t lLevel, const char* format, va_list argp)
 {
     if(!m_bRun)
     {
-        //Î´Æô¶¯
+        //Î´ï¿½ï¿½ï¿½ï¿½
         return 0;
     }
 
-    //Î´ÔÊÐíÐ´
+    //Î´ï¿½ï¿½ï¿½ï¿½Ð´
     if(!m_bAllowWrite)
     {
-        //´ÅÅÌ¿Õ¼ä´ïµ½»Ö¸´±ê×¼£¬»Ö¸´ÈÕÖ¾ÊäÈë£¬Çå³ý´ÅÅÌÂú±êÖ¾
+        //ï¿½ï¿½ï¿½Ì¿Õ¼ï¿½ïµ½ï¿½Ö¸ï¿½ï¿½ï¿½×¼ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
         m_dwLastCheckDiskSpaceTime = 0;
         m_bDiskFull = false;
         m_bAllowWrite = true;
 
-        //Èç¹ûÎÄ¼þÎ´´ò¿ª£¬ÔòÒªÖØÐÂ´ò¿ªÈÕÖ¾ÎÄ¼þ£¬Ð´ÈëÐÂÈÕÖ¾ÐÅÏ¢
+        //ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î´ï¿½ò¿ª£ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½Ï¢
         if(NULL == m_pLogFile)
         {
             m_pLogFile = ::fopen(m_szLogFilePathName, "a+");
             if(NULL == m_pLogFile)
             {
-                //ÈÔÈ»ÓÐÎÊÌâ£¬»Ö¸´´íÎó±ê¼Ç£¬ÏÂ´ÎÔÙ³¢ÊÔ´ò¿ª
+                //ï¿½ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½â£¬ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½ï¿½Â´ï¿½ï¿½Ù³ï¿½ï¿½Ô´ï¿½
                 m_bDiskFull = true;
                 m_bAllowWrite = false;
                 return 0;
             }
-            //Í¨ÖªÐ´Ïß³ÌÐ´ÈÕÖ¾
+            //Í¨ÖªÐ´ï¿½ß³ï¿½Ð´ï¿½ï¿½Ö¾
             as_set_event(m_hWriteEvent);
         }
     }
 
-    //ÈÕÖ¾¼¶±ðÏÞÖÆ
+    //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     if(lLevel > m_lLevel)
     {
         return 0;
     }
 
-//¶îÍâÐÅÏ¢×¼±¸
-    //ÈÕÖ¾Ê±¼ä
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢×¼ï¿½ï¿½
+    //ï¿½ï¿½Ö¾Ê±ï¿½ï¿½
     time_t ulTick = time(NULL);
-    //ÈÕÖ¾¼¶±ð
+    //ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
     const char* pszLevel = GetLevelString(lLevel);
-    //ÎÄ¼þÃû
+    //ï¿½Ä¼ï¿½ï¿½ï¿½
     const char* pszFileName = ::strrchr(szFile, '\\');
     if(NULL != pszFileName)
     {
-        //Ô½¹ýÐ±¸Ü
+        //Ô½ï¿½ï¿½Ð±ï¿½ï¿½
         pszFileName += 1;
     }
     else
@@ -452,26 +452,26 @@ long as_log::Write(const char* szFile, long lLine,
         pszFileName = szFile;
     }
 
-    //Ïß³ÌID
-    unsigned long ulThreadID = as_get_threadid();
-    //µ±Ç°´íÎóÂë
+    //ï¿½ß³ï¿½ID
+    uint32_t ulThreadID = as_get_threadid();
+    //ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 #if AS_APP_OS == AS_OS_LINUX
-    unsigned long ulErr = 0;
+    uint32_t ulErr = 0;
 #elif AS_APP_OS == AS_OS_WIN32
-    unsigned long ulErr = GetLastError();
+    uint32_t ulErr = GetLastError();
 #endif
-//¶îÍâÐÅÏ¢×¼±¸Íê³É
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢×¼ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    //²»ÄÜÊ¹ÓÃ³ÉÔ±±äÁ¿£¬¶àÏß³Ì»á³öÏÖÎÊÌâ
+    //ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã³ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³Ì»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     char szLogTmp [MAX_LEN_OF_SINGLE_LOG] = {0};
     char szLogTime[MAX_LEN_OF_SINGLE_LOG] = { 0 };
     as_strftime(szLogTime, MAX_LEN_OF_SINGLE_LOG, "%Y-%m-%d %H:%M:%S", ulTick);
-    //Ê×ÏÈÏò×îÖÕÈÕÖ¾ÐÅÏ¢ÖÐ¼ÓÈë¶îÍâÐÅÏ¢
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½Ï¢ï¿½Ð¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
     (void)::sprintf(szLogTmp,"%s[%s|%20s:%05d|TID:0x%04X|Err:0x%04X] ",
         szLogTime, pszLevel, pszFileName, lLine, ulThreadID, ulErr);
 
-    //½«ÓÃ»§ÐÅÏ¢½ÓÔÚ¶îÍâÐÅÏ¢ºóÐ´½øÈÕÖ¾ÖÐ
-    unsigned long ulLen = ::strlen(szLogTmp);
+    //ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½Ú¶ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½
+    uint32_t ulLen = ::strlen(szLogTmp);
 #if AS_APP_OS == AS_OS_LINUX
     (void)::vsnprintf(szLogTmp + ulLen, (MAX_LEN_OF_SINGLE_LOG - ulLen) - 1, format, argp);
 #elif AS_APP_OS == AS_OS_WIN32
@@ -480,72 +480,72 @@ long as_log::Write(const char* szFile, long lLine,
     szLogTmp[MAX_LEN_OF_SINGLE_LOG-1] = '\0';
     ulLen = ::strlen(szLogTmp);
     if((ulLen+2) < MAX_LEN_OF_SINGLE_LOG)
-    {//×Ô¶¯Ôö¼ÓÒ»¸ö»»ÐÐ
+    {//ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         szLogTmp[ulLen] = '\n';
         szLogTmp[ulLen+1] = '\0';
     }
 
-    //½«ÈÕÖ¾Ð´½ø»º³åÇø
-    unsigned long ulWriteLen = m_Cache.Write(szLogTmp, ::strlen(szLogTmp));
+    //ï¿½ï¿½ï¿½ï¿½Ö¾Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    uint32_t ulWriteLen = m_Cache.Write(szLogTmp, ::strlen(szLogTmp));
     while(0 == ulWriteLen)
     {
-        //Í¨ÖªÐ´Ïß³ÌÐ´ÈÕÖ¾
+        //Í¨ÖªÐ´ï¿½ß³ï¿½Ð´ï¿½ï¿½Ö¾
         as_set_event(m_hWriteEvent);
-        //µÈ´ýÊý¾ÝÐ´Èë»º³å
+        //ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ë»ºï¿½ï¿½
         as_sleep(LOG_WAIT_FOR_WRITE_OVER_INTERVAL);
         ulWriteLen = m_Cache.Write(szLogTmp, ::strlen(szLogTmp));
     }
 
-    //Í¨ÖªÐ´Ïß³ÌÐ´ÈÕÖ¾
+    //Í¨ÖªÐ´ï¿½ß³ï¿½Ð´ï¿½ï¿½Ö¾
     as_set_event(m_hWriteEvent);
     return 0;
 }
 
-//Í£Ö¹ÈÕÖ¾£¬ÖÕÖ¹Ð´Ïß³Ì
-long as_log::Stop()
+//Í£Ö¹ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Ö¹Ð´ï¿½ß³ï¿½
+int32_t as_log::Stop()
 {
-    //²»½ÓÊÜÐ´ÈÕÖ¾
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Ö¾
     m_bAllowWrite = false;
     m_bDiskFull = false;
     m_dwLastCheckDiskSpaceTime = 0;
 
-    //ÈôÒÑ¾­Í£Ö¹»òÕßÎ´Æô¶¯£¬Ö±½ÓÍË³ö
+    //ï¿½ï¿½ï¿½Ñ¾ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö±ï¿½ï¿½ï¿½Ë³ï¿½
     if(!m_bRun)
     {
         return ASLOG_ERROR_OK;
     }
 
-    //µÈ»º³åÖÐÊý¾Ý¶¼Ð´µ½ÎÄ¼þÖÐ(µÈ´ý5Ãë)
-    long lWaitTime = LOG_WAIT_FOR_EXIT_EVENT;
+    //ï¿½È»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¶ï¿½Ð´ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½(ï¿½È´ï¿½5ï¿½ï¿½)
+    int32_t lWaitTime = LOG_WAIT_FOR_EXIT_EVENT;
     while(lWaitTime >= 0)
     {
         if(0 == m_Cache.GetDataSize())
         {
-            //»º³åÖÐÈÕÖ¾ÒÑ¾­¶¼Ð´µ½ÎÄ¼þÖÐÁË
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ñ¾ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
             break;
         }
 
-        //´¥·¢Ð´ÊÂ¼þ
+        //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Â¼ï¿½
         as_set_event(m_hWriteEvent);
 
         as_sleep(LOG_WAIT_FOR_WRITE_OVER_INTERVAL);
         lWaitTime -= LOG_WAIT_FOR_WRITE_OVER_INTERVAL;
     }
 
-    //ÉèÖÃÈÕÖ¾±êÖ¾ÎªÍ£Ö¹£¬´¥·¢Ð´ÊÂ¼þ£¬ÈÃÏß³Ì×Ô¼ºÍË³ö
-    //µÈ´ý5Ãë£¬ÈôÈÔÎ´ÍË³ö£¬ÔòÇ¿ÖÆÖÐÖ¹
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½Ö¾ÎªÍ£Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½Ô¼ï¿½ï¿½Ë³ï¿½
+    //ï¿½È´ï¿½5ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Î´ï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½Ç¿ï¿½ï¿½ï¿½ï¿½Ö¹
     m_bRun = false;
     lWaitTime = LOG_WAIT_FOR_EXIT_EVENT;
     while(lWaitTime >= 0)
     {
-        //´¥·¢Ð´ÊÂ¼þ£¬ÈÃÏß³Ì×Ô¼ºÍË³ö
+        //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½Ô¼ï¿½ï¿½Ë³ï¿½
         as_set_event(m_hWriteEvent);
 
         if (AS_ERROR_CODE_TIMEOUT != as_wait_event(m_hThreadExitEvent, LOG_WAIT_FOR_EXIT_EVENT_INTERVAL))
         {
-            //Ïß³Ì½áÊø
+            //ï¿½ß³Ì½ï¿½ï¿½ï¿½
             //begin delete for AQ1D01618 by xuxin
-            //m_hThreadExitEvent = NULL; //ÏÂÃæÓÐCloseHandleÇåÀí£¬ÕâÀï²»ÄÜÖÃ¿Õ
+            //m_hThreadExitEvent = NULL; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CloseHandleï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï²»ï¿½ï¿½ï¿½Ã¿ï¿½
             //end delete for AQ1D01618 by xuxin
             break;
         }
@@ -555,40 +555,40 @@ long as_log::Stop()
 
     if(NULL != m_hWriteThread)
     {
-        //Ç¿ÐÐÖÐÖ¹Ð´Ïß³Ì
+        //Ç¿ï¿½ï¿½ï¿½ï¿½Ö¹Ð´ï¿½ß³ï¿½
         (void)::as_thread_exit(m_hWriteThread);
         m_hWriteThread = NULL;
     }
 
-    //ÇåÀíÐ´ÊÂ¼þ
+    //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½Â¼ï¿½
     if(NULL != m_hWriteEvent)
     {
         (void)as_destroy_event(m_hWriteEvent);
         m_hWriteEvent = NULL;
     }
 
-    //ÇåÀíÐ´Ïß³ÌÍË³öÊÂ¼þ
+    //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½
     if(NULL != m_hThreadExitEvent)
     {
         as_destroy_event(m_hThreadExitEvent);
         m_hThreadExitEvent = NULL;
     }
 
-    //¹Ø±ÕÎÄ¼þ
+    //ï¿½Ø±ï¿½ï¿½Ä¼ï¿½
     if(NULL != m_pLogFile)
     {
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
     }
 
-    //Çå¿Õ»º³å
+    //ï¿½ï¿½Õ»ï¿½ï¿½ï¿½
     m_Cache.Clear();
 
     return ASLOG_ERROR_OK;
 }
 
 #if AS_APP_OS == AS_OS_WIN32
-//ÈÕÖ¾Ð´Ïß³ÌÈë¿Ú
+//ï¿½ï¿½Ö¾Ð´ï¿½ß³ï¿½ï¿½ï¿½ï¿½
 uint32_t __stdcall as_log::ThreadEntry(VOID* lpvoid)
 #else
 VOID* as_log::ThreadEntry(VOID* lpvoid)
@@ -596,7 +596,7 @@ VOID* as_log::ThreadEntry(VOID* lpvoid)
 {
     if(NULL != lpvoid)
     {
-        //µ÷ÓÃÐ´Ïß³Ìº¯ÊýÌå
+        //ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ß³Ìºï¿½ï¿½ï¿½ï¿½ï¿½
         as_log* pASLog = (as_log *)lpvoid;
         pASLog->WriteLogFileThread();
     }
@@ -604,17 +604,17 @@ VOID* as_log::ThreadEntry(VOID* lpvoid)
     return 0;
 }
 
-//Ð´ÈÕÖ¾Ïß³Ì
+//Ð´ï¿½ï¿½Ö¾ï¿½ß³ï¿½
 void as_log::WriteLogFileThread()
 {
-    //Ïß³ÌÖÐ±äÁ¿×¼±¸
+    //ï¿½ß³ï¿½ï¿½Ð±ï¿½ï¿½ï¿½×¼ï¿½ï¿½
     char szNewFileName[MAX_LOG_FILE_PATH_NAME_LEN] = {0};
-    unsigned long ulLogDataLen = 0;
-    unsigned long ulCurFileLen = 0;
+    uint32_t ulLogDataLen = 0;
+    uint32_t ulCurFileLen = 0;
     char* pLogInfo = NULL;
     try
     {
-        //ÉêÇë¶ÁÊý¾Ý¿Õ¼ä
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ý¿Õ¼ï¿½
         pLogInfo = new char[m_Cache.GetCacheSize()];
     }
     catch(...)
@@ -622,50 +622,50 @@ void as_log::WriteLogFileThread()
     }
     if(NULL == pLogInfo)
     {
-        //ÊÍ·Å²¢¸³¿ÕÖµ
+        //ï¿½Í·Å²ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
         as_thread_exit(m_hWriteThread);
         m_hWriteThread = NULL;
 
-        //Ïß³ÌÍË³öÊÂ¼þÍ¨Öª
+        //ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½Í¨Öª
         as_set_event(m_hThreadExitEvent);
 
         return ;
     }
 
-    //Æô¶¯¶Á»º³åÑ­»·
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ñ­ï¿½ï¿½
     while(m_bRun)
     {
-        //µÈ´ýÐ´ÎÄ¼þÊÂ¼þ
+        //ï¿½È´ï¿½Ð´ï¿½Ä¼ï¿½ï¿½Â¼ï¿½
         as_wait_event(m_hWriteEvent, 0);
 
-        //´ÅÅÌÂúÎÄ¼þÎ´´ò¿ª
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½Î´ï¿½ï¿½
         if(m_bDiskFull || NULL == m_pLogFile)
         {
-            //¿ÉÄÜÊÇ´ÅÅÌÂú£¬µÈ´ý
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½
             if(m_bDiskFull)
             {
                 continue;
             }
             else
-            {   //²»ÊÇÒòÎª´ÅÅÌÂúÔì³ÉµÄ£¬ÍË³ö
+            {   //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉµÄ£ï¿½ï¿½Ë³ï¿½
                 break;
             }
         }
 
-        //¶Á»º³å
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         ulLogDataLen = m_Cache.GetCacheSize();
         ulLogDataLen= m_Cache.Read(pLogInfo, ulLogDataLen);
         if(0 == ulLogDataLen)
         {
-            //»º³åÎª¿ÕÎ´¶Áµ½Êý¾Ý
+            //ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             continue;
         }
 
-        //Ð´Êý¾Ýµ½ÎÄ¼þ
+        //Ð´ï¿½ï¿½ï¿½Ýµï¿½ï¿½Ä¼ï¿½
         if(1 != fwrite(pLogInfo, ulLogDataLen, 1, m_pLogFile))
         {
 #if AS_APP_OS == AS_OS_WIN32
-            //Ð´Êý¾Ýµ½ÎÄ¼þÖÐ³öÏÖÒì³££¬ÈôÊÇ´ÅÅÌÂúÔòÔÝÍ£ÈÕÖ¾£¬µÈ´ý¿Õ¼ä
+            //Ð´ï¿½ï¿½ï¿½Ýµï¿½ï¿½Ä¼ï¿½ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½È´ï¿½ï¿½Õ¼ï¿½
             if(ERROR_DISK_FULL == ::GetLastError())
             {
                 m_bAllowWrite = false;
@@ -673,18 +673,18 @@ void as_log::WriteLogFileThread()
                 continue;
             }
             else
-            {//ÆäËü´íÎóÔòÍË³öÐ´ÈÕÖ¾
+            {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½Ð´ï¿½ï¿½Ö¾
                 break;
             }
 #elif AS_APP_OS == AS_OS_LINUX
             break;
 #endif
         }
-        //½«ÎÄ¼þ»º³åÖÐÊý¾ÝÐ´µ½Ó²ÅÌ
+        //ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½Ó²ï¿½ï¿½
         if(fflush(m_pLogFile) != 0)
         {
 #if AS_APP_OS == AS_OS_WIN32
-            //Ð´Êý¾Ýµ½Ó²ÅÌÖÐ³öÏÖÒì³££¬ÈôÊÇ´ÅÅÌÂúÔòÔÝÍ£ÈÕÖ¾£¬µÈ´ý¿Õ¼ä
+            //Ð´ï¿½ï¿½ï¿½Ýµï¿½Ó²ï¿½ï¿½ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½È´ï¿½ï¿½Õ¼ï¿½
             if(ERROR_DISK_FULL == ::GetLastError())
             {
                 m_bAllowWrite = false;
@@ -692,7 +692,7 @@ void as_log::WriteLogFileThread()
                 continue;
             }
             else
-            {//ÆäËü´íÎóÔòÍË³öÐ´ÈÕÖ¾
+            {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½Ð´ï¿½ï¿½Ö¾
                 break;
             }
 #elif AS_APP_OS == AS_OS_LINUX
@@ -700,8 +700,8 @@ void as_log::WriteLogFileThread()
 #endif
         }
 
-        //¼ì²éÎÄ¼þ³¤¶ÈÊÇ·ñ³¬¹ýÏÞÖÆ
-        ulCurFileLen = (unsigned long)::ftell(m_pLogFile);
+        //ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ñ³¬¹ï¿½ï¿½ï¿½ï¿½ï¿½
+        ulCurFileLen = (uint32_t)::ftell(m_pLogFile);
         if(ulCurFileLen < m_ulFileLenLimit)
         {
             continue;
@@ -709,60 +709,60 @@ void as_log::WriteLogFileThread()
 
         if(::strlen(m_szLogFilePathName) >= (MAX_LOG_FILE_PATH_NAME_LEN-20))
         {
-            //ÎÄ¼þÃûÌ«³¤£¬ÎÞ·¨ÐÞ¸ÄÎÄ¼þÃûÎª±¸·ÝÎÄ¼þÃû
+            //ï¿½Ä¼ï¿½ï¿½ï¿½Ì«ï¿½ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½Þ¸ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
             continue;
         }
 
-        //¹Ø±Õµ±Ç°ÈÕÖ¾ÎÄ¼þ
+        //ï¿½Ø±Õµï¿½Ç°ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
 
         ULONG ulTick = as_get_ticks();
 
-        //Éú³É±¸·ÝÎÄ¼þÃû
+        //ï¿½ï¿½ï¿½É±ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
         (void)::sprintf(szNewFileName, "%s.%4d",m_szLogFilePathName, ulTick);
 
-        //ÐÞ¸Äµ±Ç°ÈÕÖ¾ÎÄ¼þÎª±¸·ÝÎÄ¼þ£¬ÐÞ¸ÄÎÄ¼þÃûÊ§°ÜÒ²Ã»ÓÐ¹ØÏµ£¬¿ÉÒÔÔÙ´ò¿ªËü¼ÌÐøÍù¸ÃÎÄ¼þÖÐÐ´
+        //ï¿½Þ¸Äµï¿½Ç°ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Îªï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ê§ï¿½ï¿½Ò²Ã»ï¿½Ð¹ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ð´
         (void)::rename(m_szLogFilePathName, szNewFileName);
 
-        //ÖØÐÂ´ò¿ªÈÕÖ¾ÎÄ¼þ
+        //ï¿½ï¿½ï¿½Â´ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½
         m_pLogFile = ::fopen(m_szLogFilePathName, "a+");
         if(NULL != m_pLogFile)
         {
-            //ÎÄ¼þ´ò¿ªÕý³£
+            //ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             continue;
         }
 #if AS_APP_OS == AS_OS_WIN32
-        //ÐÂÈÕÖ¾ÎÄ¼þ´ò¿ªÊ§°Ü
+        //ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
         if(ERROR_DISK_FULL != ::GetLastError())
         {
-            //Òì³££¬Í£Ö¹ÈÕÖ¾
+            //ï¿½ì³£ï¿½ï¿½Í£Ö¹ï¿½ï¿½Ö¾
             break;
         }
 #endif
-        //ÈôÊÇ´ÅÅÌÂúÔòÔÝÍ£ÈÕÖ¾£¬µÈ´ý¿Õ¼ä
+        //ï¿½ï¿½ï¿½Ç´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í£ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½È´ï¿½ï¿½Õ¼ï¿½
         m_bAllowWrite = false;
         m_bDiskFull = true;
     }
 
-    //»Ö¸´×´Ì¬
+    //ï¿½Ö¸ï¿½×´Ì¬
     m_bRun = false;
     m_bAllowWrite = false;
     m_bDiskFull = false;
     m_dwLastCheckDiskSpaceTime = 0;
 
-    //ÊÍ·Å²¢¸³¿ÕÖµ
+    //ï¿½Í·Å²ï¿½ï¿½ï¿½ï¿½ï¿½Öµ
     as_thread_exit(m_hWriteThread);
     m_hWriteThread = NULL;
 
-    //¹Ø±Õµ±Ç°ÈÕÖ¾ÎÄ¼þ
+    //ï¿½Ø±Õµï¿½Ç°ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½
     if(NULL != m_pLogFile)
     {
         (void)::fclose(m_pLogFile);
         m_pLogFile = NULL;
     }
 
-    //ÊÍ·ÅÁÙÊ±¿Õ¼ä
+    //ï¿½Í·ï¿½ï¿½ï¿½Ê±ï¿½Õ¼ï¿½
    try
     {
         delete[] pLogInfo;
@@ -772,12 +772,12 @@ void as_log::WriteLogFileThread()
     }
     pLogInfo = NULL;
 
-    //Ïß³ÌÍË³öÊÂ¼þÍ¨Öª
+    //ï¿½ß³ï¿½ï¿½Ë³ï¿½ï¿½Â¼ï¿½Í¨Öª
     as_set_event(m_hThreadExitEvent);
 }
 
-//»ñÈ¡ÈÕÖ¾¼¶±ð×Ö·û´®
-const char* as_log::GetLevelString(long lLevel) const
+//ï¿½ï¿½È¡ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½Ö·ï¿½ï¿½ï¿½
+const char* as_log::GetLevelString(int32_t lLevel) const
 {
     const char* pstrLevel = NULL;
     switch(lLevel)
@@ -813,77 +813,77 @@ const char* as_log::GetLevelString(long lLevel) const
 
     return pstrLevel;
 }
-/*************************** End ÈÕÖ¾¶ÔÏóÊµÏÖ *********************************/
+/*************************** End ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Êµï¿½ï¿½ *********************************/
 
 
-/********************** Begin ÈÕÖ¾Ä£¿éÓÃ»§½Ó¿ÚÊµÏÖ ****************************/
-//Æô¶¯ASÈÕÖ¾Ä£¿é
+/********************** Begin ï¿½ï¿½Ö¾Ä£ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ó¿ï¿½Êµï¿½ï¿½ ****************************/
+//ï¿½ï¿½ï¿½ï¿½ASï¿½ï¿½Ö¾Ä£ï¿½ï¿½
 ASLOG_API void ASStartLog(void)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     (void)(pASLog->Start());
     va_list arg;
     va_end(arg);
-    //Ð´Æô¶¯ÐÅÏ¢
+    //Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
     (void)(pASLog->Write(__FILE__, __LINE__,
         AS_LOG_INFO, "AS Log Module Start!", arg));
 }
 
-//Ð´Ò»ÌõÈÕÖ¾
-ASLOG_API void __ASWriteLog(const char* szFileName, long lLine,
-                      long lLevel, const char* format, va_list argp)
+//Ð´Ò»ï¿½ï¿½ï¿½ï¿½Ö¾
+ASLOG_API void __ASWriteLog(const char* szFileName, int32_t lLine,
+                      int32_t lLevel, const char* format, va_list argp)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
-    //Ð´Ò»ÌõÈÕÖ¾
+    //Ð´Ò»ï¿½ï¿½ï¿½ï¿½Ö¾
     (void)(pASLog->Write(szFileName, lLine, lLevel, format, argp));
 }
 
-//Í£Ö¹ASÈÕÖ¾Ä£¿é
+//Í£Ö¹ASï¿½ï¿½Ö¾Ä£ï¿½ï¿½
 ASLOG_API void ASStopLog(void)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
 
     va_list arg;
     va_end(arg);
-    //Ð´Í£Ö¹ÐÅÏ¢
+    //Ð´Í£Ö¹ï¿½ï¿½Ï¢
     (void)(pASLog->Write(__FILE__, __LINE__,
         AS_LOG_INFO, "AS Log Module Stop!\n\n\n\n", arg));
-    //Í£Ö¹ÈÕÖ¾
+    //Í£Ö¹ï¿½ï¿½Ö¾
     (void)(pASLog->Stop());
-    //É¾³ýÈÕÖ¾¶ÔÏó
+    //É¾ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
     as_log::DeleteASLogInstance();
 }
 
-//ÉèÖÃÈÕÖ¾¼¶±ð
-ASLOG_API void ASSetLogLevel(long lLevel)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
+ASLOG_API void ASSetLogLevel(int32_t lLevel)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
-    //ÉèÖÃÈÕÖ¾¼¶±ð
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
     pASLog->SetLevel(lLevel);
 }
 
-//ÉèÖÃµ±Ç°Ð´µÄÈÕÖ¾ÎÄ¼þÂ·¾¶Ãû(ÍêÕûÂ·¾¶»òÏà¶ÔÂ·¾¶)
+//ï¿½ï¿½ï¿½Ãµï¿½Ç°Ð´ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½Â·ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â·ï¿½ï¿½)
 ASLOG_API bool ASSetLogFilePathName(const char* szPathName)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
-    //ÉèÖÃÎÄ¼þÃû
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     bool bSetOk = pASLog->SetLogFilePathName(szPathName);
     return bSetOk;
 }
 
-//ÉèÖÃÈÕÖ¾ÎÄ¼þ³¤¶ÈÏÞÖÆ£¬³¬¹ý´Ë³¤¶ÈÊ±Éú³ÉÐÂÎÄ¼þ£¬µ¥Î»KB(100Kµ½100MÖ®¼ä,Ä¬ÈÏÊÇ10M)
-ASLOG_API void ASSetLogFileLengthLimit(unsigned long ulLimitLengthKB)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½Î»KB(100Kï¿½ï¿½100MÖ®ï¿½ï¿½,Ä¬ï¿½ï¿½ï¿½ï¿½10M)
+ASLOG_API void ASSetLogFileLengthLimit(uint32_t ulLimitLengthKB)
 {
-    //»ñÈ¡ÈÕÖ¾ÊµÀý
+    //ï¿½ï¿½È¡ï¿½ï¿½Ö¾Êµï¿½ï¿½
     as_log* pASLog = as_log::GetASLogInstance();
-    //ÉèÖÃÎÄ¼þ³¤¶ÈÏÞÖÆ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pASLog->SetFileLengthLimit(ulLimitLengthKB);
 }
-/************************ End ÈÕÖ¾Ä£¿éÓÃ»§½Ó¿ÚÊµÏÖ ****************************/
+/************************ End ï¿½ï¿½Ö¾Ä£ï¿½ï¿½ï¿½Ã»ï¿½ï¿½Ó¿ï¿½Êµï¿½ï¿½ ****************************/
 

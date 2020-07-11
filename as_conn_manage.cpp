@@ -1,18 +1,18 @@
 /******************************************************************************
-   °æÈ¨ËùÓÐ (C), 2001-2011, M.Kernel
+   ï¿½ï¿½È¨ï¿½ï¿½ï¿½ï¿½ (C), 2001-2011, M.Kernel
 
  ******************************************************************************
-  ÎÄ¼þÃû          : as_conn_manage.cpp
-  °æ±¾ºÅ          : 1.0
-  ×÷Õß            : hexin
-  Éú³ÉÈÕÆÚ        : 2007-4-10
-  ×î½üÐÞ¸Ä        :
-  ¹¦ÄÜÃèÊö        : Á¬½Ó¹ÜÀíÄ£¿é
-  º¯ÊýÁÐ±í        :
-  ÐÞ¸ÄÀúÊ·        :
-  1 ÈÕÆÚ          :
-    ×÷Õß          :
-    ÐÞ¸ÄÄÚÈÝ      :
+  ï¿½Ä¼ï¿½ï¿½ï¿½          : as_conn_manage.cpp
+  ï¿½æ±¾ï¿½ï¿½          : 1.0
+  ï¿½ï¿½ï¿½ï¿½            : hexin
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : 2007-4-10
+  ï¿½ï¿½ï¿½ï¿½Þ¸ï¿½        :
+  ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½        : ï¿½ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½Ä£ï¿½ï¿½
+  ï¿½ï¿½ï¿½ï¿½ï¿½Ð±ï¿½        :
+  ï¿½Þ¸ï¿½ï¿½ï¿½Ê·        :
+  1 ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½ï¿½ï¿½ï¿½          :
+    ï¿½Þ¸ï¿½ï¿½ï¿½ï¿½ï¿½      :
 *******************************************************************************/
 
 #ifndef WIN32
@@ -30,34 +30,22 @@ as_conn_mgr_log *g_pAsConnMgrLog = NULL;
 #define CONN_MS_IN_US   1000
 
 
-//ÎÄ¼þÐÐºÅ
 #define _FL_ __FILE__, __LINE__
 
-/*******************************************************************************
-  Function:       CONN_WRITE_LOG()
-  Description:    ÈÕÖ¾´òÓ¡º¯Êý
-  Calls:
-  Called By:
-  Input:          ºÍprintfÒ»ÖÂ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
-void CONN_WRITE_LOG(long lLevel, const char *format, ...)
+void CONN_WRITE_LOG(int32_t lLevel, const char *format, ...)
 {
-    //Èç¹ûÃ»ÓÐ×¢²áÈÕÖ¾´òÓ¡º¯Êý£¬·µ»Ø
     if(NULL == g_pAsConnMgrLog)
     {
         return;
     }
 
-    //½«´òÓ¡ÄÚÈÝ×éÖ¯³É×Ö·û´®
     char buff[MAX_CONN_LOG_LENTH + 1];
     buff[0] = '\0';
 
     va_list args;
     va_start (args, format);
-    long lPrefix = snprintf (buff, MAX_CONN_LOG_LENTH, "errno:%d.thread(%lu):",
-        CONN_ERRNO, (long)as_thread_self());
+    int32_t lPrefix = snprintf (buff, MAX_CONN_LOG_LENTH, "errno:%d.thread(%lu):",
+        CONN_ERRNO, (int32_t)as_thread_self());
     if(lPrefix < MAX_CONN_LOG_LENTH)
     {
         (void)vsnprintf (buff + lPrefix, (ULONG)(MAX_CONN_LOG_LENTH - lPrefix),
@@ -65,48 +53,23 @@ void CONN_WRITE_LOG(long lLevel, const char *format, ...)
     }
     buff[MAX_CONN_LOG_LENTH] = '\0';
 
-    //µ÷ÓÃÈÕÖ¾´òÓ¡½Ó¿Ú´òÓ¡
-    g_pAsConnMgrLog->writeLog(CONN_RUN_LOG, lLevel, buff, (long)strlen(buff));
+    g_pAsConnMgrLog->writeLog(CONN_RUN_LOG, lLevel, buff, (int32_t)strlen(buff));
     va_end (args);
 }
 
-/*******************************************************************************
-  Function:       as_network_addr::as_network_addr()
-  Description:    ¹¹Ôìº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_network_addr::as_network_addr()
 {
     m_lIpAddr = InvalidIp;
     m_usPort = Invalidport;
 }
 
-/*******************************************************************************
-  Function:       as_network_addr::~as_network_addr()
-  Description:    Îö¹¹º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_network_addr::~as_network_addr()
 {
 }
 
-/*******************************************************************************
-  Function:       as_handle::as_handle()
-  Description:    ¹¹Ôìº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_handle::as_handle()
 {
     m_lSockFD = InvalidSocket;
@@ -124,15 +87,6 @@ as_handle::as_handle()
     m_pMutexHandle = as_create_mutex();
 }
 
-/*******************************************************************************
-  Function:       as_handle::~as_handle()
-  Description:    Îö¹¹º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 as_handle::~as_handle()
 {
     try
@@ -154,20 +108,8 @@ as_handle::~as_handle()
     }
 }
 
-/*******************************************************************************
-  Function:       as_handle::initHandle()
-  Description:    ³õÊ¼»¯º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_handle::initHandle(void)
+int32_t as_handle::initHandle(void)
 {
-    //·ÀÖ¹ÖØÓÃhandleÊ±Î´¹Ø±ÕÁ¬½Ó
     if(NULL != m_pMutexHandle)
     {
         this->close();
@@ -192,15 +134,6 @@ long as_handle::initHandle(void)
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_handle::setHandleSend()
-  Description:    ÉèÖÃÊÇ·ñ¼ì²âÐ´ÊÂ¼þ
-  Calls:
-  Called By:
-  Input:          bHandleSend: SVS_TRUE±íÊ¾¼ì²â£¬SVS_FALSE±íÊ¾²»¼ì²â
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
 {
     if(m_pMutexHandle != NULL)
@@ -211,7 +144,6 @@ void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
         }
     }
 
-    //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
     if(AS_FALSE == bHandleSend)
     {
         m_ulEvents = m_ulEvents & (~EPOLLOUT);
@@ -224,14 +156,10 @@ void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
 #if AS_APP_OS == AS_OS_LINUX
-        //½«handleÌí¼Óµ½epollµÄ¼¯ºÏÖÐ
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
-        //ÉèÖÃÓëÒª´¦ÀíµÄÊÂ¼þÏà¹ØµÄÎÄ¼þÃèÊö·û
         epEvent.data.ptr = (void *)m_pHandleNode;
-        //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
         epEvent.events = m_ulEvents;
-        //ÐÞ¸Ä×¢²áµÄepollÊÂ¼þ
         if ( 0 != epoll_ctl(m_lEpfd, EPOLL_CTL_MOD, m_lSockFD, &epEvent))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -247,17 +175,6 @@ void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
     }
 }
 
-/*******************************************************************************
-  Function:       as_handle::setHandleRecv()
-  Description:    ÉèÖÃÊÇ·ñ¼ì²â¶ÁÊÂ¼þ
-  Calls:
-  Called By:
-  Input:          bHandleRecv: SVS_TRUE±íÊ¾¼ì²â£¬SVS_FALSE±íÊ¾²»¼ì²â
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
 void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
 {
     if(m_pMutexHandle != NULL)
@@ -268,7 +185,6 @@ void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
         }
     }
 
-    //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
     if(AS_FALSE == bHandleRecv)
     {
         m_ulEvents = m_ulEvents & (~EPOLLIN);
@@ -281,14 +197,10 @@ void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
 #if AS_APP_OS == AS_OS_LINUX
-        //½«handleÌí¼Óµ½epollµÄ¼¯ºÏÖÐ
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
-        //ÉèÖÃÓëÒª´¦ÀíµÄÊÂ¼þÏà¹ØµÄÎÄ¼þÃèÊö·û
         epEvent.data.ptr = (void *)m_pHandleNode;
-        //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
         epEvent.events = m_ulEvents;
-        //ÐÞ¸Ä×¢²áµÄepollÊÂ¼þ
         if ( 0 != epoll_ctl(m_lEpfd, EPOLL_CTL_MOD, m_lSockFD, &epEvent))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -304,15 +216,6 @@ void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
     }
 }
 
-/*******************************************************************************
-  Function:       as_handle::close()
-  Description:    ¹Ø±ÕÍøÂçÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_handle::close(void)
 {
     if (InvalidSocket != m_lSockFD)
@@ -324,30 +227,13 @@ void as_handle::close(void)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_network_handle::as_network_handle()
-  Description:    ¹¹ÔÚº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 as_network_handle::as_network_handle()
 {
     m_lSockFD = InvalidSocket;
 }
 
-/*******************************************************************************
-  Function:       as_network_handle::initHandle()
-  Description:    ¹Ø±ÕÍøÂçÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
-long as_network_handle::initHandle(void)
+
+int32_t as_network_handle::initHandle(void)
 {
     if (AS_ERROR_CODE_OK != as_handle::initHandle())
     {
@@ -359,16 +245,7 @@ long as_network_handle::initHandle(void)
 }
 
 #if AS_APP_OS == AS_OS_LINUX
-/*******************************************************************************
-  Function:       as_network_handle::sendMsg()
-  Description:    ·¢ËÍÊ¸Á¿Êý¾Ý
-  Calls:
-  Called By:
-  Input:          Ê¸Á¿Êý¾Ý
-  Output:         ÎÞ
-  Return:         ²Î¼ûÏµÍ³µ÷ÓÃsendmsg
-*******************************************************************************/
-long as_network_handle::sendMsg(const struct msghdr *pMsg)
+int32_t as_network_handle::sendMsg(const struct msghdr *pMsg)
 {
     if (InvalidSocket == m_lSockFD)
     {
@@ -379,29 +256,12 @@ long as_network_handle::sendMsg(const struct msghdr *pMsg)
 }
 #endif
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::as_tcp_conn_handle()
-  Description:    ¹¹Ôìº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 as_tcp_conn_handle::as_tcp_conn_handle()
 {
     m_lConnStatus = enIdle;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::~as_tcp_conn_handle()
-  Description:    Îö¹¹º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_tcp_conn_handle::~as_tcp_conn_handle()
 {
     try
@@ -421,18 +281,8 @@ as_tcp_conn_handle::~as_tcp_conn_handle()
     }
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::initHandle()
-  Description:    ³õÊ¼»¯º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_tcp_conn_handle::initHandle(void)
+
+int32_t as_tcp_conn_handle::initHandle(void)
 {
     if (AS_ERROR_CODE_OK != as_network_handle::initHandle())
     {
@@ -443,24 +293,12 @@ long as_tcp_conn_handle::initHandle(void)
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::conn()
-  Description:    ´´½¨Á¬½Óº¯Êý
-  Calls:
-  Called By:
-  Input:          pLocalAddr: ±¾µØµØÖ·£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-                  bSyncConn: SVS_TRUE±íÊ¾Í¬²½Á¬½Ó£¬SVS_FALSE±íÊ¾Òì²½Á¬½Ó
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: connect success
-  AS_ERROR_CODE_FAIL: connect fail
-*******************************************************************************/
-long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
+int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
     const as_network_addr *pPeerAddr, const EnumSyncAsync bSyncConn, ULONG ulTimeOut)
 {
     m_lConnStatus = enConnFailed;
 
-    long lSockFd = (long)socket(AF_INET, SOCK_STREAM, 0);
+    int32_t lSockFd = (int32_t)socket(AF_INET, SOCK_STREAM, 0);
     if(lSockFd < 0)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -468,7 +306,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
     //setSendBufSize
-    long lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+    int32_t lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
     socklen_t lSendBufLength = sizeof(lSendBufSize);
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_SNDBUF, (char*)&lSendBufSize,
         lSendBufLength) < 0)
@@ -479,7 +317,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
     //setRecBufSize
-    long lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+    int32_t lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
     socklen_t lRecvBufLength = sizeof(lRecvBufSize);
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_RCVBUF, (char*)&lRecvBufSize,
         lRecvBufLength) < 0)
@@ -490,7 +328,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
 
-    long flag = 1;
+    int32_t flag = 1;
     if(setsockopt((SOCKET)lSockFd, IPPROTO_TCP, TCP_NODELAY, (char*)&flag,
         sizeof(flag)) < 0)
     {
@@ -501,7 +339,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
     }
 
     //setReuseAddr();
-    long lReuseAddrFlag = 1;
+    int32_t lReuseAddrFlag = 1;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
         sizeof(lReuseAddrFlag)) < 0)
     {
@@ -511,14 +349,13 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
 
-    //°ó¶¨±¾µØµØÖ·
     if(((ULONG)(pLocalAddr->m_lIpAddr) != InvalidIp)
         && ( pLocalAddr->m_usPort != Invalidport))
     {
         struct sockaddr_in  serverAddr;
-        memset((char *)&serverAddr, 0, (long)sizeof(serverAddr));
+        memset((char *)&serverAddr, 0, (int32_t)sizeof(serverAddr));
         serverAddr.sin_family = AF_INET;
-        serverAddr.sin_addr.s_addr = (unsigned long)pLocalAddr->m_lIpAddr;
+        serverAddr.sin_addr.s_addr = (uint32_t)pLocalAddr->m_lIpAddr;
         serverAddr.sin_port = pLocalAddr->m_usPort;
         errno = 0;
         if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)))
@@ -548,16 +385,14 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         }
     }
 
-    //Èç¹ûÊÇÒì²½Á¬½Ó£¬ÉèÖÃÎª·Ç×èÈûÄ£Ê½
     errno = 0;
     if((enAsyncOp == bSyncConn) || (ulTimeOut > 0))
     {
 #if AS_APP_OS == AS_OS_LINUX
-        //ÉèÖÃÎª·Ç×èÈû
         if(fcntl(lSockFd, F_SETFL, fcntl(lSockFd, F_GETFL)|O_NONBLOCK) < 0)
 #elif AS_APP_OS == AS_OS_WIN32
         ULONG ulNoBlock = AS_TRUE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)lSockFd,(long)(long)FIONBIO,&ulNoBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)lSockFd,(int32_t)(int32_t)FIONBIO,&ulNoBlock))
 #endif
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -568,13 +403,12 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         setHandleSend(AS_TRUE);
     }
 
-    //Á¬½Ó¶Ô¶Ë
     struct sockaddr_in  peerAddr;
-    memset((char *)&peerAddr, 0, (long)sizeof(peerAddr));
+    memset((char *)&peerAddr, 0, (int32_t)sizeof(peerAddr));
     peerAddr.sin_family = AF_INET;
     peerAddr.sin_addr.s_addr = (UINT)pPeerAddr->m_lIpAddr;
     peerAddr.sin_port = pPeerAddr->m_usPort;
-    long lRetVal = ::connect((SOCKET)lSockFd,(struct sockaddr*)&peerAddr,
+    int32_t lRetVal = ::connect((SOCKET)lSockFd,(struct sockaddr*)&peerAddr,
         sizeof(peerAddr));
     if( lRetVal < 0)
     {
@@ -600,11 +434,11 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         {
             fd_set    fdWriteReady;
             struct timeval waitTime;
-            waitTime.tv_sec = (long)ulTimeOut;
+            waitTime.tv_sec = (int32_t)ulTimeOut;
             waitTime.tv_usec = 0;
             FD_ZERO(&fdWriteReady);
             FD_SET((SOCKET)lSockFd, &fdWriteReady);
-            long lSelectResult = select(FD_SETSIZE, (fd_set*)0, &fdWriteReady,
+            int32_t lSelectResult = select(FD_SETSIZE, (fd_set*)0, &fdWriteReady,
                 (fd_set*)0, &waitTime);
             if(lSelectResult <= 0)
             {
@@ -613,7 +447,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
                 (void)CLOSESOCK((SOCKET)lSockFd);
                 return AS_ERROR_CODE_FAIL;
             }
-            long lErrorNo = 0;
+            int32_t lErrorNo = 0;
             socklen_t len = sizeof(lErrorNo);
             if (getsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_ERROR,
                 (SOCK_OPT_TYPE *)&lErrorNo, &len) < 0)
@@ -643,15 +477,13 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
             "connect server OK. socket id = %d", _FL_, lSockFd);
     }
 
-    //Èç¹ûÉèÖÃÎª·Ç×èÈûÄ£Ê½£¬»Ö¸´Îª×èÈûÄ£Ê½
     if((enAsyncOp == bSyncConn) || (ulTimeOut > 0))
     {
 #if AS_APP_OS == AS_OS_LINUX
-        //»Ö¸´Îª×èÈûÄ£Ê½
         if(fcntl(lSockFd, F_SETFL, fcntl(lSockFd, F_GETFL&(~O_NONBLOCK))) < 0)
 #elif AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = 0;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)lSockFd,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)lSockFd,(int32_t)FIONBIO,&ulBlock))
 #endif
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -683,19 +515,7 @@ long as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::send()
-  Description:    ·¢ËÍº¯Êý
-  Calls:
-  Called By:
-  Input:          pArrayData: Êý¾Ýbuffer£¬ulDataSize: Êý¾Ý³¤¶È£¬
-                  bSyncSend: SVS_TRUE±íÊ¾Í¬²½·¢ËÍ£¬SVS_FALSE±íÊ¾Òì²½·¢ËÍ
-  Output:         ÎÞ
-  Return:
-  lBytesSent: ·¢ËÍ×Ö½ÚÊý(>0)
-  SendRecvError: ·¢ËÍÊ§°Ü
-*******************************************************************************/
-long as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
+int32_t as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
     const EnumSyncAsync bSyncSend)
 {
     if (InvalidSocket == m_lSockFD)
@@ -706,13 +526,12 @@ long as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
     }
 
     errno = 0;
-    long lBytesSent = 0;
+    int32_t lBytesSent = 0;
     if(enSyncOp == bSyncSend)
     {
-        //Í¬²½·¢ËÍ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_FALSE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket Block fail.", _FL_);
@@ -723,10 +542,9 @@ long as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
     }
     else
     {
-        //Òì²½·¢ËÍ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_TRUE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket NoBlock fail.", _FL_);
@@ -735,11 +553,9 @@ long as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
 #endif
         lBytesSent = ::send((SOCKET)m_lSockFD, pArrayData, (int)ulDataSize,
             MSG_DONTWAIT|MSG_NOSIGNAL);
-        //¿ªÊ¼¼ì²âÊÇ·ñ¿ÉÒÔ·¢ËÍÊý¾Ý
         setHandleSend(AS_TRUE);
     }
 
-    //Èç¹û·¢ËÍÊ§°Ü£¬Ê×ÏÈÅÐ¶ÏÊÇ·ñÊÇÒòÎª×èÈû£¬ÊÇµÄ»°·µ»Ø·¢ËÍ0×Ö½Ú£¬·ñÔò¹Ø±ÕÁ¬½Ó
     if (lBytesSent < 0)
     {
 #if AS_APP_OS == AS_OS_WIN32
@@ -764,19 +580,7 @@ long as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
     return lBytesSent;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::recv()
-  Description:    ½ÓÊÕº¯Êý
-  Calls:
-  Called By:
-  Input:          pArrayData: Êý¾Ýbuffer£¬ulDataSize: Êý¾Ý³¤¶È£¬
-                  bSyncRecv: SVS_TRUE±íÊ¾Í¬²½·¢ËÍ£¬SVS_FALSE±íÊ¾Òì²½·¢ËÍ
-  Output:         pArrayData: Êý¾Ýbuffer£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-  Return:
-  lBytesSent: ·¢ËÍ×Ö½ÚÊý(>0)
-  SendRecvError: ·¢ËÍÊ§°Ü
-*******************************************************************************/
-long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
+int32_t as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     const ULONG ulDataSize, const EnumSyncAsync bSyncRecv)
 {
     if (InvalidSocket == m_lSockFD)
@@ -787,13 +591,12 @@ long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     }
 
     errno = 0;
-    long lBytesRecv = 0;
+    int32_t lBytesRecv = 0;
     if(enSyncOp == bSyncRecv)
     {
-        //Í¬²½½ÓÊÕ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_FALSE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket Block fail.", _FL_);
@@ -804,10 +607,9 @@ long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     }
     else
     {
-        //Òì²½½ÓÊÕ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_TRUE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket NoBlock fail.", _FL_);
@@ -817,7 +619,6 @@ long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
         lBytesRecv = ::recv((SOCKET)m_lSockFD, pArrayData, (int)ulDataSize, MSG_DONTWAIT);
     }
 
-    //Èç¹û·µ»Ø0£¬±íÊ¾ÒÑ¾­¶ÏÁ¬
     if (0 == lBytesRecv)
     {
         CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): recv EOF!",
@@ -825,7 +626,6 @@ long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
         return SendRecvError;
     }
 
-    //Èç¹ûÐ¡ÓÚ0£¬Ê×ÏÈÅÐ¶ÏÊÇ·ñÊÇÒòÎª×èÈû£¬ÊÇµÄ»°·µ»Ø½ÓÊÕ0×Ö½Ú£¬·ñÔò¶ÏÁ¬´¦Àí
     if (lBytesRecv < 0)
     {
         if((EWOULDBLOCK == CONN_ERRNO) || (EAGAIN == CONN_ERRNO))
@@ -843,27 +643,14 @@ long as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     return lBytesRecv;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::recvWithTimeout()
-  Description:    ½ÓÊÕº¯Êý
-  Calls:
-  Called By:
-  Input:          pArrayData: Êý¾Ýbuffer£¬ulDataSize: Êý¾Ý³¤¶È£¬
-                  ulTimeOut: µÈ´ýÊ±³¤, ulSleepTime: ¼ì²â¼ä¸ô(ms)
-  Output:         pArrayData: Êý¾Ýbuffer£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-  Return:
-  lBytesSent: ·¢ËÍ×Ö½ÚÊý(>0)
-  SendRecvError: ·¢ËÍÊ§°Ü
-*******************************************************************************/
-long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPeerAddr,
+int32_t as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPeerAddr,
     const ULONG ulDataSize, const ULONG ulTimeOut, const ULONG ulSleepTime)
 {
-    (void)ulSleepTime;//¹ýPC-LINT
-    long lRecvBytes = 0;
+    (void)ulSleepTime;
+    int32_t lRecvBytes = 0;
     ULONG ulTotalRecvBytes = 0;
     ULONG ulWaitTime = ulTimeOut;
     errno = 0;
-    //ÉèÖÃsocket³¬Ê±Ê±¼ä
 #if AS_APP_OS == AS_OS_WIN32
 
     if(setsockopt((SOCKET)m_lSockFD, SOL_SOCKET, SO_RCVTIMEO,
@@ -891,10 +678,6 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
 
 #endif
 
-    //windowsÕâ¸öµØ·½ÎÞ·¨È«²¿½ÓÊÕÍê£¬¸ÄÎªÑ­»·½ÓÊÕ
-    //lRecvBytes = this->recv(pArrayData, pPeerAddr, ulDataSize, enSyncOp);
-
-    //windows Ñ­»·½ÓÊÕ linux´Ë´¦Ö»¾­¹ýÒ»´ÎÑ­»·
     if(NULL == pArrayData)
     {
         return SendRecvError;
@@ -908,7 +691,7 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
             break;
         }
 
-        ulTotalRecvBytes += (unsigned long)lRecvBytes;
+        ulTotalRecvBytes += (uint32_t)lRecvBytes;
     }
 
 
@@ -931,7 +714,7 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
         return SendRecvError;
     }
 
-    if(ulTotalRecvBytes <  ulDataSize)//ËµÃ÷½ÓÊÜ³¬Ê±
+    if(ulTotalRecvBytes <  ulDataSize)
     {
         CONN_WRITE_LOG(CONN_DEBUG, (char *)"FILE(%s)LINE(%d): "
             "as_tcp_conn_handle::recvWithTimeout: recv time out. "
@@ -942,7 +725,6 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
         return SendRecvError;
     }
 
-    //ÉèÖÃsocket³¬Ê±Ê±¼äÎª0±íÊ¾ÓÀ¾ÃµÈ´ý
 #if AS_APP_OS == AS_OS_WIN32
 
     ulWaitTime = 0;
@@ -957,7 +739,6 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
 
 #elif AS_APP_OS == AS_OS_LINUX
 
-    //ÉèÖÃsocket³¬Ê±Ê±¼äÎª0±íÊ¾ÓÀ¾ÃµÈ´ý
     recvWaitTime.tv_sec = 0;
     recvWaitTime.tv_usec = 0;
     if(setsockopt((SOCKET)m_lSockFD, SOL_SOCKET, SO_RCVTIMEO,
@@ -970,19 +751,10 @@ long as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
     }
 #endif
 
-    return (long)ulTotalRecvBytes;
+    return (int32_t)ulTotalRecvBytes;
 
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_handle::close()
-  Description:    ¹Ø±ÕÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_tcp_conn_handle::close(void)
 {
     if(m_pMutexHandle != NULL)
@@ -1009,19 +781,14 @@ void as_tcp_conn_handle::close(void)
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)NULL;
-        //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
         epEvent.events = (EPOLLIN | EPOLLOUT);
-        //ÐÞ¸Ä×¢²áµÄepollÊÂ¼þ
         if ( 0 != epoll_ctl(m_lEpfd, EPOLL_CTL_MOD, m_lSockFD, &epEvent))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "as_handle::setHandleSend: modify event fail, "
                 "m_lSockFD = %d", _FL_, m_lSockFD);
         }
-        //ÉèÖÃÓëÒª´¦ÀíµÄÊÂ¼þÏà¹ØµÄÎÄ¼þÃèÊö·û
-        //epEvent.data.ptr = (void *)m_pHandleNode;
-        //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
-        //epEvent.events = EPOLLIN;
+
         if ( 0 != epoll_ctl(m_lEpfd, EPOLL_CTL_DEL, m_lSockFD, &epEvent))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -1044,22 +811,12 @@ void as_tcp_conn_handle::close(void)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_handle::createSock()
-  Description:    ´´½¨UDP socket
-  Calls:
-  Called By:
-  Input:          pLocalAddr:±¾µØµØÖ·
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
+
+int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
                                          const as_network_addr *pMultiAddr)
 {
-    long lSockFd = (long)InvalidSocket;
-    if ((lSockFd = (long)socket(AF_INET, SOCK_DGRAM, 0)) < 0)
+    int32_t lSockFd = (int32_t)InvalidSocket;
+    if ((lSockFd = (int32_t)socket(AF_INET, SOCK_DGRAM, 0)) < 0)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
             "create udp socket failed, errno = %d, Msg = %s",
@@ -1069,7 +826,7 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
 
     struct sockaddr_in  localAddr;
-    memset((char *)&localAddr, 0, (long)sizeof(localAddr));
+    memset((char *)&localAddr, 0, (int32_t)sizeof(localAddr));
     localAddr.sin_family = AF_INET;
     if(NULL != pMultiAddr)
     {
@@ -1081,7 +838,6 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
     localAddr.sin_port = pLocalAddr->m_usPort;
 
-    //°ó¶¨±¾µØµØÖ·
     if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *) &localAddr, sizeof (localAddr)))
     {
 #if AS_APP_OS == AS_OS_LINUX
@@ -1108,7 +864,7 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
 
 #if AS_APP_OS == AS_OS_LINUX
-    long lReuseAddrFlag = 1;
+    int32_t lReuseAddrFlag = 1;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
         sizeof(lReuseAddrFlag)) < 0)
     {
@@ -1119,7 +875,7 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
 #endif
 
-    long lSendBufSize = DEFAULT_UDP_SENDRECV_SIZE;
+    int32_t lSendBufSize = DEFAULT_UDP_SENDRECV_SIZE;
     if(setsockopt ((SOCKET)lSockFd, SOL_SOCKET, SO_SNDBUF, (char*)&lSendBufSize,
         sizeof(lSendBufSize)) < 0)
     {
@@ -1129,7 +885,7 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
     //setRecBufSize
-    long lRecvBufSize = DEFAULT_UDP_SENDRECV_SIZE;
+    int32_t lRecvBufSize = DEFAULT_UDP_SENDRECV_SIZE;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_RCVBUF, (char*)&lRecvBufSize,
         sizeof(lRecvBufSize)) < 0)
     {
@@ -1140,7 +896,6 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
 
 #if AS_APP_OS == AS_OS_LINUX
-    //Èç¹ûÓÐ×é²¥µØÖ·£¬Ôò±íÃ÷Òª·¢ËÍ×é²¥
     if(NULL != pMultiAddr)
     {
         struct ip_mreq mreq;
@@ -1162,19 +917,7 @@ long as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
 
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_handle::send()
-  Description:    ·¢ËÍº¯Êý
-  Calls:
-  Called By:
-  Input:          pPeerAddr: ¶Ô¶ËµØÖ·£¬pArrayData: ·¢ËÍ»º³åÇø£¬ulDataSize:Êý¾Ý³¤¶È
-                  bSyncSend: SVS_TRUE±íÊ¾Í¬²½·¢ËÍ£¬SVS_FALSE±íÊ¾Òì²½·¢ËÍ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: connect success
-  AS_ERROR_CODE_FAIL: connect fail
-*******************************************************************************/
-long as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArrayData,
+int32_t as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArrayData,
          const ULONG ulDataSize, const EnumSyncAsync bSyncSend)
 {
     if (InvalidSocket == m_lSockFD)
@@ -1191,13 +934,12 @@ long as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArr
     peerAddr.sin_port = pPeerAddr->m_usPort;
 
     errno = 0;
-    long lBytesSent = 0;
+    int32_t lBytesSent = 0;
     if(enSyncOp == bSyncSend)
     {
-        //Í¬²½·¢ËÍ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_FALSE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket Block fail.", _FL_);
@@ -1205,14 +947,13 @@ long as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArr
         }
 #endif
         lBytesSent = ::sendto((SOCKET)m_lSockFD, pArrayData, (int)ulDataSize,
-            (long)MSG_NOSIGNAL, (const struct sockaddr *)&peerAddr, sizeof(peerAddr));
+            (int32_t)MSG_NOSIGNAL, (const struct sockaddr *)&peerAddr, sizeof(peerAddr));
     }
     else
     {
-        //Òì²½·¢ËÍ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_TRUE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket NoBlock fail.", _FL_);
@@ -1220,12 +961,11 @@ long as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArr
         }
 #endif
         lBytesSent = ::sendto((SOCKET)m_lSockFD, pArrayData, (int)ulDataSize,
-            (long) MSG_DONTWAIT|MSG_NOSIGNAL,
+            (int32_t) MSG_DONTWAIT|MSG_NOSIGNAL,
             (const struct sockaddr *)&peerAddr, sizeof(peerAddr));
         setHandleSend(AS_TRUE);
     }
 
-    //Èç¹û·¢ËÍÊ§°Ü£¬Ê×ÏÈÅÐ¶ÏÊÇ·ñÊÇÒòÎª×èÈû£¬ÊÇµÄ»°·µ»Ø·¢ËÍ0×Ö½Ú£¬·ñÔò¹Ø±ÕÁ¬½Ó
     if (lBytesSent < 0)
     {
         if((EWOULDBLOCK == CONN_ERRNO) || (EAGAIN == CONN_ERRNO))
@@ -1244,19 +984,7 @@ long as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *pArr
     return lBytesSent;
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_handle::recv()
-  Description:    ½ÓÊÕº¯Êý
-  Calls:
-  Called By:
-  Input:          pArrayData: Êý¾Ýbuffer£¬ulDataSize: Êý¾Ý³¤¶È£¬
-                  bSyncRecv: SVS_TRUE±íÊ¾Í¬²½·¢ËÍ£¬SVS_FALSE±íÊ¾Òì²½·¢ËÍ
-  Output:         pArrayData: Êý¾Ýbuffer£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-  Return:
-  lBytesSent: ·¢ËÍ×Ö½ÚÊý(>0)
-  SendRecvError: ·¢ËÍÊ§°Ü
-*******************************************************************************/
-long as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
+int32_t as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     const ULONG ulDataSize, const EnumSyncAsync bSyncRecv)
 {
     if (InvalidSocket == m_lSockFD)
@@ -1269,13 +997,12 @@ long as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     errno = 0;
     struct sockaddr_in  peerAddr;
     socklen_t iFromlen = sizeof(peerAddr);
-    long lBytesRecv = 0;
+    int32_t lBytesRecv = 0;
     if(enSyncOp == bSyncRecv)
     {
-        //Í¬²½½ÓÊÕ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_FALSE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket Block fail.", _FL_);
@@ -1287,10 +1014,9 @@ long as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     }
     else
     {
-        //Òì²½½ÓÊÕ
 #if AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = AS_TRUE;
-        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(long)FIONBIO,&ulBlock))
+        if (SOCKET_ERROR == ioctlsocket((SOCKET)m_lSockFD,(int32_t)FIONBIO,&ulBlock))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "Set Socket NoBlock fail.", _FL_);
@@ -1301,14 +1027,12 @@ long as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
             (struct sockaddr *)&peerAddr, &iFromlen);
     }
 
-    //Èç¹û·µ»Ø0£¬±íÊ¾ÒÑ¾­¶ÏÁ¬
     if (0 == lBytesRecv)
     {
         CONN_WRITE_LOG(CONN_DEBUG, (char *)"FILE(%s)LINE(%d): recv EOF!", _FL_);
         return SendRecvError;
     }
 
-    //Èç¹ûÐ¡ÓÚ0£¬Ê×ÏÈÅÐ¶ÏÊÇ·ñÊÇÒòÎª×èÈû£¬ÊÇµÄ»°·µ»Ø½ÓÊÕ0×Ö½Ú£¬·ñÔò¶ÏÁ¬´¦Àí
     if (lBytesRecv < 0)
     {
         if((EWOULDBLOCK == CONN_ERRNO) || (EAGAIN == CONN_ERRNO))
@@ -1323,33 +1047,20 @@ long as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
     pPeerAddr->m_lIpAddr = (LONG)peerAddr.sin_addr.s_addr;
     pPeerAddr->m_usPort = peerAddr.sin_port;
 
-    //Á¬½Ó¹ÜÀíµ÷ÓÃ½ÓÊÕ²Ù×÷ºó²»ÔÙ»Ö¸´¼ì²â¶ÁÊÂ¼þ£¬¸ÄÎªÓÉÓ¦ÓÃ³ÌÐò»Ö¸´
     //setHandleRecv(AS_TRUE);
 
     return lBytesRecv;
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_handle::recvWithTimeout()
-  Description:    ½ÓÊÕº¯Êý
-  Calls:
-  Called By:
-  Input:          pArrayData: Êý¾Ýbuffer£¬ulDataSize: Êý¾Ý³¤¶È£¬
-                  ulTimeOut: µÈ´ýÊ±³¤, ulSleepTime: ¼ì²â¼ä¸ô(ms)
-  Output:         pArrayData: Êý¾Ýbuffer£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-  Return:
-  lBytesSent: ·¢ËÍ×Ö½ÚÊý(>0)
-  SendRecvError: ·¢ËÍÊ§°Ü
-*******************************************************************************/
-long as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPeerAddr,
+
+int32_t as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPeerAddr,
     const ULONG ulDataSize, const ULONG ulTimeOut, const ULONG ulSleepTime)
 {
-    (void)ulSleepTime;//¹ýPC-LINT
-    long lRecvBytes = 0;
+    (void)ulSleepTime;
+    int32_t lRecvBytes = 0;
     ULONG ulTotalRecvBytes = 0;
     ULONG ulWaitTime = ulTimeOut;
     errno = 0;
-    //ÉèÖÃsocket³¬Ê±Ê±¼ä
 #if AS_APP_OS == AS_OS_WIN32
 
     ULONG recvWaitTime;
@@ -1393,7 +1104,6 @@ long as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
 
     ulTotalRecvBytes += (ULONG)lRecvBytes;
 
-    //ÉèÖÃsocket³¬Ê±Ê±¼äÎª0±íÊ¾ÓÀ¾ÃµÈ´ý
 #if AS_APP_OS == AS_OS_WIN32
 
     recvWaitTime = 0;
@@ -1408,7 +1118,6 @@ long as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
 
 #elif AS_APP_OS == AS_OS_LINUX
 
-    //ÉèÖÃsocket³¬Ê±Ê±¼äÎª0±íÊ¾ÓÀ¾ÃµÈ´ý
     recvWaitTime.tv_sec = 0;
     recvWaitTime.tv_usec = 0;
     if(setsockopt((SOCKET)m_lSockFD, SOL_SOCKET, SO_RCVTIMEO,
@@ -1421,18 +1130,9 @@ long as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *pPee
     }
 #endif
 
-    return (long)ulTotalRecvBytes;
+    return (int32_t)ulTotalRecvBytes;
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_handle::close()
-  Description:    ¹Ø±ÕÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_udp_sock_handle::close(void)
 {
     if(m_pMutexHandle != NULL)
@@ -1460,20 +1160,10 @@ void as_udp_sock_handle::close(void)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_server_handle::listen()
-  Description:    Æô¶¯µÈ´ý¶Ô¶ËÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          pLocalAddr: ±¾µØµØÖ·
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: listen success
-  AS_ERROR_CODE_FAIL: listen fail
-*******************************************************************************/
-long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
+
+int32_t as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
 {
-    long lSockFd = (long)socket(AF_INET, SOCK_STREAM, 0);
+    int32_t lSockFd = (int32_t)socket(AF_INET, SOCK_STREAM, 0);
     if(lSockFd < 0)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
@@ -1482,7 +1172,7 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
     }
 
     //setSendBufSize
-    long lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+    int32_t lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
     socklen_t lSendBufLength = sizeof(lSendBufSize);
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_SNDBUF, (char*)&lSendBufSize,
         lSendBufLength) < 0)
@@ -1494,7 +1184,7 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
     }
 
     //setRecBufSize
-    long lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+    int32_t lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
     socklen_t lRecvBufLength = sizeof(lRecvBufSize);
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_RCVBUF, (char*)&lRecvBufSize,
         lRecvBufLength) < 0)
@@ -1507,7 +1197,7 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
 
 #if AS_APP_OS == AS_OS_LINUX
     //setReuseAddr();
-    long lReuseAddrFlag = 1;
+    int32_t lReuseAddrFlag = 1;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
         sizeof(lReuseAddrFlag)) < 0)
     {
@@ -1517,9 +1207,9 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
         return AS_ERROR_CODE_FAIL;
     }
 #endif
-    //°ó¶¨±¾µØµØÖ·
+
     struct sockaddr_in  serverAddr;
-    memset((char *)&serverAddr, 0, (long)sizeof(serverAddr));
+    memset((char *)&serverAddr, 0, (int32_t)sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_addr.s_addr = (UINT)pLocalAddr->m_lIpAddr;
     serverAddr.sin_port = pLocalAddr->m_usPort;
@@ -1549,7 +1239,7 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
         return AS_ERROR_CODE_FAIL;
     }
 
-    //Æô¶¯ÕìÌý
+
     errno = 0;
     if(::listen((SOCKET)lSockFd, MAX_LISTEN_QUEUE_SIZE) < 0)
     {
@@ -1564,15 +1254,7 @@ long as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_server_handle::close()
-  Description:    ¹Ø±ÕÁ¬½Ó
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_tcp_server_handle::close(void)
 {
     if(m_pMutexHandle != NULL)
@@ -1600,15 +1282,7 @@ void as_tcp_server_handle::close(void)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::as_handle_manager()
-  Description:    ¹¹Ôìº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_handle_manager::as_handle_manager()
 {
     m_pMutexListOfHandle = NULL;
@@ -1616,7 +1290,6 @@ as_handle_manager::as_handle_manager()
     m_lEpfd = InvalidFd;
     memset(m_epEvents, 0, sizeof(m_epEvents));
 #elif AS_APP_OS == AS_OS_WIN32
-    //³õÊ¼»¯select¼¯
     FD_ZERO(&m_readSet);
     FD_ZERO(&m_writeSet);
     m_stSelectPeriod.tv_sec = 0;
@@ -1628,15 +1301,7 @@ as_handle_manager::as_handle_manager()
     memset(m_szMgrType, 0, sizeof(m_szMgrType));
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::~as_handle_manager()
-  Description:    Îö¹¹º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_handle_manager::~as_handle_manager()
 {
     try
@@ -1662,7 +1327,6 @@ as_handle_manager::~as_handle_manager()
     #if AS_APP_OS == AS_OS_LINUX
 
     #endif
-            //½«¶ÔÓ¦µÄHandleNodeÉ¾³ý
             AS_DELETE(*itListOfHandle);
             ++itListOfHandle;
         }
@@ -1697,18 +1361,7 @@ as_handle_manager::~as_handle_manager()
 
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::init()
-  Description:    ³õÊ¼»¯º¯Êý
-  Calls:
-  Called By:
-  Input:          ulSelectPeriod: ÊÂ¼þ¼ì²â¼ä¸ô£¬µ¥Î»Îªms
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_handle_manager::init(const ULONG ulSelectPeriod)
+int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
 {
     if (0 == ulSelectPeriod)
     {
@@ -1731,11 +1384,8 @@ long as_handle_manager::init(const ULONG ulSelectPeriod)
         return AS_ERROR_CODE_FAIL;
     }
 #elif AS_APP_OS == AS_OS_WIN32
-    //½«ulSelectPeriod×ª»»³Étimeval½á¹¹
-    m_stSelectPeriod.tv_sec = (long)(ulSelectPeriod / CONN_SECOND_IN_MS);
+    m_stSelectPeriod.tv_sec = (int32_t)(ulSelectPeriod / CONN_SECOND_IN_MS);
     m_stSelectPeriod.tv_usec = (ulSelectPeriod % CONN_SECOND_IN_MS) * CONN_MS_IN_US;
-
-    //³õÊ¼»¯select¼¯
     FD_ZERO(&m_readSet);
     FD_ZERO(&m_writeSet);
 #endif
@@ -1757,18 +1407,8 @@ long as_handle_manager::init(const ULONG ulSelectPeriod)
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::run()
-  Description:    ´´½¨Ïß³Ì£¬Æô¶¯ÊÂ¼þ¼ì²âÖ÷Ñ­»·
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_handle_manager::run()
+
+int32_t as_handle_manager::run()
 {
     errno = 0;
     if (AS_ERROR_CODE_OK != as_create_thread((AS_THREAD_FUNC)invoke, (void *)this,
@@ -1786,17 +1426,7 @@ long as_handle_manager::run()
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::invoke()
-  Description:    ´´½¨Ïß³Ì£¬Æô¶¯ÊÂ¼þ¼ì²âÖ÷Ñ­»·
-  Calls:
-  Called By:
-  Input:          argc: ±£´æ¶ÔÏóÊµÀýÖ¸Õë
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
+
 void *as_handle_manager::invoke(void *argc)
 {
     as_handle_manager *pHandleManager = (as_handle_manager *)argc;
@@ -1808,23 +1438,13 @@ void *as_handle_manager::invoke(void *argc)
     return NULL;
 }
 #if AS_APP_OS == AS_OS_WIN32
-/*******************************************************************************
-  Function:       as_handle_manager::mainLoop()
-  Description:    ÊÂ¼þ¼ì²âÖ÷Ñ­»·
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_handle_manager::mainLoop()
 {
     while(AS_FALSE == m_bExit)
     {
         errno = 0;
-        long lWaitFds = 0;
+        int32_t lWaitFds = 0;
 
-        //¼ÓËø
         if(AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfHandle))
         {
            break;
@@ -1833,8 +1453,7 @@ void as_handle_manager::mainLoop()
         FD_ZERO(&m_readSet);
         FD_ZERO(&m_writeSet);
 
-        //½«ulSelectPeriod×ª»»³Étimeval½á¹¹
-        m_stSelectPeriod.tv_sec =  (long)(m_ulSelectPeriod / CONN_SECOND_IN_MS);
+        m_stSelectPeriod.tv_sec =  (int32_t)(m_ulSelectPeriod / CONN_SECOND_IN_MS);
         m_stSelectPeriod.tv_usec =
             (m_ulSelectPeriod % CONN_SECOND_IN_MS) * CONN_MS_IN_US;
 
@@ -1843,7 +1462,7 @@ void as_handle_manager::mainLoop()
         {
             as_handle_node *pHandleNode = NULL;
             as_handle *pHandle = NULL;
-            long lSockFd = InvalidSocket;
+            int32_t lSockFd = InvalidSocket;
 
             if(AS_TRUE == (*itListOfHandle)->m_bRemoved)
             {
@@ -1883,11 +1502,9 @@ void as_handle_manager::mainLoop()
             }
             ++itListOfHandle;
         }
-        //½âËø
         (void)as_mutex_unlock(m_pMutexListOfHandle);
 
 
-        //»¹Ã»ÓÐÒª¼ì²âµÄsocket
         if ((0 == m_readSet.fd_count) && (0 == m_writeSet.fd_count))
         {
             Sleep(1);
@@ -1921,13 +1538,10 @@ void as_handle_manager::mainLoop()
             CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
                 "select failed: manager type: %s. errno = %d",
                 _FL_, m_szMgrType, CONN_ERRNO);
-            //Èç¹ûÔÚselect²Ù×÷Ö®Ç°FD_SET¼¯ºÏÖÐµÄsocket±»close£¬
-            //select²Ù×÷»á±¨WSAENOTSOCK£¨10038£©´íÎó, break»áµ¼ÖÂÏß³ÌÍË³ö
             //break;
             continue;
         }
 
-        //¼ÓËø
         if(AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfHandle))
         {
            break;
@@ -1943,7 +1557,6 @@ void as_handle_manager::mainLoop()
                 continue;
             }
 
-            //¼ì²éÊÇ·ñÎª¶Á²Ù×÷
             as_handle *pHandle = pHandleNode->m_pHandle;
             if (pHandle->m_lSockFD != InvalidSocket)
             {
@@ -1954,7 +1567,6 @@ void as_handle_manager::mainLoop()
                     this->checkSelectResult(enEpollRead, pHandleNode->m_pHandle);
                 }
 
-                //¼ì²éÊÇ·ñÎªÐ´²Ù×÷
                 if (FD_ISSET(pHandle->m_lSockFD,&m_writeSet)
                     && (AS_TRUE == pHandle->m_bWriteSelected))
                 {
@@ -1962,7 +1574,6 @@ void as_handle_manager::mainLoop()
                 }
             }
         }
-        //½âËø
         (void)as_mutex_unlock(m_pMutexListOfHandle);
     }
 
@@ -1971,22 +1582,14 @@ void as_handle_manager::mainLoop()
 #endif
 
 #if AS_APP_OS == AS_OS_LINUX
-/*******************************************************************************
-  Function:       as_handle_manager::mainLoop()
-  Description:    ÊÂ¼þ¼ì²âÖ÷Ñ­»·
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_handle_manager::mainLoop()
 {
     while(AS_FALSE == m_bExit)
     {
         errno = 0;
-        long lWaitFds = epoll_wait(m_lEpfd, m_epEvents, EPOLL_MAX_EVENT,
-            (long)m_ulSelectPeriod);
+        int32_t lWaitFds = epoll_wait(m_lEpfd, m_epEvents, EPOLL_MAX_EVENT,
+            (int32_t)m_ulSelectPeriod);
         if (0 == lWaitFds )
         {
             continue;
@@ -2005,14 +1608,13 @@ void as_handle_manager::mainLoop()
             break;
         }
 
-        //¼ÓËø
         if(AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfHandle))
         {
            break;
         }
 
         as_handle_node *pHandleNode = NULL;
-        for(long i = 0; i < lWaitFds; ++i)
+        for(int32_t i = 0; i < lWaitFds; ++i)
         {
             pHandleNode = (as_handle_node *)(m_epEvents[i].data.ptr);
             if(NULL == pHandleNode)
@@ -2021,8 +1623,7 @@ void as_handle_manager::mainLoop()
                     "pHandleNode is NULL, sequence = %d", _FL_, i);
                 continue;
             }
-            //Õý³£Çé¿öÏÂm_bRemovedµÄÖµÖ»ÓÐ2ÖÖ£¬ÎªÁË·ÀÖ¹ÄÚ´æ±»¸ÄÐ´³ÉÆäËüÖµ£¬
-            //Ôö¼ÓÌõ¼þ:(AS_FALSE != pHandleNode->m_bRemoved)
+
             if((AS_TRUE == pHandleNode->m_bRemoved) ||
                 (AS_FALSE != pHandleNode->m_bRemoved))
             {
@@ -2036,13 +1637,11 @@ void as_handle_manager::mainLoop()
                 continue;
             }
 
-            //Í¨¹ýÊÂ¼þÀàÐÍ¼ì²éÊÇ·ñÎª¶Á²Ù×÷
             if(m_epEvents[i].events & EPOLLIN)
             {
                 this->checkSelectResult(enEpollRead, pHandle);
             }
 
-            //Í¨¹ýÊÂ¼þÀàÐÍ¼ì²éÊÇ·ñÎªÐ´²Ù×÷
             if(m_epEvents[i].events & EPOLLOUT)
             {
                 this->checkSelectResult(enEpollWrite, pHandle);
@@ -2056,9 +1655,8 @@ void as_handle_manager::mainLoop()
             {
                 CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
                     "(*itListOfHandle) removed, pHandleNode = 0x%x", _FL_,
-                    (long)(*itListOfHandle));
+                    (int32_t)(*itListOfHandle));
 
-                //½«¶ÔÓ¦µÄHandleNodeÉ¾³ý
                 pHandleNode = *itListOfHandle;
                 itListOfHandle = m_listHandle.erase(itListOfHandle);
                 AS_DELETE(pHandleNode);
@@ -2067,22 +1665,13 @@ void as_handle_manager::mainLoop()
             ++itListOfHandle;
         }
 
-        //½âËø
         (void)as_mutex_unlock(m_pMutexListOfHandle);
     }
     return;
 }
 #endif
 
-/*******************************************************************************
-  Function:       as_handle_manager::exit()
-  Description:    ·¢ËÍÍË³öÍ¨Öª¸øÊÂ¼þ¼ì²âÖ÷Ñ­»·£¬ÍË³öÏß³Ì
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_handle_manager::exit()
 {
     if(NULL == m_pSVSThread)
@@ -2094,7 +1683,7 @@ void as_handle_manager::exit()
 
     this->m_bExit = AS_TRUE;
     errno = 0;
-    long ret_val = as_join_thread(m_pSVSThread);
+    int32_t ret_val = as_join_thread(m_pSVSThread);
     if (ret_val != AS_ERROR_CODE_OK)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
@@ -2109,16 +1698,7 @@ void as_handle_manager::exit()
     return;
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::addHandle()
-  Description:    ×¢²áÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Calls:
-  Called By:
-  Input:          pHandle: ÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
-long as_handle_manager::addHandle(as_handle *pHandle,
+int32_t as_handle_manager::addHandle(as_handle *pHandle,
                                   AS_BOOLEAN bIsListOfHandleLocked)
 {
     if (NULL == pHandle )
@@ -2142,10 +1722,9 @@ long as_handle_manager::addHandle(as_handle *pHandle,
         return AS_ERROR_CODE_FAIL;
     }
 
-    //¼ÓËø(Èç¹ûºÍmainloop²»ÊÇÍ¬Ò»Ïß³Ì²»ÐèÒª¼ÓËø)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
-    if(AS_FALSE == bIsListOfHandleLocked)//Ã»ÓÐ¼Ó¹ýËøÐèÒª¼ÓËø
+    if(AS_FALSE == bIsListOfHandleLocked)
     {
         if (NULL == m_pSVSThread)
         {
@@ -2174,14 +1753,11 @@ long as_handle_manager::addHandle(as_handle *pHandle,
     }
 
 #if AS_APP_OS == AS_OS_LINUX
-    //½«handleÌí¼Óµ½epollµÄ¼¯ºÏÖÐ
     struct epoll_event epEvent;
     memset(&epEvent, 0, sizeof(epEvent));
-    //ÉèÖÃÓëÒª´¦ÀíµÄÊÂ¼þÏà¹ØµÄÎÄ¼þÃèÊö·û
     epEvent.data.ptr = (void *)pHandleNode;
-    //ÉèÖÃÒª´¦ÀíµÄÊÂ¼þÀàÐÍ
     epEvent.events = pHandle->getEvents();
-    //×¢²áepollÊÂ¼þ
+
     errno = 0;
     if ( 0 != epoll_ctl(m_lEpfd, EPOLL_CTL_ADD, pHandle->m_lSockFD, &epEvent))
     {
@@ -2190,7 +1766,6 @@ long as_handle_manager::addHandle(as_handle *pHandle,
             "errno = %d, error: %s", _FL_, CONN_ERRNO, strerror(CONN_ERRNO));
         AS_DELETE(pHandleNode);
 
-        //½âËø
         if(AS_TRUE == bLocked)
         {
             if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfHandle))
@@ -2230,7 +1805,6 @@ long as_handle_manager::addHandle(as_handle *pHandle,
 #endif
     m_listHandle.push_back(pHandleNode);
 
-    //½âËø
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfHandle))
@@ -2243,15 +1817,7 @@ long as_handle_manager::addHandle(as_handle *pHandle,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_handle_manager::removeHandle()
-  Description:    È¡Ïû×¢²áÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Calls:
-  Called By:
-  Input:          pHandle: ÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_handle_manager::removeHandle(as_handle *pHandle)
 {
     if(NULL == pHandle)
@@ -2261,7 +1827,6 @@ void as_handle_manager::removeHandle(as_handle *pHandle)
         return;
     }
 
-    //¼ÓËø(Èç¹ûºÍmainloop²»ÊÇÍ¬Ò»Ïß³Ì²»ÐèÒª¼ÓËø)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
     if (NULL == m_pSVSThread)
@@ -2311,7 +1876,6 @@ void as_handle_manager::removeHandle(as_handle *pHandle)
         pHandle->m_pHandleNode = NULL;
     }
 
-    //½âËø(Èç¹û²»ÊÇÍ¬Ò»Ïß³Ì)
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfHandle))
@@ -2324,15 +1888,7 @@ void as_handle_manager::removeHandle(as_handle *pHandle)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_mgr::lockListOfHandle()
-  Description:    ¶ÔList Handle ¼ÓËø
-  Calls:
-  Called By:
-  Input:          NA
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_tcp_conn_mgr::lockListOfHandle()
 {
     if (AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfHandle))
@@ -2341,15 +1897,7 @@ void as_tcp_conn_mgr::lockListOfHandle()
             "as_tcp_conn_mgr::lockListOfHandle: get lock failed", _FL_);
     }
 }
-/*******************************************************************************
-  Function:       as_tcp_conn_mgr::unlockListOfHandle()
-  Description:    ¶ÔList Handle ½âËø
-  Calls:
-  Called By:
-  Input:          NA
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_tcp_conn_mgr::unlockListOfHandle()
 {
     if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfHandle))
@@ -2359,15 +1907,6 @@ void as_tcp_conn_mgr::unlockListOfHandle()
     }
 }
 
-/*******************************************************************************
-  Function:       as_tcp_conn_mgr::checkSelectResult()
-  Description:    ¸ù¾ÝµÃµ½µÄÊÂ¼þµ÷ÓÃÏàÓ¦µÄtcp handle´¦ÀíÊÂ¼þ
-  Calls:
-  Called By:
-  Input:          enEpEvent:¼ì²âµ½µÄÊÂ¼þ£¬pHandle: ÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_tcp_conn_mgr::checkSelectResult(const EpollEventType enEpEvent,
     as_handle *pHandle)
 {
@@ -2384,25 +1923,19 @@ void as_tcp_conn_mgr::checkSelectResult(const EpollEventType enEpEvent,
         return;
     }
 
-    //´¦Àí¶ÁÊÂ¼þ
     if(enEpollRead == enEpEvent)
     {
-        //Çå³ý¶ÁÊÂ¼þ¼ì²â
         pTcpConnHandle->setHandleRecv(AS_FALSE);
-        //µ÷ÓÃhandle´¦Àí½ÓÊÕÊÂ¼þ
         pTcpConnHandle->handle_recv();
     }
 
-    //´¦ÀíÐ´ÊÂ¼þ
     if(enEpollWrite == enEpEvent)
     {
-        //Çå³ýÐ´ÊÂ¼þ¼ì²â
         pTcpConnHandle->setHandleSend(AS_FALSE);
 
-        //¼ì²âÊÇ·ñÁ¬½Ó³É¹¦
         if(pTcpConnHandle->getStatus() == enConnecting)
         {
-            long lErrorNo = 0;
+            int32_t lErrorNo = 0;
             socklen_t len = sizeof(lErrorNo);
             if (getsockopt((SOCKET)(pTcpConnHandle->m_lSockFD), SOL_SOCKET, SO_ERROR,
                 (SOCK_OPT_TYPE *)&lErrorNo, &len) < 0)
@@ -2423,21 +1956,12 @@ void as_tcp_conn_mgr::checkSelectResult(const EpollEventType enEpEvent,
             pTcpConnHandle->m_lConnStatus = enConnected;
         }
 
-        //µ÷ÓÃhandle´¦ÀíÐ´ÊÂ¼þ
         pTcpConnHandle->handle_send();
     }
 
 }
 
-/*******************************************************************************
-  Function:       as_udp_sock_mgr::checkSelectResult()
-  Description:    ¸ù¾ÝµÃµ½µÄÊÂ¼þµ÷ÓÃÏàÓ¦µÄudp handle´¦ÀíÊÂ¼þ
-  Calls:
-  Called By:
-  Input:          enEpEvent:¼ì²âµ½µÄÊÂ¼þ£¬pHandle: ÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_udp_sock_mgr::checkSelectResult(const EpollEventType enEpEvent,
     as_handle *pHandle)
 {
@@ -2454,34 +1978,19 @@ void as_udp_sock_mgr::checkSelectResult(const EpollEventType enEpEvent,
         return;
     }
 
-    //´¦Àí¶ÁÊÂ¼þ
     if(enEpollRead == enEpEvent)
     {
-        //Çå³ý¶ÁÊÂ¼þ¼ì²â
         pUdpSockHandle->setHandleRecv(AS_FALSE);
-        //µ÷ÓÃhandle´¦Àí½ÓÊÕÊÂ¼þ
         pUdpSockHandle->handle_recv();
     }
 
-    //´¦ÀíÐ´ÊÂ¼þ
     if(enEpollWrite == enEpEvent)
     {
-        //Çå³ýÐ´ÊÂ¼þ¼ì²â
         pUdpSockHandle->setHandleSend(AS_FALSE);
-        //µ÷ÓÃhandle´¦ÀíÐ´ÊÂ¼þ
         pUdpSockHandle->handle_send();
     }
 }
 
-/*******************************************************************************
-  Function:       as_tcp_server_mgr::checkSelectResult()
-  Description:    ¸ù¾ÝµÃµ½µÄÊÂ¼þµ÷ÓÃÏàÓ¦µÄhandle´¦ÀíÊÂ¼þ
-  Calls:
-  Called By:
-  Input:          enEpEvent:¼ì²âµ½µÄÊÂ¼þ£¬pHandle: ÐèÒª¼ì²âÊÂ¼þµÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
     as_handle *pHandle)
 {
@@ -2505,17 +2014,15 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
         return;
     }
 
-    //´¦ÀíÁ¬½Óµ½À´ÊÂ¼þ
     if(enEpollRead == enEpEvent)
     {
         struct sockaddr_in peerAddr;
         memset(&peerAddr, 0, sizeof(struct sockaddr_in));
 
-        //½ÓÊÜÁ¬½Ó
         socklen_t len = sizeof(struct sockaddr_in);
-        long lClientSockfd = InvalidFd;
+        int32_t lClientSockfd = InvalidFd;
         errno = 0;
-        lClientSockfd = (long)::accept((SOCKET)(pTcpServerHandle->m_lSockFD),
+        lClientSockfd = (int32_t)::accept((SOCKET)(pTcpServerHandle->m_lSockFD),
             (struct sockaddr *)&peerAddr, &len);
         if( 0 > lClientSockfd)
         {
@@ -2527,7 +2034,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
             return;
         }
         //setSendBufSize
-        long lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+        int32_t lSendBufSize = DEFAULT_TCP_SENDRECV_SIZE;
         socklen_t lSendBufLength = sizeof(lSendBufSize);
         if(setsockopt((SOCKET)lClientSockfd, SOL_SOCKET, SO_SNDBUF, (char*)&lSendBufSize,
             lSendBufLength) < 0)
@@ -2539,7 +2046,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
         }
 
         //setRecBufSize
-        long lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
+        int32_t lRecvBufSize = DEFAULT_TCP_SENDRECV_SIZE;
         socklen_t lRecvBufLength = sizeof(lRecvBufSize);
         if(setsockopt((SOCKET)lClientSockfd, SOL_SOCKET, SO_RCVBUF, (char*)&lRecvBufSize,
             lRecvBufLength) < 0)
@@ -2549,7 +2056,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
                 "setRecvBufSize client socket error(%d)", _FL_, CONN_ERRNO);
             return;
         }
-        long flag = 1;
+        int32_t flag = 1;
         if(setsockopt((SOCKET)lClientSockfd, IPPROTO_TCP, TCP_NODELAY, (char*)&flag,
             sizeof(flag)) < 0)
         {
@@ -2559,7 +2066,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
             return;
         }
         //setReuseAddr();
-        long lReuseAddrFlag = 1;
+        int32_t lReuseAddrFlag = 1;
         if(setsockopt((SOCKET)lClientSockfd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
             sizeof(lReuseAddrFlag)) < 0)
         {
@@ -2568,13 +2075,13 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
                 "setsockopt client socket error(%d)", _FL_, CONN_ERRNO);
             return;
         }
-        //µ÷ÓÃserver handle´¦ÀíÁ¬½Óµ½À´
+
         as_network_addr clientAddr;
         clientAddr.m_lIpAddr = (LONG)peerAddr.sin_addr.s_addr;
         clientAddr.m_usPort = peerAddr.sin_port;
         as_tcp_conn_handle *pTcpConnHandle = NULL;
 
-        /*´Ë´¦¼ÓËø,Ê¹µÃÐÂÉú³ÉµÄpTcpConnHandle,ÓëremoveTcpClient»¥³â*/
+
         m_pTcpConnMgr->lockListOfHandle();
         if (AS_ERROR_CODE_OK != pTcpServerHandle->handle_accept(&clientAddr, pTcpConnHandle))
         {
@@ -2627,7 +2134,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
 
     }
 
-    //²»Ó¦¸Ã¼ì²âµ½Ð´ÊÂ¼þ
+
     if(enEpollWrite == enEpEvent)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
@@ -2635,15 +2142,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
     }
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::as_conn_mgr()
-  Description:    ¹¹Ôìº¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 as_conn_mgr::as_conn_mgr()
 {
     m_lLocalIpAddr = InvalidIp;
@@ -2653,15 +2152,6 @@ as_conn_mgr::as_conn_mgr()
 
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::~as_conn_mgr()
-  Description:    Îö¹¹º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 as_conn_mgr::~as_conn_mgr()
 {
     try
@@ -2675,18 +2165,8 @@ as_conn_mgr::~as_conn_mgr()
     }
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::init()
-  Description:    ³õÊ¼»¯º¯Êý
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: init success
-  AS_ERROR_CODE_FAIL: init fail
-*******************************************************************************/
-long as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
+
+int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
             const AS_BOOLEAN bHasTcpClient, const AS_BOOLEAN bHasTcpServer)
 {
 #if AS_APP_OS == AS_OS_WIN32
@@ -2753,18 +2233,8 @@ long as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::run()
-  Description:    Æô¶¯¸÷¸ömanager
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: start success
-  AS_ERROR_CODE_FAIL: start fail
-*******************************************************************************/
-long as_conn_mgr::run(void)
+
+int32_t as_conn_mgr::run(void)
 {
     if(NULL != m_pUdpSockMgr)
     {
@@ -2801,15 +2271,6 @@ long as_conn_mgr::run(void)
 }
 
 
-/*******************************************************************************
-  Function:       as_conn_mgr::exit()
-  Description:    ÍË³ö¸÷¸ömanager
-  Calls:
-  Called By:
-  Input:          ÎÞ
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
 void as_conn_mgr::exit(void)
 {
     if(NULL != m_pUdpSockMgr)
@@ -2836,43 +2297,23 @@ void as_conn_mgr::exit(void)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::setDefaultLocalAddr()
-  Description:    ÉèÖÃ±¾µØÈ±Ê¡µØÖ·
-  Calls:
-  Called By:
-  Input:          szLocalIpAddr: ±¾µØµØÖ·
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_conn_mgr::setDefaultLocalAddr(const char *szLocalIpAddr)
 {
     if(szLocalIpAddr != NULL)
     {
-        long lLocalIp = (long)inet_addr(szLocalIpAddr);
+        int32_t lLocalIp = (int32_t)inet_addr(szLocalIpAddr);
         if ((ULONG)lLocalIp != InvalidIp)
         {
-            m_lLocalIpAddr = (long)inet_addr(szLocalIpAddr);
+            m_lLocalIpAddr = (int32_t)inet_addr(szLocalIpAddr);
         }
     }
 
     return;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::regTcpClient()
-  Description:    ´´½¨TCP¿Í»§¶Ë
-  Calls:
-  Called By:
-  Input:          pLocalAddr: ±¾µØµØÖ·£¬pPeerAddr: ¶Ô¶ËµØÖ·£¬
-                  pTcpConnHandle: Á¬½Ó¶ÔÓ¦µÄhandle
-                  bSyncConn: SVS_TRUE±íÊ¾Í¬²½Á¬½Ó£¬SVS_FALSE±íÊ¾Òì²½Á¬½Ó
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: connect success
-  AS_ERROR_CODE_FAIL: connect fail
-*******************************************************************************/
-long as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
+
+int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     const as_network_addr *pPeerAddr, as_tcp_conn_handle *pTcpConnHandle,
     const EnumSyncAsync bSyncConn, ULONG ulTimeOut)
 {
@@ -2925,7 +2366,7 @@ long as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     pTcpConnHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
     pTcpConnHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    long lRetVal = pTcpConnHandle->conn(&localAddr, pPeerAddr, bSyncConn, ulTimeOut);
+    int32_t lRetVal = pTcpConnHandle->conn(&localAddr, pPeerAddr, bSyncConn, ulTimeOut);
 
     if(lRetVal != AS_ERROR_CODE_OK)
     {
@@ -2947,15 +2388,7 @@ long as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::removeTcpClient()
-  Description:    ×¢ÏúÁ¬½Óº¯Êý
-  Calls:
-  Called By:
-  Input:          pTcpConnHandle: Á¬½Ó¶ÔÓ¦µÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
 {
     if(NULL == pTcpConnHandle)
@@ -2972,11 +2405,6 @@ void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
             pTcpConnHandle->m_lSockFD, pTcpConnHandle->m_localAddr.m_lIpAddr,
             pTcpConnHandle->m_localAddr.m_usPort);
 
-    //´Ë´¦²»ÄÜ¹Ø±Õsocket£¬Ô­ÒòÈçÏÂ:
-    //µ÷ÓÃÍ¨ÐÅÆ½Ì¨ÖÐµÃas_conn_mgr::removeTcpClientº¯ÊýÊ±£¬
-    //ÓÉÓÚÏÈ¹Ø±ÕÁËsocket£¬µ¼ÖÂÍ¨ÐÅÆ½Ì¨µÄsocketÉ¨ÃèÏß³Ì¼à¿Øµ½socketÓÐ¶ÁÊÂ¼þ£¬
-    //µ«ÊÇ´ËÊ±socketÒÑ¾­±»¹Ø±ÕÁË,socket ÉÏ±¨µÄ¶ÁÊÂ¼þÊÇ·Ç·¨µÄ¡£
-    //ËùÒÔ¹Ø±Õsocket¶¯×÷ÒªºÍ¼à¿ØsocketÊÂ¼þ²Ù×÷£¬ÔÚÊ±ÐòÉÏÒª»¥³â.
     //pTcpConnHandle->close();
 
     if(NULL == m_pTcpConnMgr)
@@ -2991,19 +2419,8 @@ void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::regTcpServer()
-  Description:    ´´½¨TCP·þÎñÆ÷
-  Calls:
-  Called By:
-  Input:          pLocalAddr: ±¾µØµØÖ·
-                  pTcpServerHandle: TCP·þÎñÆ÷¶ÔÓ¦µÄhandle
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: listen success
-  AS_ERROR_CODE_FAIL: listen fail
-*******************************************************************************/
-long as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
+
+int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     as_tcp_server_handle *pTcpServerHandle)
 {
     if(NULL == pLocalAddr)
@@ -3055,7 +2472,7 @@ long as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     pTcpServerHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
     pTcpServerHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    long lRetVal = pTcpServerHandle->listen(&localAddr);
+    int32_t lRetVal = pTcpServerHandle->listen(&localAddr);
 
     if(lRetVal != AS_ERROR_CODE_OK)
     {
@@ -3076,15 +2493,7 @@ long as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::regTcpClient()
-  Description:    ×¢ÏúTCP·þÎñÆ÷
-  Calls:
-  Called By:
-  Input:          pTcpServerHandle: TCP·þÎñÆ÷¶ÔÓ¦µÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
 {
     if(NULL == pTcpServerHandle)
@@ -3094,11 +2503,6 @@ void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
         return;
     }
 
-    //´Ë´¦²»ÄÜ¹Ø±Õsocket£¬Ô­ÒòÈçÏÂ:
-    //µ÷ÓÃÍ¨ÐÅÆ½Ì¨ÖÐµÃas_conn_mgr::removeTcpClientº¯ÊýÊ±£¬
-    //ÓÉÓÚÏÈ¹Ø±ÕÁËsocket£¬µ¼ÖÂÍ¨ÐÅÆ½Ì¨µÄsocketÉ¨ÃèÏß³Ì¼à¿Øµ½socketÓÐ¶ÁÊÂ¼þ£¬
-    //µ«ÊÇ´ËÊ±socketÒÑ¾­±»¹Ø±ÕÁË,socket ÉÏ±¨µÄ¶ÁÊÂ¼þÊÇ·Ç·¨µÄ¡£
-    //ËùÒÔ¹Ø±Õsocket¶¯×÷ÒªºÍ¼à¿ØsocketÊÂ¼þ²Ù×÷£¬ÔÚÊ±ÐòÉÏÒª»¥³â.
     //pTcpServerHandle->close();
 
     if(NULL == m_pTcpServerMgr)
@@ -3113,19 +2517,8 @@ void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
     return;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::regUdpSocket()
-  Description:    ´´½¨UDP socket
-  Calls:
-  Called By:
-  Input:          pLocalAddr: ±¾µØµØÖ·£¬
-                  pUdpSockHandle: Á¬½Ó¶ÔÓ¦µÄhandle
-  Output:         ÎÞ
-  Return:
-  AS_ERROR_CODE_OK: create success
-  AS_ERROR_CODE_FAIL: create fail
-*******************************************************************************/
-long as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
+
+int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
                                  as_udp_sock_handle *pUdpSockHandle,
                                  const as_network_addr *pMultiAddr)
 {
@@ -3171,7 +2564,7 @@ long as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
     pUdpSockHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
     pUdpSockHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    long lRetVal = pUdpSockHandle->createSock(&localAddr, pMultiAddr);
+    int32_t lRetVal = pUdpSockHandle->createSock(&localAddr, pMultiAddr);
     if(lRetVal != AS_ERROR_CODE_OK)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
@@ -3191,15 +2584,7 @@ long as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
     return AS_ERROR_CODE_OK;
 }
 
-/*******************************************************************************
-  Function:       as_conn_mgr::removeUdpSocket()
-  Description:    É¾³ýUDP socket
-  Calls:
-  Called By:
-  Input:          pUdpSockHandle: Á¬½Ó¶ÔÓ¦µÄhandle
-  Output:         ÎÞ
-  Return:         ÎÞ
-*******************************************************************************/
+
 void as_conn_mgr::removeUdpSocket(as_udp_sock_handle *pUdpSockHandle)
 {
     if(NULL == pUdpSockHandle)

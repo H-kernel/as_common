@@ -29,7 +29,7 @@ void  as_start_ticks()
     memset(&g_startTime,0x00,sizeof(g_startTime));
 
 #ifdef WIN32
-    g_startTime.tv_sec = (long)timeGetTime();
+    g_startTime.tv_sec = (int32_t)timeGetTime();
 #else
     gettimeofday(&g_startTime, NULL);
 #endif
@@ -91,7 +91,7 @@ void  as_delay (uint32_t ulDelayTimeMs)
         }
 
         ulDelayTimeMs -= elapsed;
-        tv.tv_sec = (long)(ulDelayTimeMs/1000);
+        tv.tv_sec = (int32_t)(ulDelayTimeMs/1000);
         tv.tv_usec = (ulDelayTimeMs%1000)*1000;
 
         was_error = select(0, AS_NULL, AS_NULL, AS_NULL, &tv);
@@ -111,7 +111,7 @@ void  as_sleep(uint32_t ulMs )
 return ;
 }
 
-void  as_strftime(char * pszTimeStr, unsigned long ulLens, char* pszFormat, time_t ulTime)
+void  as_strftime(char * pszTimeStr, uint32_t ulLens, char* pszFormat, time_t ulTime)
 {
     struct tm* tmv;
     time_t uTime = (time_t)ulTime;
@@ -123,12 +123,12 @@ void  as_strftime(char * pszTimeStr, unsigned long ulLens, char* pszFormat, time
 
 struct tm* as_Localtime(time_t* ulTime)
 {
-    return (struct tm*)localtime(ulTime);/*0~6代表 周日到周六*/
+    return (struct tm*)localtime(ulTime);/*0~6锟斤拷锟斤拷 锟斤拷锟秸碉拷锟斤拷锟斤拷*/
 }
 
 
-//形如20040629182030的时间串转换成以秒为单位的日历时间,
-//即自国际标准时间公元1970年1月1日00:00:00以来经过的秒数。
+//锟斤拷锟斤拷20040629182030锟斤拷时锟戒串转锟斤拷锟斤拷锟斤拷锟斤拷为锟斤拷位锟斤拷锟斤拷锟斤拷时锟斤拷,
+//锟斤拷锟皆癸拷锟绞憋拷准时锟戒公元1970锟斤拷1锟斤拷1锟斤拷00:00:00锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷
 time_t as_str2time(const char *pStr)
 {
     struct tm tmvalue;

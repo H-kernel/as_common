@@ -1,24 +1,24 @@
 /******************************************************************
-'' ÎÄ¼þÃû:as_ini_config.cpp
+'' ï¿½Ä¼ï¿½ï¿½ï¿½:as_ini_config.cpp
 '' Copyright (c) .......
-'' ¹¦ÄÜÃèÊö:¶ÁÈ¡ÉèÖÃiniÎÄ¼þ
-'' Ç£ÉæÊý¾Ý±í£¬ÊÓÍ¼£¬´æ´¢¹ý³Ì£ºÎÞ
-'' °üº¬µÄÎÄ¼þ:INIConfig.h
-'' ´´½¨ÈË:hexin
-'' ÈÕ¡¡ÆÚ: 2008-8-12
-'' ÐÞ¸ÄÈË:
-'' ÈÕ¡¡ÆÚ:
-'' ÐÞ¸ÄËµÃ÷:
-'' °æ¡¡±¾:Version 1.0
+'' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½iniï¿½Ä¼ï¿½
+'' Ç£ï¿½ï¿½ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½æ´¢ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½
+'' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½:INIConfig.h
+'' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½:hexin
+'' ï¿½Õ¡ï¿½ï¿½ï¿½: 2008-8-12
+'' ï¿½Þ¸ï¿½ï¿½ï¿½:
+'' ï¿½Õ¡ï¿½ï¿½ï¿½:
+'' ï¿½Þ¸ï¿½Ëµï¿½ï¿½:
+'' ï¿½æ¡¡ï¿½ï¿½:Version 1.0
 '' ******************************************************************/
 
 #ifdef WIN32
-#pragma warning(disable: 4786 4503)//È¥µômapµÄ¾¯¸æ
+#pragma warning(disable: 4786 4503)//È¥ï¿½ï¿½mapï¿½Ä¾ï¿½ï¿½ï¿½
 #endif
 #include <string.h>
 #include "as_ini_config.h"
 
-/***********************iniÎÄ¼þ¸ñÊ½*********************************
+/***********************iniï¿½Ä¼ï¿½ï¿½ï¿½Ê½*********************************
      [SectionOne]
       Key1 = Value
       Key2 = Value
@@ -40,16 +40,16 @@ as_ini_config::~as_ini_config()
 
 /******************************************************************************
 Function:        GetValue 
-Description:    »ñÈ¡Öµ
+Description:    ï¿½ï¿½È¡Öµ
 Calls:             
 Called By:    
-Input:            section:²éÑ¯µÄsection
-                key:²éÑ¯µÄkey            
-Output:            value:ÐèÒª»ñÈ¡µÄÖµ
-Return:            ³É¹¦·µ»ØSUCCESS ·ñÔò·µ»Ø´íÎóÂë
+Input:            section:ï¿½ï¿½Ñ¯ï¿½ï¿½section
+                key:ï¿½ï¿½Ñ¯ï¿½ï¿½key            
+Output:            value:ï¿½ï¿½Òªï¿½ï¿½È¡ï¿½ï¿½Öµ
+Return:            ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½SUCCESS ï¿½ï¿½ï¿½ò·µ»Ø´ï¿½ï¿½ï¿½ï¿½ï¿½
 ******************************************************************************/
-//PCLINT×¢ÊÍËµÃ÷£º±¾ÀàÄÚ²¿²»µ÷ÓÃ¸Ãº¯Êý
-long as_ini_config::GetValue (const string &section, const string &key, string &value)/*lint -e1714 ÔÝ²»µ÷ÓÃ¸Ãº¯Êý£¬ÔÝÊ±±£ÁôµÈ´ýÀ©Õ¹Ê¹ÓÃ*/
+//PCLINT×¢ï¿½ï¿½Ëµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã¸Ãºï¿½ï¿½ï¿½
+int32_t as_ini_config::GetValue (const string &section, const string &key, string &value)/*lint -e1714 ï¿½Ý²ï¿½ï¿½ï¿½ï¿½Ã¸Ãºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½È´ï¿½ï¿½ï¿½Õ¹Ê¹ï¿½ï¿½*/
 {
     if ( m_SectionMap.find(section) == m_SectionMap.end() )
     {
@@ -68,14 +68,14 @@ long as_ini_config::GetValue (const string &section, const string &key, string &
 
 /******************************************************************************
 Function:        SetValue 
-Description:    ÉèÖÃÒ»¸öÖµ
+Description:    ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Öµ
 Calls:             
 Called By:    
-Input:            section:ÉèÖÃµÄsection
-                key:ÉèÖÃµÄkey
-                value:ÐèÒªÉèÖÃµÄÖµ
-Output:            ÎÞ
-Return:            ÎÞ
+Input:            section:ï¿½ï¿½ï¿½Ãµï¿½section
+                key:ï¿½ï¿½ï¿½Ãµï¿½key
+                value:ï¿½ï¿½Òªï¿½ï¿½ï¿½Ãµï¿½Öµ
+Output:            ï¿½ï¿½
+Return:            ï¿½ï¿½
 ******************************************************************************/
 void as_ini_config::SetValue (const string &section, const string &key, const string &value)
 {
@@ -84,14 +84,14 @@ void as_ini_config::SetValue (const string &section, const string &key, const st
 
 /******************************************************************************
 Function:         ReadIniFile
-Description:    ´ò¿ªÅäÖÃÎÄ¼þ
+Description:    ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
 Calls:             
 Called By:    
-Input:            filename£ºÒª´ò¿ªµÄÎÄ¼þ
-Output:            ÎÞ
-Return:            ³É¹¦·µ»ØSUCCESS ·ñÔò·µ»Ø´íÎóÂë
+Input:            filenameï¿½ï¿½Òªï¿½ò¿ªµï¿½ï¿½Ä¼ï¿½
+Output:            ï¿½ï¿½
+Return:            ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½SUCCESS ï¿½ï¿½ï¿½ò·µ»Ø´ï¿½ï¿½ï¿½ï¿½ï¿½
 ******************************************************************************/
-long as_ini_config::ReadIniFile (const string &filename)
+int32_t as_ini_config::ReadIniFile (const string &filename)
 {
     m_strFilePath = filename;
   
@@ -112,14 +112,14 @@ long as_ini_config::ReadIniFile (const string &filename)
     {
         (void)getline( input, line );
     
-        // È¥×¢ÊÍ 
+        // È¥×¢ï¿½ï¿½ 
         pos = line.find('#', 0);
         if (pos != string::npos)
         {
             (void)line.erase(pos);
         }
         
-        // È¥µôÁ½¶Ë¿Õ¸ñ  
+        // È¥ï¿½ï¿½ï¿½ï¿½ï¿½Ë¿Õ¸ï¿½  
         (void)line.erase(0, line.find_first_not_of("\t "));
         (void)line.erase(line.find_last_not_of("\t\r\n ") + 1);
     
@@ -129,14 +129,14 @@ long as_ini_config::ReadIniFile (const string &filename)
         }  
     
     
-        // ½âÎösection 
+        // ï¿½ï¿½ï¿½ï¿½section 
         if ( ( line[0] == '[' ) && ( line[line.length() - 1] == ']' ) )
         {
             section = line.substr(1, line.length() - 2);
             continue;
         }
           
-        // ½âÎöµÈºÅ 
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Èºï¿½ 
         pos = line.find('=', 0);
         if ( pos != string::npos )
         {
@@ -155,14 +155,14 @@ long as_ini_config::ReadIniFile (const string &filename)
 
 /******************************************************************************
 Function:        RegisterCallBack 
-Description:    ×¢²á»Øµ÷º¯Êý
+Description:    ×¢ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
 Calls:             
 Called By:    
-Input:            pCallBackInfo ×¢²á»Øµ÷º¯ÊýµÄÐÅÏ¢
-Output:            ÎÞ
-Return:            ³É¹¦·µ»ØSUCCESS ·ñÔò·µ»Ø´íÎóÂë
+Input:            pCallBackInfo ×¢ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+Output:            ï¿½ï¿½
+Return:            ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½SUCCESS ï¿½ï¿½ï¿½ò·µ»Ø´ï¿½ï¿½ï¿½ï¿½ï¿½
 ******************************************************************************/
-long as_ini_config::SaveIniFile ( const string & filename )
+int32_t as_ini_config::SaveIniFile ( const string & filename )
 {
     if ( filename != "" )
     {
@@ -205,8 +205,8 @@ long as_ini_config::SaveIniFile ( const string & filename )
 }
 
 
-//»ñÈ¡Ò»¸ö¶ÎËùÓÐÐÅÏ¢
-long as_ini_config::GetSection(const string & section, items & keyValueMap)
+//ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+int32_t as_ini_config::GetSection(const string & section, items & keyValueMap)
 {
     sections::iterator iter = m_SectionMap.find(section);
     if ( iter == m_SectionMap.end() )
@@ -226,12 +226,12 @@ long as_ini_config::GetSection(const string & section, items & keyValueMap)
     return INI_SUCCESS;
 }
 
-//½«ËùÓÐÅäÖÃµ¼³öµ½Ä³¸öÒÑ¾­´æÔÚµÄÅäÖÃÎÄ¼þ
-//ÓëSaveIniFileµÄÇø±ðÊÇ£ºÖ»ÊÇÐÞ¸ÄÏàÓ¦Öµ£¬¶ø²»»á¸²¸Ç£¬Ô­ÎÄ¼þ±ÈÎÄ¼þ¶àµÄÅäÖÃÏîÒ²»á±£ÁôÏÂÀ´
-long as_ini_config::ExportToFile(const string &filename)
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+//ï¿½ï¿½SaveIniFileï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½Ö»ï¿½ï¿½ï¿½Þ¸ï¿½ï¿½ï¿½Ó¦Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¸²ï¿½Ç£ï¿½Ô­ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½á±£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+int32_t as_ini_config::ExportToFile(const string &filename)
 {
-    as_ini_config iniRecv;     //½ÓÊÕÅäÖÃµÄÎÄ¼þ
-    long lResult = iniRecv.ReadIniFile(filename);
+    as_ini_config iniRecv;     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä¼ï¿½
+    int32_t lResult = iniRecv.ReadIniFile(filename);
     if(lResult != INI_SUCCESS)
     {
         return lResult;
@@ -247,19 +247,19 @@ long as_ini_config::ExportToFile(const string &filename)
         }
     }
 
-    //±£´æ
+    //ï¿½ï¿½ï¿½ï¿½
     lResult = iniRecv.SaveIniFile();
 
     return lResult;
 }
 
-//½«ËùÓÐÅäÖÃµ¼³öµ½Ä³¸öÒÑ¾­´æÔÚµÄÅäÖÃÎÄ¼þ
-//ÓëExportToFileµÄÇø±ðÊÇ£ºÖ¸¶¨µÄSection²»ÐèÒªµ¼Èë
-long as_ini_config::ExportToFileExceptPointed(const string &filename, 
-                            unsigned long ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1])
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+//ï¿½ï¿½ExportToFileï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Sectionï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+int32_t as_ini_config::ExportToFileExceptPointed(const string &filename, 
+                            uint32_t ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1])
 {
-    as_ini_config iniRecv;     //½ÓÊÕÅäÖÃµÄÎÄ¼þ
-    long lResult = iniRecv.ReadIniFile(filename);
+    as_ini_config iniRecv;     //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½Ä¼ï¿½
+    int32_t lResult = iniRecv.ReadIniFile(filename);
     if(lResult != INI_SUCCESS)
     {
         return lResult;
@@ -269,8 +269,8 @@ long as_ini_config::ExportToFileExceptPointed(const string &filename,
             it_section != m_SectionMap.end(); ++it_section)
     {
         bool bPointed = false;
-        //ÅÐ¶ÏÊÇ·ñÖ¸¶¨µÄ²»ÐèÒª´¦ÀíµÄSection
-        for(unsigned long i=0; i<ulSectionCont; i++)
+        //ï¿½Ð¶ï¿½ï¿½Ç·ï¿½Ö¸ï¿½ï¿½ï¿½Ä²ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Section
+        for(uint32_t i=0; i<ulSectionCont; i++)
         {
             if(0 == strcmp(it_section->first.c_str(), szSection[i]))
             {
@@ -279,7 +279,7 @@ long as_ini_config::ExportToFileExceptPointed(const string &filename,
             }            
         }
 
-        //Èç¹ûÊÇÖ¸¶¨µÄSection£¬´¦ÀíÏÂÒ»¸öSection
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Sectionï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½Section
         if(true == bPointed)
         {
             continue;
@@ -293,7 +293,7 @@ long as_ini_config::ExportToFileExceptPointed(const string &filename,
         }
     }
 
-    //±£´æ
+    //ï¿½ï¿½ï¿½ï¿½
     lResult = iniRecv.SaveIniFile();
 
     return lResult;

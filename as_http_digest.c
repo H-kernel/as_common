@@ -55,7 +55,7 @@
  * the bit counters.  There are no alignment requirements.
  */
 static const void *
-as_md5_body(as_md5_ctx *ctx, const void *data, unsigned long size)
+as_md5_body(as_md5_ctx *ctx, const void *data, uint32_t size)
 {
   const unsigned char *ptr;
   MD5_u32plus a, b, c, d;
@@ -174,10 +174,10 @@ as_md5_init(as_md5_ctx *ctx)
 }
 
 static void
-as_md5_update(as_md5_ctx *ctx, const void *data, unsigned long size)
+as_md5_update(as_md5_ctx *ctx, const void *data, uint32_t size)
 {
   MD5_u32plus saved_lo;
-  unsigned long used, available;
+  uint32_t used, available;
 
   saved_lo = ctx->lo;
   if ((ctx->lo = (saved_lo + size) & 0x1fffffff) < saved_lo)
@@ -201,7 +201,7 @@ as_md5_update(as_md5_ctx *ctx, const void *data, unsigned long size)
   }
 
   if (size >= 64) {
-    data = as_md5_body(ctx, data, size & ~(unsigned long)0x3f);
+    data = as_md5_body(ctx, data, size & ~(uint32_t)0x3f);
     size &= 0x3f;
   }
 
@@ -210,7 +210,7 @@ as_md5_update(as_md5_ctx *ctx, const void *data, unsigned long size)
 static void
 as_md5_final(unsigned char *result, as_md5_ctx *ctx)
 {
-  unsigned long used, available;
+  uint32_t used, available;
 
   used = ctx->lo & 0x3f;
 
@@ -264,7 +264,7 @@ as_md5_final(unsigned char *result, as_md5_ctx *ctx)
  *
  * string needs to be null terminated.
  * result is the buffer where to store the md5 hash. The length will always be
- * 32 characters long.
+ * 32 characters int32_t.
  */
 static void
 as_get_md5(const char *string, char *result)

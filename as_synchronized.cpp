@@ -9,7 +9,7 @@
 #endif
 
 #ifdef WIN32
-long as_synchronized::start()
+int32_t as_synchronized::start()
 {
     semEvent = CreateEvent(0, FALSE, FALSE, 0);
     if( VOS_NULL == semEvent )
@@ -43,9 +43,9 @@ long as_synchronized::start()
     return AS_ERROR_CODE_OK ;
 }
 #else
-long as_synchronized::start()
+int32_t as_synchronized::start()
 {
-    long result = AS_ERROR_CODE_OK ;
+    int32_t result = AS_ERROR_CODE_OK ;
     
     memset(&monitor, 0, sizeof(monitor));
     result = pthread_mutex_init(&monitor, 0);
@@ -119,9 +119,9 @@ as_synchronized::~as_synchronized()
 #endif    
 }
 
-long as_synchronized::popWait( long timeout )
+int32_t as_synchronized::popWait( int32_t timeout )
 {
-    long result;
+    int32_t result;
 #ifdef WIN32
     result = wait(semEvent,semMutex,timeout);
 #else
@@ -130,9 +130,9 @@ long as_synchronized::popWait( long timeout )
     return result;
 }
 
-long as_synchronized::pushWait( long timeout )
+int32_t as_synchronized::pushWait( int32_t timeout )
 {
-    long result;
+    int32_t result;
 #ifdef WIN32
     result = wait(semPushEvent,semMutex,timeout);
 #else
@@ -142,9 +142,9 @@ long as_synchronized::pushWait( long timeout )
 }
 
 #ifndef WIN32
-long as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *monitor,struct timespec *ts) 
+int32_t as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *monitor,struct timespec *ts) 
 {
-    long result;
+    int32_t result;
 
     if(ts) 
     {
@@ -161,10 +161,10 @@ long as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *mon
 
 
 #ifdef WIN32
-long  as_synchronized::wait(HANDLE hSemEvent,HANDLE hSemMutex,long timeout)const
+int32_t  as_synchronized::wait(HANDLE hSemEvent,HANDLE hSemMutex,int32_t timeout)const
 {
-    unsigned long err;
-    long result = AS_ERROR_CODE_OK ;           
+    uint32_t err;
+    int32_t result = AS_ERROR_CODE_OK ;           
 
     if(!ReleaseMutex(hSemMutex))
     {
@@ -173,10 +173,10 @@ long  as_synchronized::wait(HANDLE hSemEvent,HANDLE hSemMutex,long timeout)const
 
     if( timeout == 0 ) 
     {
-        timeout = (long)INFINITE ;
+        timeout = (int32_t)INFINITE ;
 	}       
 
-    err = WaitForSingleObject(hSemEvent, (unsigned long)timeout);
+    err = WaitForSingleObject(hSemEvent, (uint32_t)timeout);
     switch(err)
     {
         case WAIT_TIMEOUT:
@@ -201,18 +201,18 @@ long  as_synchronized::wait(HANDLE hSemEvent,HANDLE hSemMutex,long timeout)const
     return result ;
 }        
 #else
-long  as_synchronized::wait(pthread_cond_t *cond,pthread_mutex_t *monitor,long timeout)
+int32_t  as_synchronized::wait(pthread_cond_t *cond,pthread_mutex_t *monitor,int32_t timeout)
 {
     struct timespec ts;
     struct timeval  tv;
 
-    long result= AS_ERROR_CODE_OK ;
+    int32_t result= AS_ERROR_CODE_OK ;
 
     gettimeofday(&tv, 0);
-    ts.tv_sec  = tv.tv_sec  + (long)timeout/1000;
+    ts.tv_sec  = tv.tv_sec  + (int32_t)timeout/1000;
     ts.tv_nsec = (tv.tv_usec + (timeout %1000)*1000) * 1000; 
 
-    long err;
+    int32_t err;
     if( timeout )
     {
         err = cond_timed_wait(cond,monitor,&ts);
@@ -240,7 +240,7 @@ long  as_synchronized::wait(pthread_cond_t *cond,pthread_mutex_t *monitor,long t
 #endif
 
 #ifdef WIN32
-long  as_synchronized::notifyRead()
+int32_t  as_synchronized::notifyRead()
 {
     numNotifies = 1;
     if(!SetEvent(semEvent))
@@ -251,9 +251,9 @@ long  as_synchronized::notifyRead()
     return AS_ERROR_CODE_OK ;
 }
 #else
-long  as_synchronized::notifyRead()
+int32_t  as_synchronized::notifyRead()
 {
-    long result;
+    int32_t result;
 
     result = pthread_cond_signal(&pop_cond);
     if(result)
@@ -266,7 +266,7 @@ long  as_synchronized::notifyRead()
 #endif
 
 #ifdef WIN32
-long  as_synchronized::notifyWrite()
+int32_t  as_synchronized::notifyWrite()
 {
     numNotifies = 1;
     if(!SetEvent(semPushEvent))
@@ -277,9 +277,9 @@ long  as_synchronized::notifyWrite()
     return AS_ERROR_CODE_OK ;
 }
 #else
-long  as_synchronized::notifyWrite()
+int32_t  as_synchronized::notifyWrite()
 {
-    long result;
+    int32_t result;
 
     result = pthread_cond_signal(&push_cond);
     if(result)
@@ -293,7 +293,7 @@ long  as_synchronized::notifyWrite()
 
 
 #ifdef WIN32
-long as_synchronized::notify_all()
+int32_t as_synchronized::notify_all()
 {
     numNotifies = (char)0x80;
     while (numNotifies--)
@@ -307,9 +307,9 @@ long as_synchronized::notify_all()
     return AS_ERROR_CODE_OK;            
 }
 #else
-long as_synchronized::notify_all()
+int32_t as_synchronized::notify_all()
 {
-    long result;
+    int32_t result;
 
     result = pthread_cond_broadcast(&pop_cond);
     if(result)
@@ -322,7 +322,7 @@ long as_synchronized::notify_all()
 #endif
 
 #ifdef WIN32
-long as_synchronized::lock()
+int32_t as_synchronized::lock()
 {
     if(WaitForSingleObject(semMutex, INFINITE) != WAIT_OBJECT_0)
     {
@@ -332,7 +332,7 @@ long as_synchronized::lock()
     return AS_ERROR_CODE_OK;
 }    
 #else
-long as_synchronized::lock()
+int32_t as_synchronized::lock()
 {
     if(pthread_mutex_lock(&monitor))
     {
@@ -346,7 +346,7 @@ long as_synchronized::lock()
 
 
 #ifdef WIN32
-long as_synchronized::unlock()/*lint !e1714*/ //供外部调用
+int32_t as_synchronized::unlock()/*lint !e1714*/ //锟斤拷锟解部锟斤拷锟斤拷
 {
     if(!ReleaseMutex(semMutex))
     {
@@ -356,7 +356,7 @@ long as_synchronized::unlock()/*lint !e1714*/ //供外部调用
     return AS_ERROR_CODE_OK ;
 }
 #else
-long as_synchronized::unlock()
+int32_t as_synchronized::unlock()
 {
     if(pthread_mutex_unlock(&monitor))
     {
@@ -370,7 +370,7 @@ long as_synchronized::unlock()
 #ifndef WIN32
 AS_BOOLEAN as_synchronized::trylock()
 {
-    long result = AS_ERROR_CODE_OK;
+    int32_t result = AS_ERROR_CODE_OK;
 
     result = pthread_mutex_trylock(&monitor);
     if( AS_ERROR_CODE_OK == result )

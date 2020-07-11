@@ -7,20 +7,20 @@ public:
     as_synchronized();
     virtual ~as_synchronized();
 
-    long   popWait(long timeout);    
-    long   pushWait(long timeout);    
+    int32_t   popWait(int32_t timeout);    
+    int32_t   pushWait(int32_t timeout);    
 
-    long   start();
+    int32_t   start();
 
-    long   notifyRead();
-    long   notifyWrite();    
-    long   notify_all();
-    long  lock();
+    int32_t   notifyRead();
+    int32_t   notifyWrite();    
+    int32_t   notify_all();
+    int32_t  lock();
     AS_BOOLEAN  trylock();
-    long  unlock();
+    int32_t  unlock();
 
 #ifdef WIN32
-    long     wait(HANDLE,HANDLE,long)const;
+    int32_t     wait(HANDLE,HANDLE,int32_t)const;
     char    numNotifies;
     HANDLE  semEvent;
     HANDLE  semMutex;
@@ -31,8 +31,8 @@ public:
     pthread_cond_t  push_cond;    
     pthread_mutex_t monitor;
     pthread_mutex_t push_monitor;    
-    long  wait(pthread_cond_t *,pthread_mutex_t *,long );
-    long  cond_timed_wait( pthread_cond_t * ,pthread_mutex_t *,timespec *);    
+    int32_t  wait(pthread_cond_t *,pthread_mutex_t *,int32_t );
+    int32_t  cond_timed_wait( pthread_cond_t * ,pthread_mutex_t *,timespec *);    
 #endif
 };
 

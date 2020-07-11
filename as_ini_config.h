@@ -42,32 +42,32 @@ public:
     as_ini_config();
     virtual ~as_ini_config();
 public:
-    //´ò¿ªiniÎÄ¼ş
-    virtual long ReadIniFile(const string &filename);
-    //±£´æiniÎÄ¼ş(»á¸²¸ÇËùÓĞĞÅÏ¢)
-    long SaveIniFile(const string & filename = "");
-    //ÉèÖÃSectionÖĞkey¶ÔÓ¦µÄvalue
+    //ï¿½ï¿½iniï¿½Ä¼ï¿½
+    virtual int32_t ReadIniFile(const string &filename);
+    //ï¿½ï¿½ï¿½ï¿½iniï¿½Ä¼ï¿½(ï¿½á¸²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢)
+    int32_t SaveIniFile(const string & filename = "");
+    //ï¿½ï¿½ï¿½ï¿½Sectionï¿½ï¿½keyï¿½ï¿½Ó¦ï¿½ï¿½value
     void SetValue(const string & section, const string & key, 
         const string & value);
-    //»ñÈ¡SectionÖĞkey¶ÔÓ¦µÄvalue
-    virtual long GetValue(const string & section, const string & key, 
+    //ï¿½ï¿½È¡Sectionï¿½ï¿½keyï¿½ï¿½Ó¦ï¿½ï¿½value
+    virtual int32_t GetValue(const string & section, const string & key, 
         string & value);
 
-    //»ñÈ¡Ò»¸ö¶ÎËùÓĞĞÅÏ¢
-    long GetSection(const string & section, items & keyValueMap);
-    //½«ËùÓĞÅäÖÃµ¼³öµ½Ä³¸öÒÑ¾­´æÔÚµÄÅäÖÃÎÄ¼ş
-    //ÓëSaveIniFileµÄÇø±ğÊÇ£ºÖ»ÊÇĞŞ¸ÄÏàÓ¦Öµ£¬¶ø²»»á¸²¸Ç
-    long ExportToFile(const string &filename);
+    //ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
+    int32_t GetSection(const string & section, items & keyValueMap);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+    //ï¿½ï¿½SaveIniFileï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½Ö»ï¿½ï¿½ï¿½Ş¸ï¿½ï¿½ï¿½Ó¦Öµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½á¸²ï¿½ï¿½
+    int32_t ExportToFile(const string &filename);
 
-    //½«ËùÓĞÅäÖÃµ¼³öµ½Ä³¸öÒÑ¾­´æÔÚµÄÅäÖÃÎÄ¼ş
-    //ÓëExportToFileµÄÇø±ğÊÇ£ºÖ¸¶¨µÄSection²»ĞèÒªµ¼Èë,Ô­ÎÄ¼ş±ÈÎÄ¼ş¶àµÄÅäÖÃÏîÒ²»á±£ÁôÏÂÀ´
-    long ExportToFileExceptPointed(const string &filename, 
-                            unsigned long ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1]);
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½
+    //ï¿½ï¿½ExportToFileï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç£ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Sectionï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½,Ô­ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò²ï¿½á±£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    int32_t ExportToFileExceptPointed(const string &filename, 
+                            uint32_t ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1]);
                             
 private:
 
-     string m_strFilePath;//´ò¿ªÎÄ¼şÂ·¾¶      
-     sections m_SectionMap; //±£´æÎÄ¼şÄÚÈİ,map
+     string m_strFilePath;//ï¿½ï¿½ï¿½Ä¼ï¿½Â·ï¿½ï¿½      
+     sections m_SectionMap; //ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½,map
 
 };
 
