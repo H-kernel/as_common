@@ -218,7 +218,7 @@ class as_network_handle : public as_handle
 
   public:
     virtual int32_t initHandle(void);
-    int32_t getSockFD(void) const    /*lint -e1714*///�ӿں��������಻����
+    int32_t getSockFD(void) const
     {
         return m_lSockFD;
     };
@@ -321,12 +321,12 @@ class  as_handle_manager
     as_mutex_t *m_pMutexListOfHandle;
 
 #if AS_APP_OS == AS_OS_LINUX
-    int32_t m_lEpfd; //����epoll�ľ��
+    int32_t m_lEpfd;
     struct epoll_event m_epEvents[EPOLL_MAX_EVENT];
 #elif AS_APP_OS == AS_OS_WIN32
     fd_set m_readSet;
     fd_set m_writeSet;
-    timeval m_stSelectPeriod;            //select����
+    timeval m_stSelectPeriod;
 #endif
 
     ULONG m_ulSelectPeriod;
@@ -346,8 +346,7 @@ class as_tcp_conn_mgr : public as_handle_manager
     void unlockListOfHandle();
 
   protected:
-    virtual void checkSelectResult(const EpollEventType enEpEvent,
-                            as_handle *pHandle);  /*lint !e1768*///��Ҫ�������θýӿ�
+    virtual void checkSelectResult(const EpollEventType enEpEvent,as_handle *pHandle);
 };
 
 class as_udp_sock_mgr : public as_handle_manager
@@ -359,8 +358,7 @@ class as_udp_sock_mgr : public as_handle_manager
     };
 
   protected:
-    virtual void checkSelectResult(const EpollEventType enEpEvent,
-        as_handle *pHandle);  /*lint !e1768*///��Ҫ�������θýӿ�
+    virtual void checkSelectResult(const EpollEventType enEpEvent,as_handle *pHandle);
 };
 
 class as_tcp_server_mgr : public as_handle_manager
