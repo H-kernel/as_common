@@ -42,32 +42,23 @@ public:
     as_ini_config();
     virtual ~as_ini_config();
 public:
-    //��ini�ļ�
     virtual int32_t ReadIniFile(const string &filename);
-    //����ini�ļ�(�Ḳ��������Ϣ)
     int32_t SaveIniFile(const string & filename = "");
-    //����Section��key��Ӧ��value
     void SetValue(const string & section, const string & key, 
         const string & value);
-    //��ȡSection��key��Ӧ��value
     virtual int32_t GetValue(const string & section, const string & key, 
         string & value);
 
-    //��ȡһ����������Ϣ
     int32_t GetSection(const string & section, items & keyValueMap);
-    //���������õ�����ĳ���Ѿ����ڵ������ļ�
-    //��SaveIniFile�������ǣ�ֻ���޸���Ӧֵ�������Ḳ��
     int32_t ExportToFile(const string &filename);
 
-    //���������õ�����ĳ���Ѿ����ڵ������ļ�
-    //��ExportToFile�������ǣ�ָ����Section����Ҫ����,ԭ�ļ����ļ����������Ҳ�ᱣ������
     int32_t ExportToFileExceptPointed(const string &filename, 
                             uint32_t ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1]);
                             
 private:
 
-     string m_strFilePath;//���ļ�·��      
-     sections m_SectionMap; //�����ļ�����,map
+     string m_strFilePath;    
+     sections m_SectionMap;
 
 };
 

@@ -1,31 +1,8 @@
-/******************************************************************
-'' �ļ���:as_ini_config.cpp
-'' Copyright (c) .......
-'' ��������:��ȡ����ini�ļ�
-'' ǣ�����ݱ�����ͼ���洢���̣���
-'' �������ļ�:INIConfig.h
-'' ������:hexin
-'' �ա���: 2008-8-12
-'' �޸���:
-'' �ա���:
-'' �޸�˵��:
-'' �桡��:Version 1.0
-'' ******************************************************************/
-
 #ifdef WIN32
 #pragma warning(disable: 4786 4503)//ȥ��map�ľ���
 #endif
 #include <string.h>
 #include "as_ini_config.h"
-
-/***********************ini�ļ���ʽ*********************************
-     [SectionOne]
-      Key1 = Value
-      Key2 = Value
-        .....
-     [SectionTwo]
-        .....
-********************************************************************/
 
 as_ini_config::as_ini_config()
 {
@@ -37,20 +14,7 @@ as_ini_config::~as_ini_config()
 
 }
 
-
-/******************************************************************************
-Function:        GetValue 
-Description:    ��ȡֵ
-Calls:             
-Called By:    
-Input:            section:��ѯ��section
-                key:��ѯ��key            
-Output:            value:��Ҫ��ȡ��ֵ
-Return:            �ɹ�����SUCCESS ���򷵻ش�����
-******************************************************************************/
-//PCLINTע��˵���������ڲ������øú���
-int32_t as_ini_config::GetValue (const string &section, const string &key, string &value)/*lint -e1714 �ݲ����øú�������ʱ�����ȴ���չʹ��*/
-{
+int32_t as_ini_config::GetValue (const string &section, const string &key, string &value)
     if ( m_SectionMap.find(section) == m_SectionMap.end() )
     {
         return INI_ERROR_NOSECTION;    
@@ -66,31 +30,12 @@ int32_t as_ini_config::GetValue (const string &section, const string &key, strin
 }
 
 
-/******************************************************************************
-Function:        SetValue 
-Description:    ����һ��ֵ
-Calls:             
-Called By:    
-Input:            section:���õ�section
-                key:���õ�key
-                value:��Ҫ���õ�ֵ
-Output:            ��
-Return:            ��
-******************************************************************************/
 void as_ini_config::SetValue (const string &section, const string &key, const string &value)
 {
     m_SectionMap[section][key] = value;
 }
 
-/******************************************************************************
-Function:         ReadIniFile
-Description:    �������ļ�
-Calls:             
-Called By:    
-Input:            filename��Ҫ�򿪵��ļ�
-Output:            ��
-Return:            �ɹ�����SUCCESS ���򷵻ش�����
-******************************************************************************/
+
 int32_t as_ini_config::ReadIniFile (const string &filename)
 {
     m_strFilePath = filename;
@@ -112,14 +57,12 @@ int32_t as_ini_config::ReadIniFile (const string &filename)
     {
         (void)getline( input, line );
     
-        // ȥע�� 
         pos = line.find('#', 0);
         if (pos != string::npos)
         {
             (void)line.erase(pos);
         }
         
-        // ȥ�����˿ո�  
         (void)line.erase(0, line.find_first_not_of("\t "));
         (void)line.erase(line.find_last_not_of("\t\r\n ") + 1);
     
@@ -129,14 +72,12 @@ int32_t as_ini_config::ReadIniFile (const string &filename)
         }  
     
     
-        // ����section 
         if ( ( line[0] == '[' ) && ( line[line.length() - 1] == ']' ) )
         {
             section = line.substr(1, line.length() - 2);
             continue;
         }
           
-        // �����Ⱥ� 
         pos = line.find('=', 0);
         if ( pos != string::npos )
         {
@@ -152,16 +93,6 @@ int32_t as_ini_config::ReadIniFile (const string &filename)
 }
 
 
-
-/******************************************************************************
-Function:        RegisterCallBack 
-Description:    ע��ص�����
-Calls:             
-Called By:    
-Input:            pCallBackInfo ע��ص���������Ϣ
-Output:            ��
-Return:            �ɹ�����SUCCESS ���򷵻ش�����
-******************************************************************************/
 int32_t as_ini_config::SaveIniFile ( const string & filename )
 {
     if ( filename != "" )
@@ -205,7 +136,6 @@ int32_t as_ini_config::SaveIniFile ( const string & filename )
 }
 
 
-//��ȡһ����������Ϣ
 int32_t as_ini_config::GetSection(const string & section, items & keyValueMap)
 {
     sections::iterator iter = m_SectionMap.find(section);
@@ -226,11 +156,9 @@ int32_t as_ini_config::GetSection(const string & section, items & keyValueMap)
     return INI_SUCCESS;
 }
 
-//���������õ�����ĳ���Ѿ����ڵ������ļ�
-//��SaveIniFile�������ǣ�ֻ���޸���Ӧֵ�������Ḳ�ǣ�ԭ�ļ����ļ����������Ҳ�ᱣ������
 int32_t as_ini_config::ExportToFile(const string &filename)
 {
-    as_ini_config iniRecv;     //�������õ��ļ�
+    as_ini_config iniRecv;
     int32_t lResult = iniRecv.ReadIniFile(filename);
     if(lResult != INI_SUCCESS)
     {
@@ -247,18 +175,15 @@ int32_t as_ini_config::ExportToFile(const string &filename)
         }
     }
 
-    //����
     lResult = iniRecv.SaveIniFile();
 
     return lResult;
 }
 
-//���������õ�����ĳ���Ѿ����ڵ������ļ�
-//��ExportToFile�������ǣ�ָ����Section����Ҫ����
 int32_t as_ini_config::ExportToFileExceptPointed(const string &filename, 
                             uint32_t ulSectionCont, const char szSection[][INI_CONFIG_MAX_SECTION_LEN+1])
 {
-    as_ini_config iniRecv;     //�������õ��ļ�
+    as_ini_config iniRecv;
     int32_t lResult = iniRecv.ReadIniFile(filename);
     if(lResult != INI_SUCCESS)
     {
@@ -269,7 +194,6 @@ int32_t as_ini_config::ExportToFileExceptPointed(const string &filename,
             it_section != m_SectionMap.end(); ++it_section)
     {
         bool bPointed = false;
-        //�ж��Ƿ�ָ���Ĳ���Ҫ������Section
         for(uint32_t i=0; i<ulSectionCont; i++)
         {
             if(0 == strcmp(it_section->first.c_str(), szSection[i]))
@@ -279,7 +203,6 @@ int32_t as_ini_config::ExportToFileExceptPointed(const string &filename,
             }            
         }
 
-        //�����ָ����Section��������һ��Section
         if(true == bPointed)
         {
             continue;
@@ -293,7 +216,6 @@ int32_t as_ini_config::ExportToFileExceptPointed(const string &filename,
         }
     }
 
-    //����
     lResult = iniRecv.SaveIniFile();
 
     return lResult;
