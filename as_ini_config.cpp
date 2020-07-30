@@ -15,6 +15,7 @@ as_ini_config::~as_ini_config()
 }
 
 int32_t as_ini_config::GetValue (const string &section, const string &key, string &value)
+{
     if ( m_SectionMap.find(section) == m_SectionMap.end() )
     {
         return INI_ERROR_NOSECTION;    
