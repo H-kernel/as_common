@@ -115,7 +115,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
         return AS_TRUE;
     }
     else {
-        return AS_FALSE
+        return AS_FALSE;
     }
 
     if (0 != semop(sem_id_, &buf[0], 2))
