@@ -12,7 +12,7 @@ extern "C" {
 #include <ctype.h>
 #include "as_dlfcn.h"
 
-as_dll_handle_t* SVS_LoadLibrary(const char* pszPath)
+as_dll_handle_t* as_load_library(const char* pszPath)
 {
     as_dll_handle_t* phandle = NULL;
     phandle = (as_dll_handle_t *)malloc(sizeof(as_dll_handle_t));
@@ -56,7 +56,7 @@ as_dll_handle_t* SVS_LoadLibrary(const char* pszPath)
 
     return phandle;
 }
-void* SVS_GetProcAddress(as_dll_handle_t* pHandle, const char* pszName)
+void* as_get_proc_addr(as_dll_handle_t* pHandle, const char* pszName)
 {
     if (NULL == pHandle)
     {
@@ -71,7 +71,7 @@ void* SVS_GetProcAddress(as_dll_handle_t* pHandle, const char* pszName)
 #endif
 }
 
-void SVS_FreeLoadLib(as_dll_handle_t* pHandle)
+void as_free_library(as_dll_handle_t* pHandle)
 {
     if (NULL == pHandle)
     {

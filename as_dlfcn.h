@@ -25,9 +25,9 @@ typedef struct tag_ASDllHandle
 #endif
 
 
-as_dll_handle_t* SVS_LoadLibrary(const char* pszPath);
-void* SVS_GetProcAddress(as_dll_handle_t* pHandle, const char* pszName);
-void SVS_FreeLoadLib(as_dll_handle_t* pHandle);
+as_dll_handle_t* as_load_library(const char* pszPath);
+void* as_get_proc_addr(as_dll_handle_t* pHandle, const char* pszName);
+void as_free_library(as_dll_handle_t* pHandle);
 
 
 #ifdef __cplusplus
