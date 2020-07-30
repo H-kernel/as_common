@@ -9,6 +9,8 @@
 #pragma once
 #endif // _MSC_VER > 1000
 #include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
 #include <string>
 #include <fstream>
 #include <map>
