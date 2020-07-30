@@ -20,6 +20,7 @@ extern "C" {
 #include "as_queue.h"
 #include "as_queue_safe.h"
 #include "as_daemon.h"
+#include "as_dlfcn.h"
 
 #ifdef __cplusplus
 #if __cplusplus
