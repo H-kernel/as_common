@@ -39,7 +39,7 @@ distribution.
 #   include <cstring>
 #   include <cstdarg>
 #endif
-
+#   include <stdint.h>
 /*
    TODO: intern strings instead of allocation.
 */
