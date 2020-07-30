@@ -413,8 +413,6 @@ class as_conn_mgr
   public:
     as_conn_mgr();
     virtual ~as_conn_mgr();
-protected:
-    as_conn_mgr();
 public:
     virtual int32_t init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
         const AS_BOOLEAN bHasTcpClient, const AS_BOOLEAN bHasTcpServer);
