@@ -13,21 +13,21 @@ extern "C" {
 
 
 #if AS_APP_OS == AS_OS_LINUX
-typedef struct tagSVSDLLHandle
+typedef struct tag_ASDllHandle
 {
     void* hDllInst;
-}SVSDLLHandle;
+}as_dll_handle_t;
 #elif AS_APP_OS == AS_OS_WIN32
-typedef struct tagSVSDLLHandle
+typedef struct tag_ASDllHandle
 {
     HINSTANCE hDllInst;
-}SVSDLLHandle;
+}as_dll_handle_t;
 #endif
 
 
-SVSDLLHandle* SVS_LoadLibrary(const char* pszPath);
-void* SVS_GetProcAddress(SVSDLLHandle* pHandle, const char* pszName);
-void SVS_FreeLoadLib(SVSDLLHandle* pHandle);
+as_dll_handle_t* SVS_LoadLibrary(const char* pszPath);
+void* SVS_GetProcAddress(as_dll_handle_t* pHandle, const char* pszName);
+void SVS_FreeLoadLib(as_dll_handle_t* pHandle);
 
 
 #ifdef __cplusplus
