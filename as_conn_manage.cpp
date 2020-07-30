@@ -1654,8 +1654,7 @@ void as_handle_manager::mainLoop()
             if(AS_TRUE == (*itListOfHandle)->m_bRemoved)
             {
                 CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
-                    "(*itListOfHandle) removed, pHandleNode = 0x%x", _FL_,
-                    (int32_t)(*itListOfHandle));
+                    "(*itListOfHandle) removed.", _FL_);
 
                 pHandleNode = *itListOfHandle;
                 itListOfHandle = m_listHandle.erase(itListOfHandle);
