@@ -53,7 +53,7 @@ uint32_t g_ulReStartTime   = 0;
 
 #define RLIMIT (1024 * 1024)
 
-#define SEM_PRMS  0644 //ÐÅºÅÁ¿²Ù×÷È¨ÏÞ£¬0644¼´Ö÷ÓÃ»§(ÊôÖ÷)¿É¶ÁÐ´¡¢×é³ÉÔ±¼°ÆäËü³ÉÔ±¿É¶Á²»¿ÉÐ´
+#define SEM_PRMS  0644 //ï¿½Åºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¨ï¿½Þ£ï¿½0644ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½(ï¿½ï¿½ï¿½ï¿½)ï¿½É¶ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô±ï¿½É¶ï¿½ï¿½ï¿½ï¿½ï¿½Ð´
 
 
 AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
@@ -108,9 +108,15 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     buf[0].sem_flg = IPC_NOWAIT;
     buf[1].sem_num = 0;
     buf[1].sem_op = 1;
-    buf[1].sem_flg = SEM_UNDO;//½ø³ÌÍË³öÊ±×Ô¶¯»Ø¹ö
+    buf[1].sem_flg = SEM_UNDO;//ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½Ê±ï¿½Ô¶ï¿½ï¿½Ø¹ï¿½
 
-    return semop(sem_id_, &buf[0], 2) == 0;
+    if( semop(sem_id_, &buf[0], 2) == 0)
+    {
+        return AS_TRUE;
+    }
+    else {
+        return AS_FALSE
+    }
 
     if (0 != semop(sem_id_, &buf[0], 2))
     {
@@ -148,9 +154,9 @@ int32_t setResourceLimit()
     return DAEMO_SUCCESS;
 }
 
-static pid_t child_pid; //¹¤×÷½ø³ÌµÄ½ø³ÌID
+static pid_t child_pid; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÌµÄ½ï¿½ï¿½ï¿½ID
 
-//¾«¶ÈÎªÃë
+//ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½
 uint32_t as_daemon_get_ticks ( void )
 {
     uint32_t ticks = 0 ;
@@ -197,17 +203,17 @@ void sigquit_handle(int32_t signum)
 
     signum = signum;
 
-    //²»ÔÙ½ÓÊÜSIGCHLDÐÅºÅ£¬·ÀÖ¹ÖØ¸´À­Æð
+    //ï¿½ï¿½ï¿½Ù½ï¿½ï¿½ï¿½SIGCHLDï¿½ÅºÅ£ï¿½ï¿½ï¿½Ö¹ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½
     (void)signal(SIGCHLD, SIG_IGN);
 
     (void)system("echo \" fail to start service, please check log files!\" | wall");
 
-    //¹¤×÷½ø³Ì×éÈ«²¿É±µô
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½É±ï¿½ï¿½
     (void)kill(0 - child_pid, SIGTERM);
     (void)usleep(WAIT_KILL_ALL);
     (void)kill(0 - child_pid, SIGKILL);
 
-    //ÊÍ·Å×Ó½ø³ÌÕ¼ÓÃµÄÏµÍ³×ÊÔ´
+    //ï¿½Í·ï¿½ï¿½Ó½ï¿½ï¿½ï¿½Õ¼ï¿½Ãµï¿½ÏµÍ³ï¿½ï¿½Ô´
     do
     {
         pid = waitpid(-1, NULL, WNOHANG | __WALL);
@@ -217,7 +223,7 @@ void sigquit_handle(int32_t signum)
     syslog(LOG_USER|LOG_WARNING,
         "daemon(pid=%d) exit.\n", getpid());
 
-    //daemon×Ô¼ºÒ²ÍË³ö
+    //daemonï¿½Ô¼ï¿½Ò²ï¿½Ë³ï¿½
     exit(1);
 }
 
@@ -233,7 +239,7 @@ void sigchld_handle(int32_t signum)
 
     uint32_t ulTempReStartTime = 0;
 
-    /*10ÃëÖ®ÄÚÖØÆôÁËÈý´Î£¬ÔòÊØ»¤½ø³ÌÍË³ö*/
+    /*10ï¿½ï¿½Ö®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î£ï¿½ï¿½ï¿½ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½*/
     if(g_iReStartTimes > 3)
     {
         ulTempReStartTime = as_daemon_get_ticks( );
@@ -242,7 +248,7 @@ void sigchld_handle(int32_t signum)
             "daemon(pid=%d)  g_ulReStartTime = %lu ulTempReStartTime = %lu.\n",
              getpid(), g_ulReStartTime, ulTempReStartTime);
 
-        //ÖØÆô¶¯¿ªÊ¼Ê±¼äËãÆð£¬10ÃëÖ®ÄÚ³¬¹ýÈý´ÎÔòdaemon½ø³ÌÍË³ö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¼Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½10ï¿½ï¿½Ö®ï¿½Ú³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½daemonï¿½ï¿½ï¿½ï¿½ï¿½Ë³ï¿½
         if( (ulTempReStartTime - g_ulReStartTime) < 10 )
         {
             syslog(LOG_USER|LOG_WARNING,
@@ -250,11 +256,11 @@ void sigchld_handle(int32_t signum)
                 "because daemon restarted too many times in time(%lu).\n",
                 getpid(), (ulTempReStartTime - g_ulReStartTime));
 
-            //daemonÍË³ö
+            //daemonï¿½Ë³ï¿½
             exit(1);
         }
 
-        //³¬¹ýÈý´Îºó£¬ÖØÐÂ¼ÆËãÖØÆôÊ±¼ä
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½
         g_iReStartTimes = 0;
         g_ulReStartTime = as_daemon_get_ticks();
 
@@ -264,31 +270,31 @@ void sigchld_handle(int32_t signum)
 
     signum = signum;
 
-    //¹¤×÷½ø³Ì×éÈ«²¿É±µô
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½É±ï¿½ï¿½
     (void)kill(0 - child_pid, SIGTERM);
     (void)usleep(WAIT_KILL_ALL);
     (void)kill(0 - child_pid, SIGKILL);
 
-    //ÊÍ·Å×Ó½ø³ÌÕ¼ÓÃµÄÏµÍ³×ÊÔ´
+    //ï¿½Í·ï¿½ï¿½Ó½ï¿½ï¿½ï¿½Õ¼ï¿½Ãµï¿½ÏµÍ³ï¿½ï¿½Ô´
     do
     {
         pid = waitpid(-1, NULL, WNOHANG | __WALL);
     }
     while (pid > 0);
 
-    //ÏÈ»¹Ô­SIGCHLD´¦Àíº¯Êý£¬·ñÔòfork³öÀ´¾ÍÊÇ½©Ê¬
+    //ï¿½È»ï¿½Ô­SIGCHLDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½forkï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç½ï¿½Ê¬
     (void)signal(SIGCHLD, SIG_DFL);
-    //ÐÝÃß2Ãë£¬·ÀÖ¹Æµ·¢ÆôÍ£
+    //ï¿½ï¿½ï¿½ï¿½2ï¿½ë£¬ï¿½ï¿½Ö¹Æµï¿½ï¿½ï¿½ï¿½Í£
     sleep(WAIT_RELAUNCH);
 
-    //daemon½ø³ÌÅÉÉú³ö¹¤×÷½ø³Ì£¬´ËÊ±daemon½ø³Ì½«¼à¿Ø¹¤×÷½ø³Ì
+    //daemonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½Ê±daemonï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkÊ§°Ü
+            //forkÊ§ï¿½ï¿½
             syslog(LOG_USER|LOG_ERR,
                "Unable to fork worker process, exit.\n");
             exit(1);
@@ -296,7 +302,7 @@ void sigchld_handle(int32_t signum)
         }
         case 0:
         {
-            //¹¤×÷½ø³Ì£¬¼ÌÐøÔËÐÐ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
             (void)umask(PROCESS_MASK);
 
@@ -311,17 +317,17 @@ void sigchld_handle(int32_t signum)
         }
         default:
         {
-            //ÊØ»¤½ø³Ì
+            //ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½
             child_pid = pid;
 
             syslog(LOG_USER|LOG_WARNING,
                    "respawed new worker pid is  %d , daemon pid is %d\n",
                     child_pid, getpid());
 
-            //ÖØÐÂ×¢²áSIGCHLD´¦Àíº¯Êý
+            //ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½SIGCHLDï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             (void)signal(SIGCHLD, sigchld_handle);
 
-            //ÒÖÖÆÒ»ÏÂÔÙ´ÎÀ­ÆðµÄËÙ¶È£¬·ÀÖ¹·´¸´À­Æð
+            //ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ù´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ù¶È£ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             (void)sleep(WAIT_RELAUNCH);
             break;
         }
@@ -333,7 +339,7 @@ void send_sigquit_to_deamon()
     int32_t enback = 1;
     if (enback == g_iCfgDaemonlize)
     {
-        //¸ø¸¸½ø³Ì·¢Ò»¸öSIGQUIT£¬±íÊ¾²»ÓÃÀ­Æð£¬Ò»ÆðÍË³ö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì·ï¿½Ò»ï¿½ï¿½SIGQUITï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Ë³ï¿½
         (void)kill(getppid(), SIGQUIT);
 
         (void)sleep(WAIT_PARENT_KILL);
@@ -346,31 +352,31 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
     int32_t fdnull;
     pid_t pid;
 
-    //fork³ödeamon½ø³Ì
+    //forkï¿½ï¿½deamonï¿½ï¿½ï¿½ï¿½
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkÊ§°Ü
+            //forkÊ§ï¿½ï¿½
             printf("Unable to fork()!\n");
             exit(1);
             break;
         }
         case 0:
         {
-            //×Ó½ø³Ì£¨deemon½ø³Ì£©£¬¼ÌÐøÔËÐÐ
+            //ï¿½Ó½ï¿½ï¿½Ì£ï¿½deemonï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             break;
         }
         default:
         {
-            //daemon½ø³ÌµÄ¸¸½ø³Ì£¬ÍË³ö
+            //daemonï¿½ï¿½ï¿½ÌµÄ¸ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½Ë³ï¿½
             exit(0);
         }
     }
 
-    if(AS_TRUE != onlyone_process( service_conf_path, service_id))  //±£Ö¤Ö»ÓÐÒ»¸öÊµÀýÔËÐÐ
+    if(AS_TRUE != onlyone_process( service_conf_path, service_id))  //ï¿½ï¿½Ö¤Ö»ï¿½ï¿½Ò»ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     {
         printf( "\nA instance is running[%s].\n\n", service_conf_path );
         exit(0);
@@ -388,31 +394,31 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
     (void)signal(SIGCHLD, sigchld_handle);
     (void)signal(SIGQUIT, sigquit_handle);
 
-    //deamon½ø³ÌÅÉÉú³ö¹¤×÷½ø³Ì£¬´ËÊ±deamon½ø³Ì½«¼à¿Ø¹¤×÷½ø³Ì
+    //deamonï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½Ê±deamonï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½Ø¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkÊ§°Ü
+            //forkÊ§ï¿½ï¿½
             printf("Unable to fork()!\n");
             exit(1);
             break;
         }
         case 0:
         {
-            //×Ó½ø³Ì£¨deemon½ø³Ì£©£¬¼ÌÐøÔËÐÐ
+            //ï¿½Ó½ï¿½ï¿½Ì£ï¿½deemonï¿½ï¿½ï¿½Ì£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             break;
         }
         default:
         {
-            //ÊØ»¤½ø³Ì
+            //ï¿½Ø»ï¿½ï¿½ï¿½ï¿½ï¿½
             child_pid = pid;
             syslog(LOG_USER|LOG_WARNING,
                 "create daemon pid=%d, worker pid=%d.\n", getpid(), child_pid);
 
-            //ÆÁ±ÎÐÅºÅ ctrl+c
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Åºï¿½ ctrl+c
             (void)signal(SIGINT, SIG_IGN);
             (void)signal(SIGPIPE, SIG_IGN);
 
@@ -426,7 +432,7 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
 
             for(; ;)
             {
-                //¿ÕÑ­»·£¬½µµÍcpuÊ¹ÓÃÂÊ
+                //ï¿½ï¿½Ñ­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½cpuÊ¹ï¿½ï¿½ï¿½ï¿½
                 (void)sleep(WAIT_DAEMON);
             }
         }
@@ -445,7 +451,7 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
 
     (void)signal(SIGQUIT, SIG_DFL);
 
-    //Ö´ÐÐ¹¤×÷½ø³ÌÖÐµÄÖ÷º¯Êý
+    //Ö´ï¿½Ð¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     workfunc();
 
     return DAEMO_SUCCESS;
@@ -509,16 +515,16 @@ void as_run_service(void (*pWorkFunc)(),
 
     g_iCfgDaemonlize = iRunningMod;
 
-     //³õÊ¼»¯daemon£¬ ×¢²á»Øµ÷º¯Êý
+     //ï¿½ï¿½Ê¼ï¿½ï¿½daemonï¿½ï¿½ ×¢ï¿½ï¿½Øµï¿½ï¿½ï¿½ï¿½ï¿½
     init_daemon(pWorkFunc, pExitFunc);
     if (enBackGround == g_iCfgDaemonlize)
     {
-        //Æô¶¯³ÌÐò
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         (void)create_daemon( service_conf_path, service_id );
     }
     else
     {
-         if(AS_TRUE !=  onlyone_process( service_conf_path, service_id))  //±£Ö¤Ö»ÓÐÒ»¸öÊµÀýÔËÐÐ
+         if(AS_TRUE !=  onlyone_process( service_conf_path, service_id))  //ï¿½ï¿½Ö¤Ö»ï¿½ï¿½Ò»ï¿½ï¿½Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
          {
              printf( "\nA instance is running[%s].\n\n", service_conf_path );
              exit(0);
