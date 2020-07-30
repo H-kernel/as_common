@@ -97,7 +97,7 @@ int32_t    as_first_arg(as_url_t* url,as_url_arg_t* arg)
         arg->next = NULL;
     }
     else {
-        idx = '\0';
+        *idx = '\0';
         arg->next = idx + 1;
     }
     char* splite = strchr(data,'=');
@@ -110,7 +110,7 @@ int32_t    as_first_arg(as_url_t* url,as_url_arg_t* arg)
         strncpy(arg->value,splite + 1,AS_URL_ARG_VALUE_LEN);
     }
     if(NULL != idx) {
-        idx = '&';
+        *idx = '&';
     }
     return AS_ERROR_CODE_OK;
 }
@@ -130,7 +130,7 @@ int32_t    as_next_arg(as_url_arg_t* arg,as_url_arg_t* next)
         next->next = NULL;
     }
     else {
-        idx = '\0';
+        *idx = '\0';
         next->next = idx + 1;
     }
     char* splite = strchr(data,'=');
@@ -143,7 +143,7 @@ int32_t    as_next_arg(as_url_arg_t* arg,as_url_arg_t* next)
         strncpy(next->value,splite + 1,AS_URL_ARG_VALUE_LEN);
     }
     if(NULL != idx) {
-        idx = '&';
+        *idx = '&';
     }
     return AS_ERROR_CODE_OK;
 }
