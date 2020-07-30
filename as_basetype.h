@@ -1,5 +1,6 @@
 #ifndef AS_BASETYPE_H_INCLUDE
 #define AS_BASETYPE_H_INCLUDE
+#include <stdint.h>
 #if (AS_APP_OS == AS_OS_LINUX)
 #ifndef SOCKET
 typedef int SOCKET; 
@@ -11,7 +12,7 @@ typedef int SOCKET;
 typedef  unsigned long long     ULONGLONG ;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)
-typedef  unsigned __int64       ULONGLONG; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  unsigned __int64       ULONGLONG; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 #endif
 
@@ -20,40 +21,40 @@ typedef  unsigned __int64       ULONGLONG; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ
 typedef  long long              LONGLONG;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)
-typedef  __int64                LONGLONG; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  __int64                LONGLONG; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 #endif
 
 #ifndef  ULONG
-typedef  unsigned long          ULONG ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  unsigned long          ULONG ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  LONG
-typedef  long                   LONG; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  long                   LONG; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  USHORT
-typedef  unsigned short         USHORT ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  unsigned short         USHORT ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  SHORT
-typedef  short                  SHORT ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  short                  SHORT ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  UCHAR
-typedef  unsigned char          UCHAR ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  unsigned char          UCHAR ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  CHAR
-typedef  char                   CHAR ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  char                   CHAR ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  VOID
-typedef  void                   VOID ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  void                   VOID ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  UINT
-typedef  unsigned int          UINT ; /*lint !e761*///·ÇÖØ¸´¶¨Òå,Õë¶Ô²»Í¬µÄ²Ù×÷ÏµÍ³
+typedef  unsigned int          UINT ; /*lint !e761*///ï¿½ï¿½ï¿½Ø¸ï¿½ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½Ô²ï¿½Í¬ï¿½Ä²ï¿½ï¿½ï¿½ÏµÍ³
 #endif
 
 #ifndef  AS_BOOLEAN
