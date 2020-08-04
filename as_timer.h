@@ -30,8 +30,8 @@ extern "C"{
 #include "as_common.h"
 }
 
-const ULONG DefaultTimerScale = 100; //ȱʡ��ʱ����Ϊ100ms
-const ULONG MinTimerScale = 1; //��ʱ������СΪ1ms
+const ULONG DefaultTimerScale = 100; 
+const ULONG MinTimerScale = 1;
 
 class ITrigger;
 class CTimerItem;
@@ -89,13 +89,11 @@ class CTimerItem
     AS_BOOLEAN m_bRemoved;
 };
 
-// 4����־����
 #define    TIMER_OPERATOR_LOG    16
 #define    TIMER_RUN_LOG         17
 #define    TIMER_SECURITY_LOG    20
 #define    TIMER_USER_LOG        19
 
-// 4����־����
 enum TIMER_LOG_LEVEL
 {
     TIMER_EMERGENCY = 0,
@@ -104,7 +102,7 @@ enum TIMER_LOG_LEVEL
     TIMER_DEBUG = 7
 };
 
-//��־��ӡ�ӿ�
+
 class ITimerLog
 {
 public:
