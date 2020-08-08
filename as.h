@@ -41,6 +41,7 @@ extern "C" {
 #include "as_synchronized.h"
 #include "as_task.h"
 #include "as_thread_manage.h"
+#include "as_queue_sync.h"
 using namespace tinyxml2;
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
