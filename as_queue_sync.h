@@ -10,7 +10,7 @@ class CSyncQueue:public as_synchronized
 {
 public:
     CSyncQueue( );    
-    ~CSyncQueue();
+    virtual ~CSyncQueue();
     int32_t init(int32_t maxQueueLen);
     bool empty(void);
     int32_t size(void);
