@@ -34,7 +34,7 @@ CSyncQueue<Type>::~CSyncQueue()
 template <class Type>
 int32_t CSyncQueue<Type>::init(int32_t maxQueueLen)
 {
-    int32_t result = VOS_OK;
+    int32_t result = AS_ERROR_CODE_OK;
     
     m_maxQueueLen = maxQueueLen;
     result = start();
@@ -69,7 +69,7 @@ int32_t CSyncQueue<Type>::size(void)
 template <class Type>
 int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
 {
-    int32_t result = VOS_OK ;
+    int32_t result = AS_ERROR_CODE_OK ;
 
     lock();    
     while( VOS_TRUE )
@@ -87,7 +87,7 @@ int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
         }
         
         result = popWait(timeout);
-        if( VOS_OK != result )
+        if( AS_ERROR_CODE_OK != result )
         {
             unlock();
             return result ;
@@ -107,7 +107,7 @@ int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
 template <class Type>
 int32_t  CSyncQueue<Type>::pushBackEv(Type *ev, int32_t timeout,int32_t mode)
 {
-    int32_t result = VOS_OK;   
+    int32_t result = AS_ERROR_CODE_OK;   
     int32_t queulen = 0 ;    
 
     lock();
@@ -121,7 +121,7 @@ int32_t  CSyncQueue<Type>::pushBackEv(Type *ev, int32_t timeout,int32_t mode)
         }
         
         result = pushWait(timeout);
-        if( VOS_OK != result )           
+        if( AS_ERROR_CODE_OK != result )           
         {
             unlock();
             return VOS_ERR_SYS;
