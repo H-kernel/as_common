@@ -1,5 +1,5 @@
 #ifdef WIN32
-#pragma warning(disable: 4786 4503)//ȥ��map�ľ���
+#pragma warning(disable: 4786 4503)
 #endif
 #include <string.h>
 #include "as_ini_config.h"

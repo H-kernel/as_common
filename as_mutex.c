@@ -38,7 +38,7 @@ as_mutex_t *as_create_mutex()
         free( pstMutex );
         return NULL ;
     }
-    (void)ulResult; //¹ýPCLINT
+    (void)ulResult;
 #endif
     return pstMutex ;
 }

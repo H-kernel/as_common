@@ -108,7 +108,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     buf[0].sem_flg = IPC_NOWAIT;
     buf[1].sem_num = 0;
     buf[1].sem_op = 1;
-    buf[1].sem_flg = SEM_UNDO;//�����˳�ʱ�Զ��ع�
+    buf[1].sem_flg = SEM_UNDO;
 
     if( semop(sem_id_, &buf[0], 2) == 0)
     {
