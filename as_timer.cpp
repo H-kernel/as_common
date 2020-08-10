@@ -1,20 +1,3 @@
-/******************************************************************************
-   ��Ȩ���� (C), 2001-2011, M.Kernel
-
- ******************************************************************************
-  �ļ���          : as_timer.cpp
-  �汾��          : 1.0
-  ����            :
-  ��������        : 2007-4-02
-  ����޸�        :
-  ��������        :
-  �����б�        :
-  �޸���ʷ        :
-  1 ����          : 2007-4-02
-    ����          :
-    �޸�����      : ����
-*******************************************************************************/
-
 #include <stdarg.h>
 extern "C"{
 #include "as_config.h"
@@ -34,15 +17,7 @@ ITimerLog *g_pTimerLog = NULL;
 #endif
 
 #define _TIMER_FL_ "as_timer.cpp", __LINE__
-/*******************************************************************************
-  Function:       TIMER_WRITE_LOG()
-  Description:    ��־��ӡ����
-  Calls:
-  Called By:
-  Input:          ��printfһ��
-  Output:         ��
-  Return:         ��
-*******************************************************************************/
+
 void TIMER_WRITE_LOG(int32_t lLevel, const char *format, ...)
 {
     if(NULL == g_pTimerLog)
@@ -77,15 +52,7 @@ as_timer::as_timer()
     m_bExit = AS_FALSE;
 };
 
-/*******************************************************************************
-  Function:       as_timer::~as_timer()
-  Description:    ��������
-  Calls:
-  Called By:
-  Input:          ��
-  Output:         ��
-  Return:         ��
-*******************************************************************************/
+
 as_timer::~as_timer()
 {
     try
@@ -122,17 +89,6 @@ as_timer::~as_timer()
     }
 };
 
-/*******************************************************************************
-  Function:       as_timer::init()
-  Description:    ��ʼ������
-  Calls:
-  Called By:
-  Input:          ulTimerScale: ��ʱ������
-  Output:         ��
-  Return:
-  AS_SUCCESS: init success
-  AS_FAIL: init fail
-*******************************************************************************/
 int32_t as_timer::init(ULONG ulTimerScale)
 {
     if (ulTimerScale < MinTimerScale)
@@ -167,17 +123,6 @@ int32_t as_timer::init(ULONG ulTimerScale)
     return AS_SUCCESS;
 };
 
-/*******************************************************************************
-  Function:       as_timer::run()
-  Description:    ������ʱ����߳�
-  Calls:
-  Called By:
-  Input:          ��
-  Output:         ��
-  Return:
-  AS_SUCCESS: init success
-  AS_FAIL: init fail
-*******************************************************************************/
 int32_t as_timer::run()
 {
     errno = 0;
@@ -196,15 +141,6 @@ int32_t as_timer::run()
     return AS_SUCCESS;
 };
 
-/*******************************************************************************
-  Function:       as_timer::exit()
-  Description:    �˳���ʱ����߳�
-  Calls:
-  Called By:
-  Input:          ��
-  Output:         ��
-  Return:         ��
-*******************************************************************************/
 void as_timer::exit()
 {
     if(NULL == m_pASThread)
@@ -235,19 +171,6 @@ void as_timer::exit()
     return;
 };
 
-/*******************************************************************************
-  Function:       as_timer::registerTimer()
-  Description:    ע�ᶨʱ��
-  Calls:
-  Called By:
-  Input:          pTrigger: ��ʱ��������ʵ��, void *pArg: ��ʱ��������,
-                  nScales: ��ʱ�¼�(��initʱָ����scaleΪ��λ)
-                  enStyle: �������    enOneShot: ����һ��, enRepeated: ѭ������
-  Output:         ��
-  Return:
-  AS_SUCCESS: init success
-  AS_FAIL: init fail
-*******************************************************************************/
 int32_t as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
     TriggerStyle enStyle)
 {
@@ -294,7 +217,6 @@ int32_t as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
     pTimerItem->m_ullCurScales = m_ullRrsAbsTimeScales + nScales;
     pTimerItem->m_enStyle = enStyle;
 
-    //����(�����mainloop����ͬһ�̲߳���Ҫ����)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
     if (NULL == m_pASThread)
@@ -325,7 +247,6 @@ int32_t as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
 
     (void)(m_plistTrigger->insert(ListOfTriggerPair(pTimerItem->m_ullCurScales, pTimerItem)));
 
-    //����
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfTrigger))
@@ -339,15 +260,6 @@ int32_t as_timer::registerTimer(ITrigger *pTrigger, void *pArg, ULONG nScales,
     return AS_SUCCESS;
 };
 
-/*******************************************************************************
-  Function:       as_timer::clearTimer
-  Description:    ɾ����ʱ���������е�TimerItem
-  Calls:
-  Called By:
-  Input:         ��
-  Output:         ��
-  Return:
-*******************************************************************************/
 void as_timer::clearTimer( )
 {
     CTimerItem *pTimerItem = NULL;
@@ -375,17 +287,6 @@ void as_timer::clearTimer( )
 
 }
 
-/*******************************************************************************
-  Function:       as_timer::cancelTimer()
-  Description:    ע����ʱ��
-  Calls:
-  Called By:
-  Input:          pTrigger: ��ʱ��������ʵ��
-  Output:         ��
-  Return:
-  AS_SUCCESS: init success
-  AS_FAIL: init fail
-*******************************************************************************/
 int32_t as_timer::cancelTimer(ITrigger *pTrigger)
 {
     if(NULL == pTrigger)
@@ -396,7 +297,6 @@ int32_t as_timer::cancelTimer(ITrigger *pTrigger)
         return AS_FAIL;
     };
 
-    //����(�����mainloop����ͬһ�̲߳���Ҫ����)
     AS_BOOLEAN bNeedLock = AS_FALSE;
     AS_BOOLEAN bLocked = AS_FALSE;
     if (NULL == m_pASThread)
@@ -437,8 +337,6 @@ int32_t as_timer::cancelTimer(ITrigger *pTrigger)
                 "  pTimerItem(0x%x) pTrigger(0x%x) .\n",
                 _TIMER_FL_, pTrigger->m_pTimerItem, pTrigger);
 
-
-    //����(�������ͬһ�߳�)
     if(AS_TRUE == bLocked)
     {
         if (AS_ERROR_CODE_OK != as_mutex_unlock(m_pMutexListOfTrigger))
@@ -452,15 +350,6 @@ int32_t as_timer::cancelTimer(ITrigger *pTrigger)
     return AS_SUCCESS;
 };
 
-/*******************************************************************************
-  Function:       as_timer::mainLoop()
-  Description:    �߳�ִ�еĶ�ʱ�����ѭ��
-  Calls:
-  Called By:
-  Input:          ��
-  Output:         ��
-  Return:         ��
-*******************************************************************************/
 void as_timer::mainLoop()
 {
     ULONGLONG ullCurrentScales = 0;
@@ -476,10 +365,9 @@ void as_timer::mainLoop()
         (void)select(0, AS_NULL, AS_NULL, AS_NULL, &tv);
 #endif
 
-        //����
         CTimerItem *pTimerItem = NULL;
         ITrigger *pTrigger = NULL;
-        ++m_ullRrsAbsTimeScales ;//�ڲ�ʱ���׼����һ���̶�
+        ++m_ullRrsAbsTimeScales ;
         ullCurrentScales = m_ullRrsAbsTimeScales;
 
         if (AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexListOfTrigger))
@@ -503,7 +391,6 @@ void as_timer::mainLoop()
 
             pTrigger = (ITrigger *)pTimerItem->m_pTrigger;
 
-            //�����ʱ����ע����ɾ����ʱ��������������һ��
             if((NULL == pTrigger) || (AS_TRUE == pTimerItem->m_bRemoved))
             {
                 TIMER_WRITE_LOG(TIMER_DEBUG,
@@ -524,23 +411,19 @@ void as_timer::mainLoop()
             ++itListOfTrigger;
             (void)(m_plistTrigger->erase(itCurrentTrigger));
 
-            //����trigger��onTrigger����
             pTrigger->onTrigger(pTimerItem->m_pArg,
                 ullCurrentScales, pTimerItem->m_enStyle);
 
-            //���ֻ����һ�Σ�ɾ����ʱ��
             if(enOneShot == pTimerItem->m_enStyle)
             {
                 TIMER_WRITE_LOG(TIMER_DEBUG,
                     "FILE(%s)LINE(%d): Timer(0x%x) remove trigger once timer.",
                     _TIMER_FL_, pTimerItem);
-                //��ֹpTrigger->onTrigger��ɾ����ʱ��
                 pTrigger->m_pTimerItem = NULL;
                 AS_DELETE(pTimerItem);
                 continue;
             }
 
-            //�����ظ�������ʱ������Ҫ�޸��´γ�ʱ�¼������¼���multimap
             pTimerItem->m_ullCurScales = ullCurrentScales
                 + pTimerItem->m_ulInitialScales;
             (void)(m_plistTrigger->insert(ListOfTriggerPair(pTimerItem->m_ullCurScales,
