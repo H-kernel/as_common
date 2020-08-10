@@ -42,6 +42,8 @@
 #define MAX_EPOLL_FD_SIZE 3000
 #define LINGER_WAIT_SECONDS 1 //(seconds)
 
+#define NETWORK_ADDR_STR_LEN 32
+
 
 #if AS_APP_OS == AS_OS_LINUX
 #define CONN_ERR_TIMEO      ETIMEDOUT
@@ -99,12 +101,15 @@ typedef int socklen_t;
 
 class as_network_addr
 {
-  public:
+public:
     as_network_addr();
     virtual ~as_network_addr();
-  public:
-    int32_t m_lIpAddr;
-    USHORT m_usPort;
+    char* get_host_addr();
+    uint16_t get_port_number();
+public:
+    char     m_strAddr[NETWORK_ADDR_STR_LEN];
+    uint32_t m_ulIpAddr;
+    uint16_t m_usPort;
 };
 
 typedef enum tagConnStatus

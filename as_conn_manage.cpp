@@ -43,13 +43,25 @@ void CONN_WRITE_LOG(int32_t lLevel, const char *format, ...)
 
 as_network_addr::as_network_addr()
 {
-    m_lIpAddr = InvalidIp;
-    m_usPort = Invalidport;
+    m_ulIpAddr = InvalidIp;
+    m_usPort   = Invalidport;
+    strncpy(m_strAddr,"0.0.0.0",NETWORK_ADDR_STR_LEN);
 }
 
 
 as_network_addr::~as_network_addr()
 {
+}
+
+char* as_network_addr::get_host_addr()
+{
+    unsigned char *p = (unsigned char *)&m_ulIpAddr;
+    snprintf(m_strAddr,NETWORK_ADDR_STR_LEN,"%u.%u.%u.%u",p[0],p[1],p[2],p[3]);
+    return &m_strAddr[0];
+}
+uint16_t as_network_addr::get_port_number()
+{
+    return m_usPort;
 }
 
 
@@ -254,7 +266,7 @@ as_tcp_conn_handle::~as_tcp_conn_handle()
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
                 "as_handle::~as_handle: handle not released, "
                 "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d)", _FL_, m_lSockFD,
-                ntohl((ULONG)(m_peerAddr.m_lIpAddr)), ntohs(m_peerAddr.m_usPort));
+                ntohl((ULONG)(m_peerAddr.m_ulIpAddr)), ntohs(m_peerAddr.m_usPort));
             (void)CLOSESOCK((SOCKET)m_lSockFD);
             m_lSockFD = InvalidSocket;
         }
@@ -332,13 +344,13 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
 
-    if(((ULONG)(pLocalAddr->m_lIpAddr) != InvalidIp)
+    if(((ULONG)(pLocalAddr->m_ulIpAddr) != InvalidIp)
         && ( pLocalAddr->m_usPort != Invalidport))
     {
         struct sockaddr_in  serverAddr;
         memset((char *)&serverAddr, 0, (int32_t)sizeof(serverAddr));
         serverAddr.sin_family = AF_INET;
-        serverAddr.sin_addr.s_addr = (uint32_t)pLocalAddr->m_lIpAddr;
+        serverAddr.sin_addr.s_addr = (uint32_t)pLocalAddr->m_ulIpAddr;
         serverAddr.sin_port = pLocalAddr->m_usPort;
         errno = 0;
         if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)))
@@ -389,7 +401,7 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
     struct sockaddr_in  peerAddr;
     memset((char *)&peerAddr, 0, (int32_t)sizeof(peerAddr));
     peerAddr.sin_family = AF_INET;
-    peerAddr.sin_addr.s_addr = (UINT)pPeerAddr->m_lIpAddr;
+    peerAddr.sin_addr.s_addr = (UINT)pPeerAddr->m_ulIpAddr;
     peerAddr.sin_port = pPeerAddr->m_usPort;
     int32_t lRetVal = ::connect((SOCKET)lSockFd,(struct sockaddr*)&peerAddr,
         sizeof(peerAddr));
@@ -487,13 +499,13 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
 
     m_lSockFD = lSockFd;
 
-    m_peerAddr.m_lIpAddr = pPeerAddr->m_lIpAddr;
+    m_peerAddr.m_ulIpAddr = pPeerAddr->m_ulIpAddr;
     m_peerAddr.m_usPort= pPeerAddr->m_usPort;
 
     CONN_WRITE_LOG(CONN_DEBUG, (char *)"FILE(%s)LINE(%d): "
         "as_tcp_conn_handle::conn: connect success, "
         "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d)", _FL_, m_lSockFD,
-        ntohl((ULONG)(m_peerAddr.m_lIpAddr)), ntohs(m_peerAddr.m_usPort));
+        ntohl((ULONG)(m_peerAddr.m_ulIpAddr)), ntohs(m_peerAddr.m_usPort));
 
     return AS_ERROR_CODE_OK;
 }
@@ -552,7 +564,7 @@ int32_t as_tcp_conn_handle::send(const char *pArrayData, const ULONG ulDataSize,
         }
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
             "as_tcp_conn_handle::send to peer(IP:0x%x, Port:%d) "
-            "Error(%d): %s",  _FL_, ntohl((ULONG)(m_peerAddr.m_lIpAddr)),
+            "Error(%d): %s",  _FL_, ntohl((ULONG)(m_peerAddr.m_ulIpAddr)),
            ntohs(m_peerAddr.m_usPort), CONN_ERRNO, strerror(CONN_ERRNO));
 
         (void)CLOSESOCK((SOCKET)m_lSockFD);
@@ -620,7 +632,7 @@ int32_t as_tcp_conn_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
         return SendRecvError;
     }
 
-    pPeerAddr->m_lIpAddr = m_peerAddr.m_lIpAddr;
+    pPeerAddr->m_ulIpAddr = m_peerAddr.m_ulIpAddr;
     pPeerAddr->m_usPort = m_peerAddr.m_usPort;
 
     return lBytesRecv;
@@ -684,7 +696,7 @@ int32_t as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
             "as_tcp_conn_handle::recvWithTimeout: socket closed when receive. "
             "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d) "
             "errno = %d, error: %s", _FL_, m_lSockFD,
-            ntohl((ULONG)(m_peerAddr.m_lIpAddr)), ntohs(m_peerAddr.m_usPort),
+            ntohl((ULONG)(m_peerAddr.m_ulIpAddr)), ntohs(m_peerAddr.m_usPort),
             CONN_ERRNO, strerror(CONN_ERRNO) );
         if(CONN_ERR_TIMEO == CONN_ERRNO)
         {
@@ -703,7 +715,7 @@ int32_t as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
             "as_tcp_conn_handle::recvWithTimeout: recv time out. "
             "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d) recv_msg_len(%lu)"
             "ulDataSize(%lu) errno = %d, error: %s", _FL_, m_lSockFD,
-            ntohl((ULONG)(m_peerAddr.m_lIpAddr)), ntohs(m_peerAddr.m_usPort),
+            ntohl((ULONG)(m_peerAddr.m_ulIpAddr)), ntohs(m_peerAddr.m_usPort),
             ulTotalRecvBytes, ulDataSize,CONN_ERRNO, strerror(CONN_ERRNO) );
         return SendRecvError;
     }
@@ -755,7 +767,7 @@ void as_tcp_conn_handle::close(void)
             "m_lSockFD = %d, peer_ip(0x%x), "
             "peer_port(%d) this(0x%x) m_pHandleNode(0x%x)",
             _FL_, m_lSockFD,
-            ntohl((ULONG)(m_peerAddr.m_lIpAddr)), ntohs(m_peerAddr.m_usPort), this,
+            ntohl((ULONG)(m_peerAddr.m_ulIpAddr)), ntohs(m_peerAddr.m_usPort), this,
             this->m_pHandleNode);
 
         //The close of an fd will cause it to be removed from
@@ -817,7 +829,7 @@ int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     }
     else
     {
-        localAddr.sin_addr.s_addr = (UINT)pLocalAddr->m_lIpAddr;
+        localAddr.sin_addr.s_addr = (UINT)pLocalAddr->m_ulIpAddr;
     }
     localAddr.sin_port = pLocalAddr->m_usPort;
 
@@ -882,8 +894,8 @@ int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
     if(NULL != pMultiAddr)
     {
         struct ip_mreq mreq;
-        mreq.imr_multiaddr.s_addr = pMultiAddr->m_lIpAddr;
-        mreq.imr_interface.s_addr = pLocalAddr->m_lIpAddr;
+        mreq.imr_multiaddr.s_addr = pMultiAddr->m_ulIpAddr;
+        mreq.imr_interface.s_addr = pLocalAddr->m_ulIpAddr;
         if(setsockopt((SOCKET)lSockFd, IPPROTO_IP, IP_ADD_MEMBERSHIP,
                              (char *)&mreq, sizeof(mreq))< 0)
         {
@@ -913,7 +925,7 @@ int32_t as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *p
     struct sockaddr_in peerAddr;
 
     peerAddr.sin_family = AF_INET;
-    peerAddr.sin_addr.s_addr = (UINT)pPeerAddr->m_lIpAddr;
+    peerAddr.sin_addr.s_addr = (UINT)pPeerAddr->m_ulIpAddr;
     peerAddr.sin_port = pPeerAddr->m_usPort;
 
     errno = 0;
@@ -957,7 +969,7 @@ int32_t as_udp_sock_handle::send(const as_network_addr *pPeerAddr, const char *p
         }
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
             "as_udp_sock_handle::send (%d)bytes to peer(IP:0x%x, Port:%d) Error(%d): %s",
-            _FL_, ulDataSize, ntohl((ULONG)(pPeerAddr->m_lIpAddr)),
+            _FL_, ulDataSize, ntohl((ULONG)(pPeerAddr->m_ulIpAddr)),
             ntohs(pPeerAddr->m_usPort),
             CONN_ERRNO, strerror(CONN_ERRNO));
 
@@ -1027,7 +1039,7 @@ int32_t as_udp_sock_handle::recv(char *pArrayData, as_network_addr *pPeerAddr,
         return SendRecvError;
     }
 
-    pPeerAddr->m_lIpAddr = (LONG)peerAddr.sin_addr.s_addr;
+    pPeerAddr->m_ulIpAddr = (LONG)peerAddr.sin_addr.s_addr;
     pPeerAddr->m_usPort = peerAddr.sin_port;
 
     //setHandleRecv(AS_TRUE);
@@ -1080,7 +1092,7 @@ int32_t as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
             "as_udp_sock_handle::recvWithTimeout: socket closed when receive. "
             "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d) "
             "errno = %d, error: %s", _FL_, m_lSockFD,
-            ntohl((ULONG)(pPeerAddr->m_lIpAddr)), ntohs(pPeerAddr->m_usPort),
+            ntohl((ULONG)(pPeerAddr->m_ulIpAddr)), ntohs(pPeerAddr->m_usPort),
             CONN_ERRNO, strerror(CONN_ERRNO) );
         return SendRecvError;
     }
@@ -1194,7 +1206,7 @@ int32_t as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
     struct sockaddr_in  serverAddr;
     memset((char *)&serverAddr, 0, (int32_t)sizeof(serverAddr));
     serverAddr.sin_family = AF_INET;
-    serverAddr.sin_addr.s_addr = (UINT)pLocalAddr->m_lIpAddr;
+    serverAddr.sin_addr.s_addr = (UINT)pLocalAddr->m_ulIpAddr;
     serverAddr.sin_port = pLocalAddr->m_usPort;
     errno = 0;
     if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)))
@@ -1773,7 +1785,7 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
             "peer_ip(0x%x) peer_port(%d)",
             _FL_, pHandleNode, pHandleNode->m_pHandle,
             pHandleNode->m_pHandle->m_lSockFD, pHandleNode->m_pHandle->m_lEpfd,
-            pHandleNode->m_pHandle->m_localAddr.m_lIpAddr,
+            pHandleNode->m_pHandle->m_localAddr.m_ulIpAddr,
             pHandleNode->m_pHandle->m_localAddr.m_usPort);
 #elif AS_APP_OS == AS_OS_WIN32
     CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
@@ -1782,7 +1794,7 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
         "peer_ip(0x%x) peer_port(%d)",
         _FL_, pHandleNode, pHandleNode->m_pHandle,
         pHandleNode->m_pHandle->m_lSockFD,
-        pHandleNode->m_pHandle->m_localAddr.m_lIpAddr,
+        pHandleNode->m_pHandle->m_localAddr.m_ulIpAddr,
             pHandleNode->m_pHandle->m_localAddr.m_usPort);
 #endif
     m_listHandle.push_back(pHandleNode);
@@ -2059,7 +2071,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
         }
 
         as_network_addr clientAddr;
-        clientAddr.m_lIpAddr = (LONG)peerAddr.sin_addr.s_addr;
+        clientAddr.m_ulIpAddr = (LONG)peerAddr.sin_addr.s_addr;
         clientAddr.m_usPort = peerAddr.sin_port;
         as_tcp_conn_handle *pTcpConnHandle = NULL;
 
@@ -2092,10 +2104,10 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
             return;
         }
         pTcpConnHandle->m_lSockFD = lClientSockfd;
-        pTcpConnHandle->m_localAddr.m_lIpAddr = pTcpServerHandle->m_localAddr.m_lIpAddr;
+        pTcpConnHandle->m_localAddr.m_ulIpAddr = pTcpServerHandle->m_localAddr.m_ulIpAddr;
         pTcpConnHandle->m_localAddr.m_usPort = pTcpServerHandle->m_localAddr.m_usPort;
         pTcpConnHandle->m_lConnStatus = enConnected;
-        pTcpConnHandle->m_peerAddr.m_lIpAddr = clientAddr.m_lIpAddr;
+        pTcpConnHandle->m_peerAddr.m_ulIpAddr = clientAddr.m_ulIpAddr;
         pTcpConnHandle->m_peerAddr.m_usPort = clientAddr.m_usPort;
 
         AS_BOOLEAN bIsListOfHandleLocked = AS_TRUE;
@@ -2111,7 +2123,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
             "as_tcp_server_mgr::checkSelectResult: accept connect, "
             "m_lSockFD = %d, peer_ip(0x%x), peer_port(%d)", _FL_,
             pTcpConnHandle->m_lSockFD,
-            ntohl((ULONG)(pTcpConnHandle->m_peerAddr.m_lIpAddr)),
+            ntohl((ULONG)(pTcpConnHandle->m_peerAddr.m_ulIpAddr)),
             ntohs(pTcpConnHandle->m_peerAddr.m_usPort));
 
     }
@@ -2335,17 +2347,17 @@ int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     }
 
     as_network_addr localAddr;
-    if (InvalidIp == (ULONG)(pLocalAddr->m_lIpAddr))
+    if (InvalidIp == (ULONG)(pLocalAddr->m_ulIpAddr))
     {
-        localAddr.m_lIpAddr = this->m_lLocalIpAddr;
+        localAddr.m_ulIpAddr = this->m_lLocalIpAddr;
     }
     else
     {
-        localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+        localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     }
     localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    pTcpConnHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+    pTcpConnHandle->m_localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     pTcpConnHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
     int32_t lRetVal = pTcpConnHandle->conn(&localAddr, pPeerAddr, bSyncConn, ulTimeOut);
@@ -2354,7 +2366,7 @@ int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
             "as_conn_mgr::regTcpClient: connect peer fail(0x%x:%d)", _FL_,
-            ntohl((ULONG)(pPeerAddr->m_lIpAddr)), ntohs(pPeerAddr->m_usPort));
+            ntohl((ULONG)(pPeerAddr->m_ulIpAddr)), ntohs(pPeerAddr->m_usPort));
         return lRetVal;
     }
 
@@ -2382,9 +2394,9 @@ void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
     CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
             "as_conn_mgr::removeTcpClient: "
             "remove pTcpConnHandle(0x%x) pHandleNode(0x%x) fd(%d)"
-            "m_lIpAddr(0x%x) m_usPort(%d)",
+            "m_ulIpAddr(0x%x) m_usPort(%d)",
             _FL_, pTcpConnHandle, pTcpConnHandle->m_pHandleNode,
-            pTcpConnHandle->m_lSockFD, pTcpConnHandle->m_localAddr.m_lIpAddr,
+            pTcpConnHandle->m_lSockFD, pTcpConnHandle->m_localAddr.m_ulIpAddr,
             pTcpConnHandle->m_localAddr.m_usPort);
 
     //pTcpConnHandle->close();
@@ -2441,17 +2453,17 @@ int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     }
 
     as_network_addr localAddr;
-    if (InvalidIp == (ULONG)(pLocalAddr->m_lIpAddr))
+    if (InvalidIp == (ULONG)(pLocalAddr->m_ulIpAddr))
     {
-        localAddr.m_lIpAddr = this->m_lLocalIpAddr;
+        localAddr.m_ulIpAddr = this->m_lLocalIpAddr;
     }
     else
     {
-        localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+        localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     }
     localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    pTcpServerHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+    pTcpServerHandle->m_localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     pTcpServerHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
     int32_t lRetVal = pTcpServerHandle->listen(&localAddr);
@@ -2533,17 +2545,17 @@ int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
     }
 
     as_network_addr localAddr;
-    if (InvalidIp == (ULONG)(pLocalAddr->m_lIpAddr))
+    if (InvalidIp == (ULONG)(pLocalAddr->m_ulIpAddr))
     {
-        localAddr.m_lIpAddr = this->m_lLocalIpAddr;
+        localAddr.m_ulIpAddr = this->m_lLocalIpAddr;
     }
     else
     {
-        localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+        localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     }
     localAddr.m_usPort = pLocalAddr->m_usPort;
 
-    pUdpSockHandle->m_localAddr.m_lIpAddr = pLocalAddr->m_lIpAddr;
+    pUdpSockHandle->m_localAddr.m_ulIpAddr = pLocalAddr->m_ulIpAddr;
     pUdpSockHandle->m_localAddr.m_usPort = pLocalAddr->m_usPort;
 
     int32_t lRetVal = pUdpSockHandle->createSock(&localAddr, pMultiAddr);

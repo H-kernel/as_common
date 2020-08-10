@@ -33,8 +33,8 @@ typedef  unsigned long          ULONG ; /*lint !e761*///���ظ�����
 typedef  long                   LONG; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
 #endif
 
-#ifndef  USHORT
-typedef  unsigned short         USHORT ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+#ifndef  uint16_t
+typedef  unsigned short         uint16_t ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
 #endif
 
 #ifndef  SHORT
