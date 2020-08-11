@@ -25,6 +25,8 @@ enum AS_ERROR_CODE {
     AS_ERROR_CODE_PARAM       = 0x02,
     AS_ERROR_CODE_SYS         = 0x03,
     AS_ERROR_CODE_TIMEOUT     = 0x04,
+    AS_ERROR_CODE_QUE_EMPTY   = 0x05,
+    AS_ERROR_CODE_QUE_LEN     = 0x06,
     AS_ERROR_CODE_MAX
 };
 

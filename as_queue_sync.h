@@ -72,10 +72,10 @@ int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
     int32_t result = AS_ERROR_CODE_OK ;
 
     lock();    
-    while( VOS_TRUE )
+    while( AS_TRUE )
     { 
         result = p_Queue.empty();        
-        if( VOS_FALSE == result )
+        if( AS_FALSE == result )
         {
             break ;
         }        
@@ -83,7 +83,7 @@ int32_t CSyncQueue<Type>::popFrontEv(Type *&ev,int32_t timeout , int32_t mode )
         if( QUEUE_MODE_NOWAIT == mode )    
         {
             unlock();
-            return VOS_ERR_QUE_EMPTY ;
+            return AS_ERROR_CODE_QUE_EMPTY ;
         }
         
         result = popWait(timeout);
@@ -117,14 +117,14 @@ int32_t  CSyncQueue<Type>::pushBackEv(Type *ev, int32_t timeout,int32_t mode)
         if( QUEUE_MODE_NOWAIT == mode )
         {
             unlock();
-            return VOS_ERR_QUE_LEN;
+            return AS_ERROR_CODE_QUE_LEN;
         }
         
         result = pushWait(timeout);
         if( AS_ERROR_CODE_OK != result )           
         {
             unlock();
-            return VOS_ERR_SYS;
+            return AS_ERROR_CODE_SYS;
         }
     }
 
