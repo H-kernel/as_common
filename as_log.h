@@ -23,6 +23,8 @@
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "as_config.h"
+#include "as_basetype.h"
 
 #define ASLOG_API
 
