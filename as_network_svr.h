@@ -394,11 +394,11 @@ class as_conn_mgr_log
 
 extern as_conn_mgr_log *g_pAsConnMgrLog;
 
-class as_conn_mgr
+class as_network_svr
 {
   public:
-    as_conn_mgr();
-    virtual ~as_conn_mgr();
+    as_network_svr();
+    virtual ~as_network_svr();
 public:
     virtual int32_t init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
         const AS_BOOLEAN bHasTcpClient, const AS_BOOLEAN bHasTcpServer);

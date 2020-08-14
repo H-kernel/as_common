@@ -49,7 +49,7 @@ as_queue_safe.$(C):	as_queue_safe.h as_config.h as_common.h as_mutex.h
 as_time.$(C):	as_time.h as_config.h as_common.h
 as_http_digest.$(C):	as_http_digest.h as_config.h as_common.h
 as_base64.$(C):	as_base64.h as_config.h as_common.h
-as_conn_manage.$(CPP):	as_conn_manage.h as_config.h as_common.h
+as_conn_manage.$(CPP):	as_network_svr.h as_config.h as_common.h
 as_daemon.$(CPP):	as_daemon.h as_config.h as_common.h
 as_ini_config.$(CPP):	as_ini_config.h as_config.h as_common.h
 as_lock_guard.$(CPP):	as_lock_guard.h as_config.h as_common.h

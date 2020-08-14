@@ -3,7 +3,7 @@
 #include <netinet/tcp.h>
 #endif
 
-#include "as_conn_manage.h"
+#include "as_network_svr.h"
 
 #include <stdarg.h>
 
@@ -2137,7 +2137,7 @@ void as_tcp_server_mgr::checkSelectResult(const EpollEventType enEpEvent,
 }
 
 
-as_conn_mgr::as_conn_mgr()
+as_network_svr::as_network_svr()
 {
     m_lLocalIpAddr = InvalidIp;
     m_pTcpConnMgr = NULL;
@@ -2146,7 +2146,7 @@ as_conn_mgr::as_conn_mgr()
 
 }
 
-as_conn_mgr::~as_conn_mgr()
+as_network_svr::~as_network_svr()
 {
     try
     {
@@ -2160,7 +2160,7 @@ as_conn_mgr::~as_conn_mgr()
 }
 
 
-int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
+int32_t as_network_svr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSock,
             const AS_BOOLEAN bHasTcpClient, const AS_BOOLEAN bHasTcpServer)
 {
 #if AS_APP_OS == AS_OS_WIN32
@@ -2178,13 +2178,13 @@ int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSo
         if(NULL == m_pUdpSockMgr)
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: create m_pUdpSockMgr fail", _FL_);
+                "as_network_svr::init: create m_pUdpSockMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
         if(AS_ERROR_CODE_OK != m_pUdpSockMgr->init(ulSelectPeriod))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: init m_pUdpSockMgr fail", _FL_);
+                "as_network_svr::init: init m_pUdpSockMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
     }
@@ -2195,13 +2195,13 @@ int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSo
         if(NULL == m_pTcpConnMgr)
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: create m_pTcpConnMgr fail", _FL_);
+                "as_network_svr::init: create m_pTcpConnMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
         if(AS_ERROR_CODE_OK != m_pTcpConnMgr->init(ulSelectPeriod))
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: init m_pTcpConnMgr fail", _FL_);
+                "as_network_svr::init: init m_pTcpConnMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
     }
@@ -2212,13 +2212,13 @@ int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSo
         if(NULL == m_pTcpServerMgr)
         {
             CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: create m_pTcpServerMgr fail", _FL_);
+                "as_network_svr::init: create m_pTcpServerMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
         if(AS_ERROR_CODE_OK != m_pTcpServerMgr->init(ulSelectPeriod))
         {
             CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::init: init m_pTcpServerMgr fail", _FL_);
+                "as_network_svr::init: init m_pTcpServerMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
         m_pTcpServerMgr->setTcpClientMgr(m_pTcpConnMgr);
@@ -2228,14 +2228,14 @@ int32_t as_conn_mgr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUdpSo
 }
 
 
-int32_t as_conn_mgr::run(void)
+int32_t as_network_svr::run(void)
 {
     if(NULL != m_pUdpSockMgr)
     {
         if(AS_ERROR_CODE_OK != m_pUdpSockMgr->run())
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::run: run m_pUdpSockMgr fail", _FL_);
+                "as_network_svr::run: run m_pUdpSockMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
     }
@@ -2245,7 +2245,7 @@ int32_t as_conn_mgr::run(void)
         if(AS_ERROR_CODE_OK != m_pTcpConnMgr->run())
         {
             CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::run: run m_pTcpConnMgr fail", _FL_);
+                "as_network_svr::run: run m_pTcpConnMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
     }
@@ -2255,7 +2255,7 @@ int32_t as_conn_mgr::run(void)
         if(AS_ERROR_CODE_OK != m_pTcpServerMgr->run())
         {
             CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-                "as_conn_mgr::run: run m_pTcpServerMgr fail", _FL_);
+                "as_network_svr::run: run m_pTcpServerMgr fail", _FL_);
             return AS_ERROR_CODE_FAIL;
         }
     }
@@ -2265,7 +2265,7 @@ int32_t as_conn_mgr::run(void)
 }
 
 
-void as_conn_mgr::exit(void)
+void as_network_svr::exit(void)
 {
     if(NULL != m_pUdpSockMgr)
     {
@@ -2292,7 +2292,7 @@ void as_conn_mgr::exit(void)
 }
 
 
-void as_conn_mgr::setDefaultLocalAddr(const char *szLocalIpAddr)
+void as_network_svr::setDefaultLocalAddr(const char *szLocalIpAddr)
 {
     if(szLocalIpAddr != NULL)
     {
@@ -2307,42 +2307,42 @@ void as_conn_mgr::setDefaultLocalAddr(const char *szLocalIpAddr)
 }
 
 
-int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
+int32_t as_network_svr::regTcpClient( const as_network_addr *pLocalAddr,
     const as_network_addr *pPeerAddr, as_tcp_conn_handle *pTcpConnHandle,
     const EnumSyncAsync bSyncConn, ULONG ulTimeOut)
 {
     if(NULL == pLocalAddr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: pLocalAddr is NULL", _FL_);
+            "as_network_svr::regTcpClient: pLocalAddr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == pPeerAddr)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: pPeerAddr is NULL", _FL_);
+            "as_network_svr::regTcpClient: pPeerAddr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == pTcpConnHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: pTcpConnHandle is NULL", _FL_);
+            "as_network_svr::regTcpClient: pTcpConnHandle is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(AS_ERROR_CODE_OK != pTcpConnHandle->initHandle())
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: pTcpConnHandle init fail", _FL_);
+            "as_network_svr::regTcpClient: pTcpConnHandle init fail", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == m_pTcpConnMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: m_pTcpConnMgr is NULL", _FL_);
+            "as_network_svr::regTcpClient: m_pTcpConnMgr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
@@ -2365,7 +2365,7 @@ int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     if(lRetVal != AS_ERROR_CODE_OK)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: connect peer fail(0x%x:%d)", _FL_,
+            "as_network_svr::regTcpClient: connect peer fail(0x%x:%d)", _FL_,
             ntohl((ULONG)(pPeerAddr->m_ulIpAddr)), ntohs(pPeerAddr->m_usPort));
         return lRetVal;
     }
@@ -2375,7 +2375,7 @@ int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
     {
         pTcpConnHandle->close();
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: register connection fail", _FL_);
+            "as_network_svr::regTcpClient: register connection fail", _FL_);
         return lRetVal;
     }
 
@@ -2383,16 +2383,16 @@ int32_t as_conn_mgr::regTcpClient( const as_network_addr *pLocalAddr,
 }
 
 
-void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
+void as_network_svr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
 {
     if(NULL == pTcpConnHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeTcpClient: pTcpConnHandle is NULL", _FL_);
+            "as_network_svr::removeTcpClient: pTcpConnHandle is NULL", _FL_);
         return;
     }
     CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeTcpClient: "
+            "as_network_svr::removeTcpClient: "
             "remove pTcpConnHandle(0x%x) pHandleNode(0x%x) fd(%d)"
             "m_ulIpAddr(0x%x) m_usPort(%d)",
             _FL_, pTcpConnHandle, pTcpConnHandle->m_pHandleNode,
@@ -2404,7 +2404,7 @@ void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
     if(NULL == m_pTcpConnMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeTcpClient: m_pTcpConnMgr is NULL", _FL_);
+            "as_network_svr::removeTcpClient: m_pTcpConnMgr is NULL", _FL_);
         return;
     }
 
@@ -2414,41 +2414,41 @@ void as_conn_mgr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
 }
 
 
-int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
+int32_t as_network_svr::regTcpServer(const as_network_addr *pLocalAddr,
     as_tcp_server_handle *pTcpServerHandle)
 {
     if(NULL == pLocalAddr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: pLocalAddr is NULL", _FL_);
+            "as_network_svr::regTcpServer: pLocalAddr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == pTcpServerHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: pTcpServerHandle is NULL", _FL_);
+            "as_network_svr::regTcpServer: pTcpServerHandle is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(AS_ERROR_CODE_OK != pTcpServerHandle->initHandle())
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: pTcpServerHandle init fail", _FL_);
+            "as_network_svr::regTcpServer: pTcpServerHandle init fail", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == m_pTcpConnMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: m_pTcpConnMgr is NULL", _FL_);
+            "as_network_svr::regTcpServer: m_pTcpConnMgr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == m_pTcpServerMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: m_pTcpServerMgr is NULL", _FL_);
+            "as_network_svr::regTcpServer: m_pTcpServerMgr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
@@ -2471,7 +2471,7 @@ int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     if(lRetVal != AS_ERROR_CODE_OK)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpServer: listen fail", _FL_);
+            "as_network_svr::regTcpServer: listen fail", _FL_);
         return lRetVal;
     }
 
@@ -2480,7 +2480,7 @@ int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
     {
         pTcpServerHandle->close();
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regTcpClient: register tcp server fail", _FL_);
+            "as_network_svr::regTcpClient: register tcp server fail", _FL_);
         return lRetVal;
     }
 
@@ -2488,12 +2488,12 @@ int32_t as_conn_mgr::regTcpServer(const as_network_addr *pLocalAddr,
 }
 
 
-void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
+void as_network_svr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
 {
     if(NULL == pTcpServerHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeTcpServer: pTcpServerHandle is NULL", _FL_);
+            "as_network_svr::removeTcpServer: pTcpServerHandle is NULL", _FL_);
         return;
     }
 
@@ -2502,7 +2502,7 @@ void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
     if(NULL == m_pTcpServerMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeTcpServer: m_pTcpServerMgr is NULL", _FL_);
+            "as_network_svr::removeTcpServer: m_pTcpServerMgr is NULL", _FL_);
         return;
     }
 
@@ -2512,35 +2512,35 @@ void as_conn_mgr::removeTcpServer(as_tcp_server_handle *pTcpServerHandle)
 }
 
 
-int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
+int32_t as_network_svr::regUdpSocket(const as_network_addr *pLocalAddr,
                                  as_udp_sock_handle *pUdpSockHandle,
                                  const as_network_addr *pMultiAddr)
 {
     if(NULL == pLocalAddr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: pUdpSockHandle is NULL", _FL_);
+            "as_network_svr::regUdpSocket: pUdpSockHandle is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == pUdpSockHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: pUdpSockHandle is NULL", _FL_);
+            "as_network_svr::regUdpSocket: pUdpSockHandle is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(AS_ERROR_CODE_OK != pUdpSockHandle->initHandle())
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: pUdpSockHandle init fail", _FL_);
+            "as_network_svr::regUdpSocket: pUdpSockHandle init fail", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
     if(NULL == m_pUdpSockMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: m_pUdpSockMgr is NULL", _FL_);
+            "as_network_svr::regUdpSocket: m_pUdpSockMgr is NULL", _FL_);
         return AS_ERROR_CODE_FAIL;
     }
 
@@ -2562,7 +2562,7 @@ int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
     if(lRetVal != AS_ERROR_CODE_OK)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: create UDP socket fail", _FL_);
+            "as_network_svr::regUdpSocket: create UDP socket fail", _FL_);
         return lRetVal;
     }
 
@@ -2571,7 +2571,7 @@ int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
     {
         pUdpSockHandle->close();
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::regUdpSocket: register UDP socket fail", _FL_);
+            "as_network_svr::regUdpSocket: register UDP socket fail", _FL_);
         return lRetVal;
     }
 
@@ -2579,12 +2579,12 @@ int32_t as_conn_mgr::regUdpSocket(const as_network_addr *pLocalAddr,
 }
 
 
-void as_conn_mgr::removeUdpSocket(as_udp_sock_handle *pUdpSockHandle)
+void as_network_svr::removeUdpSocket(as_udp_sock_handle *pUdpSockHandle)
 {
     if(NULL == pUdpSockHandle)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeUdpSocket: pUdpSockHandle is NULL", _FL_);
+            "as_network_svr::removeUdpSocket: pUdpSockHandle is NULL", _FL_);
         return;
     }
     pUdpSockHandle->close();
@@ -2592,7 +2592,7 @@ void as_conn_mgr::removeUdpSocket(as_udp_sock_handle *pUdpSockHandle)
     if(NULL == m_pUdpSockMgr)
     {
         CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
-            "as_conn_mgr::removeUdpSocket: m_pUdpSockMgr is NULL", _FL_);
+            "as_network_svr::removeUdpSocket: m_pUdpSockMgr is NULL", _FL_);
         return;
     }
 
