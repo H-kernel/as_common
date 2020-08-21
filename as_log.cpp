@@ -62,8 +62,7 @@ public:
     int32_t GetLevel();
     bool SetLogFilePathName(const char* szPathName);
     void SetFileLengthLimit(uint32_t ulLimitLengthKB);
-    int32_t Write(const char* szFile, int32_t lLine,
-        int32_t lLevel, const char* format, va_list argp);
+    int32_t Write(const char* szFile, int32_t lLine,int32_t lLevel, const char* format, va_list argp);
     int32_t Stop();
 
 private:
@@ -77,33 +76,32 @@ private:
     const char* GetLevelString(int32_t lLevel) const;
 
 private:
-    bool    m_bRun;
+    bool             m_bRun;
 
-    bool    m_bAllowWrite;
+    bool             m_bAllowWrite;
 
-    bool    m_bDiskFull;
+    bool             m_bDiskFull;
 #define MIN_DISK_SPACE_FOR_LOG      (1024*1024) 
- #define DISK_SPACE_CHECK_INTERVAL   10000 
-    uint32_t   m_dwLastCheckDiskSpaceTime;
+#define DISK_SPACE_CHECK_INTERVAL   10000 
+    uint32_t         m_dwLastCheckDiskSpaceTime;
 
-    int32_t    m_lLevel;
+    int32_t          m_lLevel;
 
-    as_thread_t* m_hWriteThread;
+    as_thread_t*     m_hWriteThread;
 
-    as_event_t*  m_hWriteEvent;
+    as_event_t*      m_hWriteEvent;
 
-    as_event_t*    m_hThreadExitEvent;
+    as_event_t*      m_hThreadExitEvent;
 
     as_ring_cache    m_Cache;
 
-    FILE*    m_pLogFile;
+    FILE*            m_pLogFile;
 
-    uint32_t    m_ulFileLenLimit;
+    uint32_t         m_ulFileLenLimit;
 
-    char    m_szLogFilePathName[MAX_LOG_FILE_PATH_NAME_LEN];
+    char             m_szLogFilePathName[MAX_LOG_FILE_PATH_NAME_LEN];
 
 private:
-
     static as_log*    g_pASLog;
 };
 
@@ -281,6 +279,10 @@ int32_t as_log::GetLevel()
 
 bool as_log::SetLogFilePathName(const char* szPathName)
 {
+    if(m_bRun)
+    {
+        return false;
+    }
     bool bSetOk = false;
     if((NULL!=szPathName) && ::strlen(szPathName)<MAX_LOG_FILE_PATH_NAME_LEN)
     {
@@ -397,7 +399,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
 int32_t as_log::Stop()
 {
     m_bAllowWrite = false;
-    m_bDiskFull = false;
+    m_bDiskFull   = false;
     m_dwLastCheckDiskSpaceTime = 0;
 
     if(!m_bRun)
