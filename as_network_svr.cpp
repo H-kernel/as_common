@@ -806,6 +806,37 @@ void as_tcp_conn_handle::close(void)
     return;
 }
 
+as_tcp_monitor_handle::as_tcp_monitor_handle()
+{
+
+}
+as_tcp_monitor_handle::~as_tcp_monitor_handle()
+{
+
+}
+
+void as_tcp_monitor_handle::close(void)
+{
+    if(m_pMutexHandle != NULL)
+    {
+        if(AS_ERROR_CODE_OK != as_mutex_lock(m_pMutexHandle))
+        {
+            return;
+        }
+    }
+
+    if (InvalidSocket != m_lSockFD)
+    {
+        m_lSockFD = InvalidSocket;
+    }
+    m_lConnStatus = enClosed;
+
+    if(m_pMutexHandle != NULL)
+    {
+        (void)as_mutex_unlock(m_pMutexHandle);
+    }
+    return;
+}
 
 int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
                                          const as_network_addr *pMultiAddr)
@@ -2382,6 +2413,42 @@ int32_t as_network_svr::regTcpClient( const as_network_addr *pLocalAddr,
     return AS_ERROR_CODE_OK;
 }
 
+int32_t as_network_svr::regTcpMonitorClient(as_tcp_monitor_handle *pTcpConnHandle,int32_t lSockFD)
+{
+    if(NULL == pTcpConnHandle)
+    {
+        CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
+            "as_network_svr::regTcpMonitorClient: pTcpConnHandle is NULL", _FL_);
+        return AS_ERROR_CODE_FAIL;
+    }
+
+    if(AS_ERROR_CODE_OK != pTcpConnHandle->initHandle())
+    {
+        CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
+            "as_network_svr::regTcpMonitorClient: pTcpConnHandle init fail", _FL_);
+        return AS_ERROR_CODE_FAIL;
+    }
+
+    pTcpConnHandle->setSockFD(lSockFD);
+
+    if(NULL == m_pTcpConnMgr)
+    {
+        CONN_WRITE_LOG(CONN_WARNING, (char *)"FILE(%s)LINE(%d): "
+            "as_network_svr::regTcpMonitorClient: m_pTcpConnMgr is NULL", _FL_);
+        return AS_ERROR_CODE_FAIL;
+    }
+
+    int32_t lRetVal = m_pTcpConnMgr->addHandle(pTcpConnHandle);
+    if(lRetVal != AS_ERROR_CODE_OK)
+    {
+        pTcpConnHandle->close();
+        CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
+            "as_network_svr::regTcpMonitorClient: register connection fail", _FL_);
+        return lRetVal;
+    }
+
+    return AS_ERROR_CODE_OK;
+}
 
 void as_network_svr::removeTcpClient(as_tcp_conn_handle *pTcpConnHandle)
 {

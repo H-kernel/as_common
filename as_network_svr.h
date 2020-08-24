@@ -140,11 +140,11 @@ typedef ListOfHandle::iterator ListOfHandleIte;
 
 class as_handle
 {
-  public:
+public:
     as_handle();
     virtual ~as_handle();
 
-  public:
+public:
     virtual int32_t initHandle(void);
     virtual void setHandleSend(AS_BOOLEAN bHandleSend);
     virtual void setHandleRecv(AS_BOOLEAN bHandleRecv);
@@ -165,8 +165,8 @@ class as_handle
     };
     virtual void close(void);
 
-  public:
-    int32_t m_lSockFD;
+public:
+    int32_t         m_lSockFD;
     as_handle_node *m_pHandleNode;
     as_network_addr m_localAddr;
 
@@ -184,31 +184,31 @@ class as_handle
 
 class as_handle_node
 {
-  public:
+public:
     as_handle_node()
     {
         m_pHandle = NULL;
         m_bRemoved = AS_FALSE;
     };
 
-  public:
+public:
     as_handle *m_pHandle;
     AS_BOOLEAN m_bRemoved;
 };
 
 class as_network_handle : public as_handle
 {
-  public:
+public:
     as_network_handle();
     virtual ~as_network_handle(){};
 
-  public:
+public:
     virtual int32_t initHandle(void);
-    int32_t getSockFD(void) const
+    virtual int32_t getSockFD(void) const
     {
         return m_lSockFD;
     };
-    void setSockFD(int32_t lSockFD)
+    virtual void setSockFD(int32_t lSockFD)
     {
         m_lSockFD = lSockFD;
     };
@@ -218,18 +218,18 @@ class as_network_handle : public as_handle
     virtual int32_t recv(char *pArrayData, as_network_addr *pPeerAddr, const ULONG ulDataSize,
         const EnumSyncAsync bSyncRecv) = 0;
 
-  public:
+public:
     virtual void handle_recv(void) = 0;
     virtual void handle_send(void) = 0;
 };
 
 class as_tcp_conn_handle : public as_network_handle
 {
-  public:
+public:
     as_tcp_conn_handle();
     virtual ~as_tcp_conn_handle();
 
-  public:
+public:
     virtual int32_t initHandle(void);
     virtual int32_t conn( const as_network_addr *pLocalAddr, const as_network_addr *pPeerAddr,
         const EnumSyncAsync bSyncConn, ULONG ulTimeOut);
@@ -245,14 +245,22 @@ class as_tcp_conn_handle : public as_network_handle
     };
     virtual void close(void);
 
-  public:
-    ConnStatus m_lConnStatus;
+public:
+    ConnStatus      m_lConnStatus;
     as_network_addr m_peerAddr;
 };
 
+/* only for monitor the tcp handle read and write event */
+class as_tcp_monitor_handle : public as_tcp_conn_handle
+{
+public:
+    as_tcp_monitor_handle();
+    virtual ~as_tcp_monitor_handle();
+    virtual void close(void);
+};
 class as_udp_sock_handle : public as_network_handle
 {
-  public:
+public:
     virtual int32_t createSock(const as_network_addr *pLocalAddr,
                                const as_network_addr *pMultiAddr);
     virtual int32_t send(const as_network_addr *pPeerAddr, const char *pArrayData,
@@ -269,10 +277,10 @@ class as_udp_sock_handle : public as_network_handle
 
 class as_tcp_server_handle : public as_handle
 {
-  public:
+public:
     int32_t listen(const as_network_addr *pLocalAddr);
 
-  public:
+public:
     virtual int32_t handle_accept(const as_network_addr *pRemoteAddr,
         as_tcp_conn_handle *&pTcpConnHandle) = 0;
     virtual void close(void);
@@ -282,21 +290,19 @@ class as_tcp_server_handle : public as_handle
 #define MAX_HANDLE_MGR_TYPE_LEN 20
 class  as_handle_manager
 {
-  public:
+public:
     as_handle_manager();
     virtual ~as_handle_manager();
 
-  public:
+public:
     int32_t init(const ULONG ulMilSeconds);
     int32_t run();
     void exit();
 
-  public:
-    int32_t addHandle(as_handle *pHandle,
-                      AS_BOOLEAN bIsListOfHandleLocked = AS_FALSE);
-    void removeHandle(as_handle *pHandle);
-    virtual void checkSelectResult(const EpollEventType enEpEvent,
-        as_handle *pHandle) = 0;
+public:
+    virtual int32_t addHandle(as_handle *pHandle,AS_BOOLEAN bIsListOfHandleLocked = AS_FALSE);
+    virtual void    removeHandle(as_handle *pHandle);
+    virtual void    checkSelectResult(const EpollEventType enEpEvent,as_handle *pHandle) = 0;
 
   protected:
     static void *invoke(void *argc);
@@ -323,7 +329,7 @@ class  as_handle_manager
 
 class as_tcp_conn_mgr : public as_handle_manager
 {
-  public:
+public:
     as_tcp_conn_mgr()
     {
         (void)strncpy(m_szMgrType, "as_tcp_conn_mgr", MAX_HANDLE_MGR_TYPE_LEN);
@@ -337,7 +343,7 @@ class as_tcp_conn_mgr : public as_handle_manager
 
 class as_udp_sock_mgr : public as_handle_manager
 {
-  public:
+public:
     as_udp_sock_mgr()
     {
         (void)strncpy(m_szMgrType, "as_udp_sock_mgr", MAX_HANDLE_MGR_TYPE_LEN);
@@ -349,14 +355,14 @@ class as_udp_sock_mgr : public as_handle_manager
 
 class as_tcp_server_mgr : public as_handle_manager
 {
-  public:
+public:
     as_tcp_server_mgr()
     {
         m_pTcpConnMgr = NULL;
         (void)strncpy(m_szMgrType, "as_tcp_server_mgr", MAX_HANDLE_MGR_TYPE_LEN);
     };
 
-  public:
+public:
     void setTcpClientMgr(as_tcp_conn_mgr *pTcpConnMgr)
     {
         m_pTcpConnMgr = pTcpConnMgr;
@@ -387,7 +393,7 @@ enum CONN_LOG_LEVEL
 
 class as_conn_mgr_log
 {
-  public:
+public:
     virtual void writeLog(int32_t lType, int32_t llevel,
         const char *szLogDetail, const int32_t lLogLen) = 0;
 };
@@ -396,7 +402,7 @@ extern as_conn_mgr_log *g_pAsConnMgrLog;
 
 class as_network_svr
 {
-  public:
+public:
     as_network_svr();
     virtual ~as_network_svr();
 public:
@@ -414,6 +420,7 @@ public:
     virtual int32_t regTcpClient( const as_network_addr *pLocalAddr,
         const as_network_addr *pPeerAddr, as_tcp_conn_handle *pTcpConnHandle,
         const EnumSyncAsync bSyncConn, ULONG ulTimeOut);
+    virtual int32_t regTcpMonitorClient(as_tcp_monitor_handle *pTcpConnHandle,int32_t lSockFD);
     virtual void removeTcpClient(as_tcp_conn_handle *pTcpConnHandle);
     virtual int32_t regTcpServer(const as_network_addr *pLocalAddr,
         as_tcp_server_handle *pTcpServerHandle);
