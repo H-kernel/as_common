@@ -36,13 +36,6 @@ ASLOG_API void ASWrite(const char* szFileName, int32_t lLine,
 ASLOG_API void ASWriteLog(int32_t lLevel,const char* szLog);
 ASLOG_API void ASStopLog(void);
 
-class CWriter
-{
-public:
-    CWriter();
-    virtual ~CWriter();
-};
-
 class CDefaultWriter
 {
     public:
@@ -70,6 +63,8 @@ class CDefaultWriter
 
 
 #define AS_LOG (CDefaultWriter(__FILE__, __LINE__))
+
+#define AS_LOG_WRITE(file,line,level,format,...)    ASWrite(file,line,level,format,##__VA_ARGS__)
 
 #endif//_AS_LOG_H_
 
