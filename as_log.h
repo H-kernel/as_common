@@ -31,14 +31,22 @@ ASLOG_API void ASSetLogFileLengthLimit(uint32_t ulLimitLengthKB);
 
 ASLOG_API void ASStartLog(void);
 
-ASLOG_API void __ASWriteLog(const char* szFileName, int32_t lLine,
+ASLOG_API void ASWrite(const char* szFileName, int32_t lLine,
                              int32_t lLevel, const char* format, va_list argp);
+ASLOG_API void ASWriteLog(int32_t lLevel,const char* szLog);
 ASLOG_API void ASStopLog(void);
 
 class CWriter
 {
+public:
+    CWriter();
+    virtual ~CWriter();
+};
+
+class CDefaultWriter
+{
     public:
-        CWriter(const char* file, int32_t line)
+        CDefaultWriter(const char* file, int32_t line)
         {
             m_file_ = file;
             m_line_ = line;
@@ -47,11 +55,11 @@ class CWriter
         {
             va_list argp;
             va_start(argp, format);
-            __ASWriteLog(m_file_,m_line_,level,format,argp);
+            ASWrite(m_file_,m_line_,level,format,argp);
             va_end(argp);
         }
     private:
-        CWriter()   //��PC-LINT
+        CDefaultWriter()
         {
             m_file_ = NULL;
             m_line_ = 0;
@@ -60,7 +68,8 @@ class CWriter
         int32_t m_line_;
 };
 
-#define AS_LOG (CWriter(__FILE__, __LINE__))
+
+#define AS_LOG (CDefaultWriter(__FILE__, __LINE__))
 
 #endif//_AS_LOG_H_
 

@@ -50,12 +50,12 @@ class as_log
 private: 
     as_log();
 public:
+    static as_log& Instance()
+    {
+        static as_log objAsLog;
+        return objAsLog;
+    };
     virtual ~as_log();
-
-public:
-    static as_log* GetASLogInstance(); 
-    static void DeleteASLogInstance(); 
-
 public:
     int32_t Start();
     void SetLevel(int32_t lLevel);
@@ -63,8 +63,8 @@ public:
     bool SetLogFilePathName(const char* szPathName);
     void SetFileLengthLimit(uint32_t ulLimitLengthKB);
     int32_t Write(const char* szFile, int32_t lLine,int32_t lLevel, const char* format, va_list argp);
+    int32_t Write(int32_t lLevel,const char* szlog);
     int32_t Stop();
-
 private:
 #if AS_APP_OS == AS_OS_WIN32
     static uint32_t __stdcall ThreadEntry(VOID* lpvoid);
@@ -100,12 +100,7 @@ private:
     uint32_t         m_ulFileLenLimit;
 
     char             m_szLogFilePathName[MAX_LOG_FILE_PATH_NAME_LEN];
-
-private:
-    static as_log*    g_pASLog;
 };
-
-as_log* as_log::g_pASLog = NULL;
 
 as_log::as_log()
 {
@@ -155,26 +150,6 @@ as_log::~as_log()
     }
 }
 
-as_log* as_log::GetASLogInstance()
-{
-    if(NULL == g_pASLog)
-    {
-        g_pASLog = new as_log;
-    }
-
-    return g_pASLog;
-}
-
-void as_log::DeleteASLogInstance()
-{
-    if(NULL == g_pASLog)
-    {
-        (void)(g_pASLog->Stop());
-
-        delete g_pASLog;
-        g_pASLog = NULL;
-    }
-}
 
 int32_t as_log::Start()
 {
@@ -315,7 +290,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
 {
     if(!m_bRun)
     {
-        return 0;
+        return AS_ERROR_CODE_OK;
     }
 
     if(!m_bAllowWrite)
@@ -331,7 +306,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
             {
                 m_bDiskFull = true;
                 m_bAllowWrite = false;
-                return 0;
+                return AS_ERROR_CODE_OK;
             }
             as_set_event(m_hWriteEvent);
         }
@@ -339,7 +314,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
 
     if(lLevel > m_lLevel)
     {
-        return 0;
+        return AS_ERROR_CODE_OK;
     }
 
 
@@ -393,7 +368,52 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
     }
 
     as_set_event(m_hWriteEvent);
-    return 0;
+    return AS_ERROR_CODE_OK;
+}
+
+int32_t as_log::Write(int32_t lLevel,const char* szlog)
+{
+    if(!m_bRun)
+    {
+        return AS_ERROR_CODE_OK;
+    }
+
+    if(!m_bAllowWrite)
+    {
+        m_dwLastCheckDiskSpaceTime = 0;
+        m_bDiskFull = false;
+        m_bAllowWrite = true;
+
+        if(NULL == m_pLogFile)
+        {
+            m_pLogFile = ::fopen(m_szLogFilePathName, "a+");
+            if(NULL == m_pLogFile)
+            {
+                m_bDiskFull = true;
+                m_bAllowWrite = false;
+                return AS_ERROR_CODE_OK;
+            }
+            as_set_event(m_hWriteEvent);
+        }
+    }
+
+    if(lLevel > m_lLevel)
+    {
+        return AS_ERROR_CODE_OK;
+    }
+
+    uint32_t ulLen = ::strlen(szlog);
+
+    uint32_t ulWriteLen = m_Cache.Write(szlog, ulLen);
+    while(0 == ulWriteLen)
+    {
+        as_set_event(m_hWriteEvent);
+        as_sleep(LOG_WAIT_FOR_WRITE_OVER_INTERVAL);
+        ulWriteLen = m_Cache.Write(szlog, ulLen);
+    }
+
+    as_set_event(m_hWriteEvent);
+    return AS_ERROR_CODE_OK;
 }
 
 int32_t as_log::Stop()
@@ -476,7 +496,7 @@ VOID* as_log::ThreadEntry(VOID* lpvoid)
         pASLog->WriteLogFileThread();
     }
 
-    return 0;
+    return AS_ERROR_CODE_OK;
 }
 
 void as_log::WriteLogFileThread()
@@ -666,65 +686,58 @@ const char* as_log::GetLevelString(int32_t lLevel) const
 
 ASLOG_API void ASStartLog(void)
 {
-    as_log* pASLog = as_log::GetASLogInstance();
-    (void)(pASLog->Start());
+    (void)(as_log::Instance().Start());
     va_list arg;
     va_end(arg);
 
-    (void)(pASLog->Write(__FILE__, __LINE__,
+    (void)(as_log::Instance().Write(__FILE__, __LINE__,
         AS_LOG_INFO, "AS Log Module Start!", arg));
 }
 
 
-ASLOG_API void __ASWriteLog(const char* szFileName, int32_t lLine,
+ASLOG_API void ASWrite(const char* szFileName, int32_t lLine,
                       int32_t lLevel, const char* format, va_list argp)
 {
 
-    as_log* pASLog = as_log::GetASLogInstance();
-
-    (void)(pASLog->Write(szFileName, lLine, lLevel, format, argp));
+    (void)(as_log::Instance().Write(szFileName, lLine, lLevel, format, argp));
 }
 
+ASLOG_API void ASWriteLog(int32_t lLevel,const char* szLog)
+{
+    (void)(as_log::Instance().Write(lLevel, szLog));
+}
 
 ASLOG_API void ASStopLog(void)
 {
 
-    as_log* pASLog = as_log::GetASLogInstance();
-
     va_list arg;
     va_end(arg);
 
-    (void)(pASLog->Write(__FILE__, __LINE__,
+    (void)(as_log::Instance().Write(__FILE__, __LINE__,
         AS_LOG_INFO, "AS Log Module Stop!\n\n\n\n", arg));
 
-    (void)(pASLog->Stop());
-
-    as_log::DeleteASLogInstance();
+    (void)(as_log::Instance().Stop());
 }
 
 ASLOG_API void ASSetLogLevel(int32_t lLevel)
 {
-    as_log* pASLog = as_log::GetASLogInstance();
-    pASLog->SetLevel(lLevel);
+    as_log::Instance().SetLevel(lLevel);
 }
 
 ASLOG_API int32_t ASGetLogLevel()
 {
-    as_log* pASLog = as_log::GetASLogInstance();
-    return pASLog->GetLevel();
+    return as_log::Instance().GetLevel();
 }
 
 ASLOG_API bool ASSetLogFilePathName(const char* szPathName)
 {
-    as_log* pASLog = as_log::GetASLogInstance();
-    bool bSetOk = pASLog->SetLogFilePathName(szPathName);
+    bool bSetOk = as_log::Instance().SetLogFilePathName(szPathName);
     return bSetOk;
 }
 
 ASLOG_API void ASSetLogFileLengthLimit(uint32_t ulLimitLengthKB)
 {
-    as_log* pASLog = as_log::GetASLogInstance();
-    pASLog->SetFileLengthLimit(ulLimitLengthKB);
+    as_log::Instance().SetFileLengthLimit(ulLimitLengthKB);
 }
-/************************ End ��־ģ���û��ӿ�ʵ�� ****************************/
+
 
