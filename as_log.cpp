@@ -495,8 +495,11 @@ VOID* as_log::ThreadEntry(VOID* lpvoid)
         as_log* pASLog = (as_log *)lpvoid;
         pASLog->WriteLogFileThread();
     }
-
+#if AS_APP_OS == AS_OS_WIN32
     return AS_ERROR_CODE_OK;
+#else
+    return NULL;
+#endif
 }
 
 void as_log::WriteLogFileThread()
