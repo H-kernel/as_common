@@ -1,22 +1,5 @@
-/******************************************************************************
-   ��Ȩ���� (C), 2001-2011, M.Kernel
-
- ******************************************************************************
-  �ļ���          : as_timer.h
-  �汾��          : 1.0
-  ����            :
-  ��������        : 2007-4-02
-  ����޸�        :
-  ��������        :
-  �����б�        :
-  �޸���ʷ        :
-  1 ����          : 2007-4-02
-    ����          : hexin
-    �޸�����      : ����
-*******************************************************************************/
-
-#ifndef CTIMER_H_INCLUDE
-#define CTIMER_H_INCLUDE
+#ifndef __AS_TIMER_H_INCLUDE
+#define __AS_TIMER_H_INCLUDE
 
 #ifdef WIN32
 #pragma warning(disable: 4786)
@@ -115,14 +98,8 @@ extern ITimerLog *g_pTimerLog;
 class as_timer
 {
 public:
-    static as_timer& instance()
-    {
-        static as_timer objASTimer;
-        return objASTimer;
-    }
-
+    as_timer();
     virtual ~as_timer();
-
 public:
     virtual int32_t init(ULONG ulTimerScale);
     void setLogWriter(ITimerLog *pTimerLog)
@@ -138,8 +115,6 @@ public:
      virtual int32_t cancelTimer(ITrigger *pRrsTrigger);
 
     void clearTimer( );
-protected:
-    as_timer();
 private:
     static void *invoke(void *argc)
     {
@@ -161,6 +136,6 @@ private:
 };
 
 
-#endif //CTIMER_H_INCLUDE
+#endif //__AS_TIMER_H_INCLUDE
 
 
