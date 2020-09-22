@@ -19,6 +19,8 @@ extern "C" {
 typedef struct tagASUrl
 {
     char     protocol[AS_ULR_PROTOCOL_LEN];
+    char     username[AS_URL_ARG_NAME_LEN];
+    char     password[AS_URL_ARG_NAME_LEN];
     char     host[AS_URL_MAX_LEN];
     uint16_t port;
     char     uri[AS_URL_MAX_LEN];

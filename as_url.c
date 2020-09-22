@@ -29,6 +29,25 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         data =idx + 3;/* skip the '://' */
     }
 
+    /* find username and password */
+    idx = strrchr(data,'@');
+    if(NULL != idx) {
+        char* username = data;
+        data = idx + 1; /* skip the '@' */
+        idx = '\0';
+        char* password = strchr(username,':');
+        if(NULL == password) {
+            len = idx - username;
+            strncpy(info->username,username,len);
+        }
+        else {
+            len = password - username;
+            strncpy(info->username,username,len);
+            len = idx - password;
+            strncpy(info->password,username,len);
+        }
+    }
+
     /* find host and port*/
     idx = strchr(data,':');
     if(NULL == idx) {
