@@ -76,13 +76,13 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         /* parse the port */
         idx = strchr(data,'/');
         if(NULL != idx) {
-            idx = '\0';
+            *idx = '\0';
         }
         info->port = atoi(data);
         if(NULL == idx) {
             return AS_ERROR_CODE_OK;
         }
-        idx = '/';
+        *idx = '/';
     }
 
     /* parse the uri */
