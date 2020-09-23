@@ -63,7 +63,7 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
             return AS_ERROR_CODE_FAIL;
         }
         strncpy(info->host,data,len);
-        data =idx + 1;/* skip the '/' */
+        data = idx;
     }
     else {
         len = idx - data;
