@@ -82,6 +82,7 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         if(NULL == idx) {
             return AS_ERROR_CODE_OK;
         }
+        idx = '/';
     }
 
     /* parse the uri */
