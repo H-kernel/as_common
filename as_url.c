@@ -85,11 +85,12 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         *idx = '/';
         data = idx;
     }
+    strncpy(info->uri,data,AS_URL_MAX_LEN);
 
-    /* parse the uri */
+    /* parse the path */
     idx = strchr(data,'?');
     if(NULL == idx) {
-        strncpy(info->uri,data,AS_URL_MAX_LEN);
+        strncpy(info->path,data,AS_URL_MAX_LEN);
         info->args[0] = '\0';
     }
     else {
@@ -97,7 +98,7 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         if(len >= AS_URL_MAX_LEN) {
             return AS_ERROR_CODE_FAIL;
         }
-        strncpy(info->uri,data,len);
+        strncpy(info->path,data,len);
         data =idx + 1;/* skip the '?' */
         strncpy(info->args,data,AS_URL_MAX_LEN);
     }

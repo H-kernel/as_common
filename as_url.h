@@ -23,6 +23,7 @@ typedef struct tagASUrl
     char     password[AS_URL_ARG_NAME_LEN];
     char     host[AS_URL_MAX_LEN];
     uint16_t port;
+    char     path[AS_URL_MAX_LEN];
     char     uri[AS_URL_MAX_LEN];
     char     args[AS_URL_MAX_LEN];
 }as_url_t;
