@@ -39,15 +39,15 @@ typedef as_digest_s as_digest_t;
 typedef enum {
     D_ATTR_USERNAME,    /* char * */
     D_ATTR_PASSWORD,    /* char * */
-    D_ATTR_REALM,        /* char * */
-    D_ATTR_NONCE,        /* char * */
-    D_ATTR_CNONCE,        /* int */
-    D_ATTR_OPAQUE,        /* char * */
-    D_ATTR_URI,        /* char * */
-    D_ATTR_METHOD,        /* int */
-    D_ATTR_ALGORITHM,    /* int */
-    D_ATTR_QOP,        /* int */
-    D_ATTR_NONCE_COUNT    /* int */
+    D_ATTR_REALM,       /* char * */
+    D_ATTR_NONCE,       /* char * */
+    D_ATTR_CNONCE,      /* int */
+    D_ATTR_OPAQUE,      /* char * */
+    D_ATTR_URI,         /* char * */
+    D_ATTR_METHOD,      /* int */
+    D_ATTR_ALGORITHM,   /* int */
+    D_ATTR_QOP,         /* int */
+    D_ATTR_NONCE_COUNT  /* int */
 } as_digest_attr_t;
 
 /* Union type for attribute get/set function  */
