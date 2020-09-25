@@ -790,6 +790,9 @@ as_digest_client_generate_header(as_digest_t *digest, char *result, size_t max_l
     case DIGEST_METHOD_TRACE:
         method_value = "TRACE";
         break;
+    case DIGEST_METHOD_RTSP:
+        method_value = "rtsp";
+        break;
     default:
         return -1;
     }

@@ -80,6 +80,8 @@ typedef union {
 #define DIGEST_METHOD_PUT       5
 #define DIGEST_METHOD_DELETE    6
 #define DIGEST_METHOD_TRACE     7
+#define DIGEST_METHOD_RTSP      8
+
 
 /*********************************common************************************/
 /**
