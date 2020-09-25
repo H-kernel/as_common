@@ -1,6 +1,12 @@
 #ifndef __BASE64_H__
 #define __BASE64_H__
 
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 enum {BASE64_OK = 0, BASE64_INVALID};
 
 #define BASE64_ENCODE_OUT_SIZE(s)    (((s) + 2) / 3 * 4)
@@ -12,6 +18,11 @@ as_base64_encode(const unsigned char *in, unsigned int inlen, char *out);
 int
 as_base64_decode(const char *in, unsigned int inlen, unsigned char *out);
 
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
 
 #endif /* __BASE64_H__ */
 
