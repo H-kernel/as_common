@@ -655,7 +655,7 @@ as_digest_get_attr(as_digest_t *digest, as_digest_attr_t attr)
     case D_ATTR_URI:
         return dig->uri;
     case D_ATTR_METHOD:
-        return &(dig->method);
+        return dig->method;
     case D_ATTR_ALGORITHM:
         return &(dig->algorithm);
     case D_ATTR_QOP:
@@ -695,7 +695,7 @@ as_digest_set_attr(as_digest_t *digest, as_digest_attr_t attr, const as_digest_a
         dig->uri = value.string;
         break;
     case D_ATTR_METHOD:
-        dig->method = value.number;
+        dig->method = value.string;
         break;
     case D_ATTR_ALGORITHM:
         dig->algorithm = value.number;
@@ -768,38 +768,13 @@ as_digest_client_generate_header(as_digest_t *digest, char *result, size_t max_l
     }
 
     /* Set method */
-    switch (dig->method) {
-    case DIGEST_METHOD_OPTIONS:
-        method_value = "OPTIONS";
-        break;
-    case DIGEST_METHOD_GET:
-        method_value = "GET";
-        break;
-    case DIGEST_METHOD_HEAD:
-        method_value = "HEAD";
-        break;
-    case DIGEST_METHOD_POST:
-        method_value = "POST";
-        break;
-    case DIGEST_METHOD_PUT:
-        method_value = "PUT";
-        break;
-    case DIGEST_METHOD_DELETE:
-        method_value = "DELETE";
-        break;
-    case DIGEST_METHOD_TRACE:
-        method_value = "TRACE";
-        break;
-    case DIGEST_METHOD_RTSP:
-        method_value = "rtsp";
-        break;
-    default:
+    if(NULL == dig->method) {
         return -1;
     }
 
     /* Generate the hashes */
     as_hash_generate_a1(hash_a1, dig->username, dig->realm, dig->password);
-    as_hash_generate_a2(hash_a2, method_value, dig->uri);
+    as_hash_generate_a2(hash_a2, dig->method, dig->uri);
 
     if (DIGEST_QOP_NOT_SET != dig->qop) {
         as_hash_generate_response_auth(hash_res, hash_a1, dig->nonce, dig->nc, dig->cnonce, qop_value, hash_a2);
