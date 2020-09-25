@@ -43,6 +43,7 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
         else {
             len = password - username;
             strncpy(info->username,username,len);
+            password += 1; /* skip the ':' */
             len = idx - password;
             strncpy(info->password,password,len);
         }
