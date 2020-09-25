@@ -1,6 +1,12 @@
 #ifndef __AS_HTTP_DIGEST_H__
 #define __AS_HTTP_DIGEST_H__
 
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
 #define ARRAY_LENGTH(a) (sizeof a / sizeof (a[0]))
 
 
@@ -177,5 +183,11 @@ int as_digest_server_generate_nonce(as_digest_t *digest);
  * Returns the number of bytes in the result string. -1 on failure.
  */
 size_t as_digest_server_generate_header(as_digest_t *digest, char *result, size_t max_length);
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
 
 #endif  /* __AS_HTTP_DIGEST_H__ */

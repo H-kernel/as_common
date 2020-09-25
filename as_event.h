@@ -1,5 +1,13 @@
 #ifndef __AS_EVENT_H__
 #define __AS_EVENT_H__
+
+#ifdef __cplusplus
+#if __cplusplus
+extern "C" {
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
+
+
 #include "as_config.h"
 #include <stdint.h>
 #include <stdio.h>
@@ -27,6 +35,12 @@ int32_t   as_wait_event(as_event_t *pstASEvent, int32_t lTimeOut);
 int32_t   as_set_event(as_event_t *pstASEvent);
 int32_t   as_reset_event(as_event_t *pstASEvent);
 int32_t   as_destroy_event(as_event_t *pstASEvent );
+
+#ifdef __cplusplus
+#if __cplusplus
+}
+#endif /* __cpluscplus */
+#endif /* __cpluscplus */
 
 #endif
 
