@@ -44,7 +44,7 @@ int32_t    as_parse_url(const char* url,as_url_t* info)
             len = password - username;
             strncpy(info->username,username,len);
             len = idx - password;
-            strncpy(info->password,username,len);
+            strncpy(info->password,password,len);
         }
         *idx = '@';
     }
