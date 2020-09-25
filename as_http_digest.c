@@ -784,16 +784,18 @@ as_digest_client_generate_header(as_digest_t *digest, char *result, size_t max_l
 
     /* Generate the minimum digest header string */
     if(digest->quotes) {
-        result_size = snprintf(result, max_length, "Digest username=\"%s\", realm=\"%s\", uri=\"%s\", response=\"%s\"",\
+        result_size = snprintf(result, max_length, "Digest username=\"%s\", realm=\"%s\", nonce=\"%s\", uri=\"%s\", response=\"%s\"",\
             dig->username,\
             dig->realm,\
+            dig->nonce,\
             dig->uri,\
             hash_res);
     }
     else {
-        result_size = snprintf(result, max_length, "Digest username=%s, realm=%s, uri=%s, response=%s",\
+        result_size = snprintf(result, max_length, "Digest username=%s, realm=%s, nonce=\"%s\", uri=%s, response=%s",\
             dig->username,\
             dig->realm,\
+            dig->nonce,\
             dig->uri,\
             hash_res);
     }
@@ -821,9 +823,8 @@ as_digest_client_generate_header(as_digest_t *digest, char *result, size_t max_l
 
     /* If qop is supplied, add nonce, cnonce, nc and qop */
     if (DIGEST_QOP_NOT_SET != dig->qop) {
-        sz = snprintf(result + result_size, max_length - result_size, ", qop=%s, nonce=\"%s\", cnonce=\"%08x\", nc=%08x",\
+        sz = snprintf(result + result_size, max_length - result_size, ", qop=%s, cnonce=\"%08x\", nc=%08x",\
             qop_value,\
-            dig->nonce,\
             dig->cnonce,\
             dig->nc);
         if (sz == -1 || result_size >= max_length) {
