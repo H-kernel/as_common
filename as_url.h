@@ -12,9 +12,9 @@ extern "C" {
 #include <stdio.h>
 #include <signal.h>
 #define AS_ULR_PROTOCOL_LEN  8
-#define AS_URL_MAX_LEN       128
+#define AS_URL_MAX_LEN       512
 #define AS_URL_ARG_NAME_LEN  64
-#define AS_URL_ARG_VALUE_LEN 128
+#define AS_URL_ARG_VALUE_LEN 512
 
 typedef struct tagASUrl
 {
