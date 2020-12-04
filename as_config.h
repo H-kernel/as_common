@@ -1,6 +1,6 @@
 #ifndef __AS_MEDIA_KENERL_CONFIG_H__
 #define __AS_MEDIA_KENERL_CONFIG_H__
-
+#include <stdio.h>
 
 #define   AS_OS_LINUX                       1
 #define   AS_OS_WIN32                       2

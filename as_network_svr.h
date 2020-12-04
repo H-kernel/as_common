@@ -7,6 +7,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <sys/epoll.h>
+#include <unistd.h>
 #endif //AS_OS_LINUX
 
  #ifdef WIN32
@@ -17,7 +18,6 @@
 #include <list>
 #include <fcntl.h>
 #include <string.h>
-#include <unistd.h>
 #include <stdio.h>
 
 #include "as_config.h"
