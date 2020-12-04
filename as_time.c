@@ -11,8 +11,9 @@ extern "C" {
 
 #if AS_APP_OS == AS_OS_WIN32
 #include <WinSock2.h>
-#include <Mmsystem.h>
+#include <mmsystem.h>
 #pragma comment( lib,"winmm.lib" )
+extern struct timeval;
 #elif AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #endif
@@ -33,7 +34,7 @@ void  as_start_ticks()
 
     memset(&g_startTime,0x00,sizeof(g_startTime));
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
     g_startTime.tv_sec = (int32_t)timeGetTime();
 #else
     gettimeofday(&g_startTime, NULL);
