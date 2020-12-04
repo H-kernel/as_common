@@ -12,6 +12,10 @@ extern "C" {
 #include <ctype.h>
 #include "as_dlfcn.h"
 
+#if AS_APP_OS == AS_OS_WIN32
+#define _CRT_SECURE_NO_WARNINGS
+#endif
+
 #define AS_FILE_FILE_SIZE 512
 
 as_dll_handle_t* as_load_library(const char* pszPath)
