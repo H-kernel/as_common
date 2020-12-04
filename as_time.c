@@ -12,6 +12,7 @@ extern "C" {
 #if AS_APP_OS == AS_OS_WIN32
 #include <WinSock2.h>
 #include <Mmsystem.h>
+#pragma comment( lib,"winmm.lib" )
 #elif AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #endif
