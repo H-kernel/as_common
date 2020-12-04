@@ -13,7 +13,6 @@ extern "C" {
 
 void  as_delay (uint32_t ulDelayTimeMs);
 void  as_sleep(uint32_t ulMs );
-void  as_start_ticks();
 uint32_t as_get_ticks ();
 uint32_t as_get_cur_msecond();
 void  as_strftime(char * pszTimeStr, uint32_t ulLens, char* pszFormat, time_t ulTime);

@@ -22,28 +22,6 @@ extern struct timeval;
 
 static uint32_t g_ulSysStart = 0 ;
 
-static struct timeval g_startTime;
-
-void  as_start_ticks()
-{
-    if(g_ulSysStart )
-    {
-        return ;
-    }
-
-    g_ulSysStart = 1 ;
-
-    memset(&g_startTime,0x00,sizeof(g_startTime));
-
-#if AS_APP_OS == AS_OS_WIN32
-    g_startTime.tv_sec = (int32_t)timeGetTime();
-#else
-    gettimeofday(&g_startTime, NULL);
-#endif
-
-    return ;
-}
-
 
 uint32_t as_get_ticks ()
 {
