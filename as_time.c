@@ -10,10 +10,12 @@ extern "C" {
 
 
 #if AS_APP_OS == AS_OS_WIN32
+#include <Windows.h>
 #include <Mmsystem.h>
 #elif AS_OS_LINUX == AS_OS_WIN32
 #include <sys/time.h>
 #endif
+
 
 static uint32_t g_ulSysStart = 0 ;
 

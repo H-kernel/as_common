@@ -875,7 +875,7 @@ size_t
 as_digest_server_generate_header(as_digest_t *digest, char *result, size_t max_length)
 {
     as_digest_s *dig = (as_digest_s *) digest;
-    char *qop_value, *algorithm_value;
+    char *qop_value = "auth", *algorithm_value;
     size_t result_size; /* The size of the result string */
     int sz;
 
