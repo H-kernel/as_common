@@ -12,7 +12,7 @@ extern "C" {
 #if AS_APP_OS == AS_OS_WIN32
 #include <WinSock2.h>
 #include <Mmsystem.h>
-#elif AS_OS_LINUX == AS_OS_WIN32
+#elif AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #endif
 
