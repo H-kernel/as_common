@@ -12,6 +12,8 @@ extern "C" {
 #include <ctype.h>
 #include "as_dlfcn.h"
 
+#define AS_FILE_FILE_SIZE 256
+
 as_dll_handle_t* as_load_library(const char* pszPath)
 {
     as_dll_handle_t* phandle = NULL;
@@ -22,8 +24,8 @@ as_dll_handle_t* as_load_library(const char* pszPath)
     }
 
 #if AS_APP_OS == AS_OS_WIN32
-    char szFullPath[SVS_FILE_FILE_SIZE] = { 0 }; 
-    char szLoadPath[SVS_FILE_FILE_SIZE] = { 0 };
+    char szFullPath[AS_FILE_FILE_SIZE] = { 0 }; 
+    char szLoadPath[AS_FILE_FILE_SIZE] = { 0 };
     HANDLE hDLLModule = NULL;
 
     if (0 == GetModuleFileName((HMODULE)hDLLModule, szFullPath, sizeof(szFullPath)))
@@ -41,7 +43,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
 
     *(pszFind + 1) = '\0';    //�滻Ϊ������
 
-    strncat(szFullPath, pszPath, SVS_FILE_FILE_SIZE);
+    strncat(szFullPath, pszPath, AS_FILE_FILE_SIZE);
 
     phandle->hDllInst = LoadLibraryEx(szFullPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH);
 #elif AS_APP_OS == AS_OS_LINUX
