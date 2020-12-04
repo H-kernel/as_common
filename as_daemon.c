@@ -1,3 +1,8 @@
+#include "as_daemon.h"
+#include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
+#if AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>
@@ -12,9 +17,7 @@
 #include <syslog.h>
 #include <sys/types.h>
 
-#include "as_config.h"
-#include "as_basetype.h"
-#include "as_common.h"
+
 
 #ifndef uint32_t
 typedef u_int32_t  uint32_t;
@@ -29,9 +32,7 @@ typedef u_int64_t  uint64_t;
 #ifndef uint16_t
 typedef u_int16_t uint16_t;
 #endif
-#include "as_daemon.h"
 
-#if AS_APP_OS == AS_OS_LINUX
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
