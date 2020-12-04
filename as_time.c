@@ -10,11 +10,9 @@ extern "C" {
 
 
 #if AS_APP_OS == AS_OS_WIN32
-#include <WinSock2.h>
 #include <mmsystem.h>
 #include <windows.h>
 #pragma comment( lib,"winmm.lib" )
-extern struct timeval;
 #elif AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #endif
