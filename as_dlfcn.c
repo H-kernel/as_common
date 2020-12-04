@@ -12,7 +12,7 @@ extern "C" {
 #include <ctype.h>
 #include "as_dlfcn.h"
 
-#define AS_FILE_FILE_SIZE 256
+#define AS_FILE_FILE_SIZE 512
 
 as_dll_handle_t* as_load_library(const char* pszPath)
 {
@@ -28,16 +28,16 @@ as_dll_handle_t* as_load_library(const char* pszPath)
     char szLoadPath[AS_FILE_FILE_SIZE] = { 0 };
     HANDLE hDLLModule = NULL;
 
-    if (0 == GetModuleFileName((HMODULE)hDLLModule, szFullPath, sizeof(szFullPath)))
+    if (0 == GetModuleFileName((HMODULE)hDLLModule, (LPWSTR)&szFullPath[0], sizeof(szFullPath)))
     {
-        SVS_free(phandle);
+        free(phandle);
         return NULL;
     }
 
     char* pszFind = strrchr(szFullPath, '\\');
     if (NULL == pszFind)
     {
-        SVS_free(phandle);
+        free(phandle);
         return NULL;
     }
 
@@ -45,7 +45,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
 
     strncat(szFullPath, pszPath, AS_FILE_FILE_SIZE);
 
-    phandle->hDllInst = LoadLibraryEx(szFullPath, 0, LOAD_WITH_ALTERED_SEARCH_PATH);
+    phandle->hDllInst = LoadLibraryEx( (LPWSTR)&szFullPath[0], 0, LOAD_WITH_ALTERED_SEARCH_PATH);
 #elif AS_APP_OS == AS_OS_LINUX
     //phandle->hDllInst = dlopen(pszPath,RTLD_NOW);
     phandle->hDllInst = dlopen(pszPath,RTLD_LAZY);
