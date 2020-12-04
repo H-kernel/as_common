@@ -28,8 +28,8 @@ as_dll_handle_t* as_load_library(const char* pszPath)
     }
 
 #if AS_APP_OS == AS_OS_WIN32
-    char szFullPath[AS_FILE_FILE_SIZE] = { 0 }; 
-    char szLoadPath[AS_FILE_FILE_SIZE] = { 0 };
+    char szFullPath[AS_FILE_FILE_SIZE + 1] = { 0 }; 
+    char szLoadPath[AS_FILE_FILE_SIZE + 1] = { 0 };
     HANDLE hDLLModule = NULL;
 
     if (0 == GetModuleFileName((HMODULE)hDLLModule, (LPWSTR)&szFullPath[0], sizeof(szFullPath)))

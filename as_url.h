@@ -18,20 +18,20 @@ extern "C" {
 
 typedef struct tagASUrl
 {
-    char     protocol[AS_ULR_PROTOCOL_LEN];
-    char     username[AS_URL_ARG_NAME_LEN];
-    char     password[AS_URL_ARG_NAME_LEN];
-    char     host[AS_URL_MAX_LEN];
+    char     protocol[AS_ULR_PROTOCOL_LEN + 1];
+    char     username[AS_URL_ARG_NAME_LEN + 1];
+    char     password[AS_URL_ARG_NAME_LEN + 1];
+    char     host[AS_URL_MAX_LEN + 1];
     uint16_t port;
-    char     path[AS_URL_MAX_LEN];
-    char     uri[AS_URL_MAX_LEN];
-    char     args[AS_URL_MAX_LEN];
+    char     path[AS_URL_MAX_LEN + 1];
+    char     uri[AS_URL_MAX_LEN + 1];
+    char     args[AS_URL_MAX_LEN + 1];
 }as_url_t;
 
 typedef struct tagASUrlArg
 {
-    char     name[AS_URL_ARG_NAME_LEN];
-    char     value[AS_URL_ARG_VALUE_LEN];
+    char     name[AS_URL_ARG_NAME_LEN + 1];
+    char     value[AS_URL_ARG_VALUE_LEN + 1];
     char*    next;
 }as_url_arg_t;
 
