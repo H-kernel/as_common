@@ -4,7 +4,7 @@
 #include <time.h>
 #include <stdint.h>
 #include "as_http_digest.h"
-#include "as_c"
+#include "as_config.h"
 
 #ifndef inline
 #define inline __inline
