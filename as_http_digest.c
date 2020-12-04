@@ -4,7 +4,11 @@
 #include <time.h>
 #include <stdint.h>
 #include "as_http_digest.h"
-#include "as_config.h"
+#include "as_c"
+
+#ifndef inline
+#define inline __inline
+#endif 
 /*
  * The basic MD5 functions.
  *
