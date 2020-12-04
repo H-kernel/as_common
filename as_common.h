@@ -11,10 +11,18 @@
 #include <errno.h>
 #include <memory.h>
 #if AS_APP_OS == AS_OS_WIN32
+#ifndef snprintf
 #define snprintf _snprintf
+#endif
+#ifndef strcasecmp
 #define strcasecmp stricmp
+#endif
+#ifndef strncasecmp
 #define strncasecmp strnicmp
+#endif
+#ifndef vsnprintf
 #define vsnprintf _vsnprintf
+#endif
 #endif
 
 
