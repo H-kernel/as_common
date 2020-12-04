@@ -7,11 +7,13 @@ extern "C" {
 #include <time.h>
 #include <errno.h>
 #include "as_time.h"
-#include <sys/time.h>
+
 
 #if AS_APP_OS == AS_OS_WIN32
 #include <WinSock2.h>
 #include <Mmsystem.h>
+#elif AS_OS_LINUX == AS_OS_WIN32
+#include <sys/time.h>
 #endif
 
 static uint32_t g_ulSysStart = 0 ;
