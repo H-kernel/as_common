@@ -5,10 +5,6 @@
 #include <stdint.h>
 #include "as_http_digest.h"
 #include "as_config.h"
-
-#if AS_APP_OS == AS_OS_WIN32
-#define _CRT_SECURE_NO_WARNINGS
-#endif
 /*
  * The basic MD5 functions.
  *
