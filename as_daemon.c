@@ -29,21 +29,12 @@ typedef u_int64_t  uint64_t;
 #ifndef uint16_t
 typedef u_int16_t uint16_t;
 #endif
-
+#include "as_daemon.h"
 
 #if AS_APP_OS == AS_OS_LINUX
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-//#include <linux/sem.h>
-#endif
-
-#if AS_APP_OS == AS_OS_WIN32
-#include "Winbase.h"
-#include "Windows.h"
-#endif
-
-#include "as_daemon.h"
 
 int32_t g_iCfgDaemonlize = 1;
 int32_t g_iReStartTimes  = 0;
@@ -58,21 +49,6 @@ uint32_t g_ulReStartTime   = 0;
 
 AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
 {
-#if AS_APP_OS == AS_OS_WIN32
-    SECURITY_ATTRIBUTES eventAtrributes;
-    eventAtrributes.nLength = sizeof(SECURITY_ATTRIBUTES);
-    eventAtrributes.bInheritHandle = FALSE;
-    eventAtrributes.lpSecurityDescriptor = NULL;
-
-    HANDLE handle = ::CreateEvent(&eventAtrributes, TRUE, FALSE, strFileName);
-    if(NULL == handle || (ERROR_ALREADY_EXISTS == ::GetLastError()))
-    {
-        printf("A instance is running");
-        return AS_FALSE;
-    }
-
-    return AS_TRUE;
-#elif AS_APP_OS == AS_OS_LINUX
     key_t   key_    = 0;
     int32_t sem_id_ = -1;
     const char *fileName = "/dev";
@@ -123,8 +99,6 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
         syslog(LOG_USER|LOG_WARNING,"Fail to create semaphore to avoid re-run, semaphore ID[%d].", sem_id_);
         return AS_FALSE;
     }
-#endif
-
     return AS_TRUE;
 }
 
@@ -541,5 +515,6 @@ void as_run_service(void (*pWorkFunc)(),
 
 }
 
+#endif
 
 

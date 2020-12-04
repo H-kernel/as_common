@@ -9,6 +9,8 @@ extern "C" {
 #include "as_config.h"
 #if AS_APP_OS == AS_OS_LINUX
 #include <dlfcn.h>
+#elif AS_APP_OS == AS_OS_WIN32
+#include <windows.h>
 #endif
 
 
