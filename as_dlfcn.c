@@ -51,7 +51,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
 
     strncat(szFullPath, pszPath, AS_FILE_FILE_SIZE);
 
-    phandle->hDllInst = LoadLibraryEx( (LPWSTR)&szFullPath[0], 0, LOAD_WITH_ALTERED_SEARCH_PATH);
+    phandle->hDllInst = LoadLibrary( (LPWSTR)&szFullPath[0], 0);
 #elif AS_APP_OS == AS_OS_LINUX
     //phandle->hDllInst = dlopen(pszPath,RTLD_NOW);
     phandle->hDllInst = dlopen(pszPath,RTLD_LAZY);
