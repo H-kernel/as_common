@@ -64,6 +64,8 @@
 #define CONN_ERRNO WSAGetLastError()
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #define EINPROGRESS WSAEINPROGRESS
+
+#include <WinSock2.h>
 #endif
 
 
