@@ -1,6 +1,10 @@
 #ifndef __AS_SYNCHRONIZED_INCLUDE_H__
 #define __AS_SYNCHRONIZED_INCLUDE_H__
 #include "as.h" 
+#if AS_APP_OS == AS_OS_WIN32
+#include <windows.h>
+#endif
+
 class as_synchronized
 {
 public:
