@@ -3,9 +3,11 @@
 extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
-
-#include "as_event.h"
+#include "as_config.h"
+#include "as_basetype.h"
 #include "as_common.h"
+#include "as.h"
+#include "as_event.h"
 #if AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #include <pthread.h>
