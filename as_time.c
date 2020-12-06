@@ -53,42 +53,11 @@ uint32_t as_get_cur_msecond()
     return(ticks);
 }
 
-void  as_delay (uint32_t ulDelayTimeMs)
-{
-    LONG was_error;
-
-    struct timeval tv;
-
-    ULONG then, now, elapsed;
-
-    then = as_get_ticks();
-
-    do
-    {
-        errno = 0;
-        /* Calculate the time LONGerval left (in case of LONGerrupt) */
-        now = as_get_ticks();
-        elapsed = (now-then);
-        then = now;
-        if ( elapsed >= ulDelayTimeMs )
-        {
-            break;
-        }
-
-        ulDelayTimeMs -= elapsed;
-        tv.tv_sec = (int32_t)(ulDelayTimeMs/1000);
-        tv.tv_usec = (ulDelayTimeMs%1000)*1000;
-
-        was_error = select(0, AS_NULL, AS_NULL, AS_NULL, &tv);
-
-    } while ( was_error && (errno == EINTR) );
-}
-
 /*1000 = 1second*/
 void  as_sleep(uint32_t ulMs )
 {
 #if AS_APP_OS == AS_OS_LINUX
-    as_delay( ulMs );
+    usleep( ulMs*1000 );
 #elif AS_APP_OS == AS_OS_WIN32
     Sleep(ulMs);
 #endif
