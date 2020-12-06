@@ -4,6 +4,8 @@ extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
 #include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
 #include <time.h>
 #include <errno.h>
 #include "as_time.h"
