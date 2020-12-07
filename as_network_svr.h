@@ -20,10 +20,12 @@
 #include <string.h>
 #include <stdio.h>
 
+extern "C"{
 #include "as_config.h"
 #include "as_basetype.h"
 #include "as_common.h"
-#include "as.h"
+#include "as_time.h"
+}
 
 #define InvalidFd -1
 #define InvalidSocket -1
