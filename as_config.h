@@ -31,6 +31,11 @@
 #define vsnprintf _vsnprintf
 #endif
 
+#include <WinSock2.h>
+#pragma comment(lib,"winsock32.lib")
+#pragma comment(lib,"Winmm.lib")
+#pragma comment(lib,"ws2_32.lib")
+
 #endif
 
 #endif /*__AS_MEDIA_KENERL_CONFIG_H__*/
