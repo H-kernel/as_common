@@ -7,6 +7,7 @@ extern "C"{
 }
 #if AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
+#include <synchapi.h>
 #endif
 
 class as_synchronized
