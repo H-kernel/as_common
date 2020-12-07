@@ -14,6 +14,7 @@ ITimerLog *g_pTimerLog = NULL;
 #ifndef WIN32   //��PC-LINT
 #define TIMER_SECOND_IN_MS 1000
 #define TIMER_MS_IN_US 1000
+#include <windows.h>
 #endif
 
 #define _TIMER_FL_ "as_timer.cpp", __LINE__
