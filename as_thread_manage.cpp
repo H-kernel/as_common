@@ -3,8 +3,9 @@
 #include "as_log.h"
 #include "as_time.h"
 #include <time.h>
-#include <unistd.h>
+
 #if AS_APP_OS == AS_OS_LINUX
+#include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
 #include <pthread.h>
