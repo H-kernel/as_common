@@ -65,7 +65,7 @@
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #define EINPROGRESS WSAEINPROGRESS
 
-#include <WinSock2.h>
+#include <winsock.h>
 #endif
 
 
