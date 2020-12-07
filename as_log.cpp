@@ -5,6 +5,7 @@
 
 #ifdef WIN32
 #include "atlstr.h"
+#include <windows.h>
 #endif
 extern "C"{
 #include "as_config.h"
