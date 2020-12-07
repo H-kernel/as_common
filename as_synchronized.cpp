@@ -12,19 +12,19 @@
 int32_t as_synchronized::start()
 {
     semEvent = CreateEvent(0, FALSE, FALSE, 0);
-    if( VOS_NULL == semEvent )
+    if( AS_NULL == semEvent )
     {
         return AS_ERROR_CODE_SYS;
     }
     semMutex = CreateMutex(0, FALSE, 0);
-    if( VOS_NULL == semMutex )
+    if( AS_NULL == semMutex )
     {
         (void)CloseHandle(semEvent);
         return AS_ERROR_CODE_SYS;
     }    
 
     semPushEvent = CreateEvent(0, FALSE, FALSE, 0);
-    if( VOS_NULL == semPushEvent )    
+    if( AS_NULL == semPushEvent )    
     {
         (void)CloseHandle(semEvent);
         (void)CloseHandle(semMutex);
@@ -32,7 +32,7 @@ int32_t as_synchronized::start()
     }    
     
     semPushMutex = CreateMutex(0, FALSE, 0);
-    if( VOS_NULL == semPushMutex )    
+    if( AS_NULL == semPushMutex )    
     {
         (void)CloseHandle(semEvent);
         (void)CloseHandle(semMutex);
