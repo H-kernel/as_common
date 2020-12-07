@@ -58,6 +58,7 @@
 #define SOCK_OPT_TYPE void
 #define CONN_ERRNO errno
 #elif AS_APP_OS == AS_OS_WIN32
+#include <winsock.h>
 #define CLOSESOCK(x) closesocket(x)
 #define socklen_t int
 #define SOCK_OPT_TYPE char
@@ -65,7 +66,7 @@
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #define EINPROGRESS WSAEINPROGRESS
 
-#include <winsock.h>
+
 #endif
 
 
