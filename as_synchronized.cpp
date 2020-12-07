@@ -365,7 +365,7 @@ int32_t as_synchronized::unlock()
 }
 #endif
 
-#if AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_LINUX
 AS_BOOLEAN as_synchronized::trylock()
 {
     int32_t result = AS_ERROR_CODE_OK;
