@@ -17,7 +17,9 @@ extern "C"{
 #include "as_time.h"
 #include "as_json.h"
 }
-
+#if AS_APP_OS == AS_OS_WIN32
+#include <libloaderapi.h>
+#endif
 
 #define ASLOG_ERROR_OK             0    
 #define ASLOG_ERROR_INIT_CACHE     (-1)    
