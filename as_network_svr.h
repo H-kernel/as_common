@@ -27,6 +27,7 @@ extern "C"{
 #include "as_time.h"
 }
 
+#include "as_mem.h"
 #define InvalidFd -1
 #define InvalidSocket -1
 #define InvalidIp INADDR_ANY
