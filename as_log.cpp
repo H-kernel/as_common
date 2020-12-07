@@ -3,10 +3,6 @@
 #include "as_log.h"
 #include <time.h>
 
-#ifdef WIN32
-#include "atlstr.h"
-#include <windows.h>
-#endif
 extern "C"{
 #include "as_config.h"
 #include "as_basetype.h"
@@ -19,6 +15,8 @@ extern "C"{
 }
 #if AS_APP_OS == AS_OS_WIN32
 #include <libloaderapi.h>
+#include "atlstr.h"
+#include <windows.h>
 #endif
 
 #define ASLOG_ERROR_OK             0    
