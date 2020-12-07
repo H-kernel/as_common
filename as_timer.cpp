@@ -357,15 +357,7 @@ void as_timer::mainLoop()
     ULONGLONG ullCurrentScales = 0;
     while(AS_FALSE == m_bExit)
     {
-
-#ifdef WIN32
-        Sleep(m_ulTimerScale);
-#else
-        struct timeval tv;
-        tv.tv_sec = (int32_t)(m_ulTimerScale/TIMER_SECOND_IN_MS);
-        tv.tv_usec = (m_ulTimerScale%TIMER_SECOND_IN_MS)*TIMER_MS_IN_US;
-        (void)select(0, AS_NULL, AS_NULL, AS_NULL, &tv);
-#endif
+       as_sleep(m_ulTimerScale);
 
         CTimerItem *pTimerItem = NULL;
         ITrigger *pTrigger = NULL;
