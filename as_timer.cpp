@@ -11,10 +11,11 @@ extern "C"{
 ITimerLog *g_pTimerLog = NULL;
 #define MAX_TIMER_LOG_LENTH 512
 
-#ifndef WIN32   //��PC-LINT
+#if AS_APP_OS == AS_OS_WIN32
+#include <windows.h>
+#elif AS_APP_OS == AS_OS_LINUX
 #define TIMER_SECOND_IN_MS 1000
 #define TIMER_MS_IN_US 1000
-#include <windows.h>
 #endif
 
 #define _TIMER_FL_ "as_timer.cpp", __LINE__
