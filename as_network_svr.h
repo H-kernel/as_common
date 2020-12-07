@@ -63,7 +63,7 @@
 #define socklen_t int
 #define SOCK_OPT_TYPE char
 #define CONN_ERRNO WSAGetLastError()
-ifndef EWOULDBLOCK
+#ifndef EWOULDBLOCK
 #define EWOULDBLOCK WSAEWOULDBLOCK
 #endif
 #ifndef EINPROGRESS
