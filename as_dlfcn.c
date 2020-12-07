@@ -34,7 +34,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
     char szLoadPath[AS_FILE_FILE_SIZE + 1] = { 0 };
     HANDLE hDLLModule = NULL;
 
-    if (0 == GetModuleFileName((HMODULE)hDLLModule, (LPWSTR)&szFullPath[0], sizeof(szFullPath)))
+    if (0 == GetModuleFileName((HMODULE)hDLLModule, (LPSTR)&szFullPath[0], sizeof(szFullPath)))
     {
         free(phandle);
         return NULL;
@@ -51,7 +51,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
 
     strncat(szFullPath, pszPath, AS_FILE_FILE_SIZE);
 
-    phandle->hDllInst = LoadLibrary( (LPWSTR)&szFullPath[0], 0);
+    phandle->hDllInst = LoadLibrary( (LPSTR)&szFullPath[0], 0);
 #elif AS_APP_OS == AS_OS_LINUX
     //phandle->hDllInst = dlopen(pszPath,RTLD_NOW);
     phandle->hDllInst = dlopen(pszPath,RTLD_LAZY);

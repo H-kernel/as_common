@@ -2200,7 +2200,7 @@ int32_t as_network_svr::init(const ULONG ulSelectPeriod, const AS_BOOLEAN bHasUd
     {
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
             "WSAStartup error.", _FL_);
-        return SVS_ERR_SYS;
+        return AS_ERROR_CODE_FAIL;
     }
 #endif
     if(AS_TRUE == bHasUdpSock)
