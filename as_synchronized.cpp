@@ -8,7 +8,7 @@
 #include <errno.h>
 #endif
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t as_synchronized::start()
 {
     semEvent = CreateEvent(0, FALSE, FALSE, 0);
@@ -87,7 +87,7 @@ int32_t as_synchronized::start()
 
 as_synchronized::as_synchronized()
 {
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
     numNotifies = 0;
     semEvent = NULL;
     semMutex = NULL;
@@ -99,8 +99,7 @@ as_synchronized::as_synchronized()
 
 as_synchronized::~as_synchronized()
 {
-#ifdef WIN32
-    
+#if AS_APP_OS == AS_OS_WIN32    
     (void)CloseHandle(semEvent);
     semEvent = NULL;
     (void)CloseHandle(semMutex);
@@ -122,7 +121,7 @@ as_synchronized::~as_synchronized()
 int32_t as_synchronized::popWait( int32_t timeout )
 {
     int32_t result;
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
     result = wait(semEvent,semMutex,timeout);
 #else
     result = wait(&pop_cond,&monitor,timeout);
@@ -133,7 +132,7 @@ int32_t as_synchronized::popWait( int32_t timeout )
 int32_t as_synchronized::pushWait( int32_t timeout )
 {
     int32_t result;
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
     result = wait(semPushEvent,semMutex,timeout);
 #else
     result = wait(&push_cond,&monitor,timeout);
@@ -141,7 +140,7 @@ int32_t as_synchronized::pushWait( int32_t timeout )
     return result;
 }
 
-#ifndef WIN32
+#if AS_APP_OS == AS_OS_LINUX
 int32_t as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *monitor,struct timespec *ts) 
 {
     int32_t result;
@@ -160,7 +159,7 @@ int32_t as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *
 #endif
 
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t  as_synchronized::wait(HANDLE hSemEvent,HANDLE hSemMutex,int32_t timeout)const
 {
     uint32_t err;
@@ -239,7 +238,7 @@ int32_t  as_synchronized::wait(pthread_cond_t *cond,pthread_mutex_t *monitor,int
 }
 #endif
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t  as_synchronized::notifyRead()
 {
     numNotifies = 1;
@@ -265,7 +264,7 @@ int32_t  as_synchronized::notifyRead()
 }
 #endif
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t  as_synchronized::notifyWrite()
 {
     numNotifies = 1;
@@ -291,8 +290,7 @@ int32_t  as_synchronized::notifyWrite()
 }
 #endif
 
-
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t as_synchronized::notify_all()
 {
     numNotifies = (char)0x80;
@@ -321,7 +319,7 @@ int32_t as_synchronized::notify_all()
 }
 #endif
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t as_synchronized::lock()
 {
     if(WaitForSingleObject(semMutex, INFINITE) != WAIT_OBJECT_0)
@@ -345,7 +343,7 @@ int32_t as_synchronized::lock()
 
 
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 int32_t as_synchronized::unlock()/*lint !e1714*/ //���ⲿ����
 {
     if(!ReleaseMutex(semMutex))
@@ -367,7 +365,7 @@ int32_t as_synchronized::unlock()
 }
 #endif
 
-#ifndef WIN32
+#if AS_APP_OS == AS_OS_WIN32
 AS_BOOLEAN as_synchronized::trylock()
 {
     int32_t result = AS_ERROR_CODE_OK;

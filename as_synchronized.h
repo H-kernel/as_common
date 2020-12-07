@@ -1,6 +1,10 @@
 #ifndef __AS_SYNCHRONIZED_INCLUDE_H__
 #define __AS_SYNCHRONIZED_INCLUDE_H__
-#include "as.h" 
+extern "C"{
+#include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
+}
 #if AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
 #endif
@@ -23,7 +27,7 @@ public:
     AS_BOOLEAN  trylock();
     int32_t  unlock();
 
-#ifdef WIN32
+#if AS_APP_OS == AS_OS_WIN32
     int32_t     wait(HANDLE,HANDLE,int32_t)const;
     char    numNotifies;
     HANDLE  semEvent;
