@@ -169,7 +169,7 @@ int32_t as_log::Start()
     if(::strlen(m_szLogFilePathName) == 0)
     {
 #if AS_APP_OS == AS_OS_WIN32
-        (void)::GetModuleFileName(NULL, CA2W(m_szLogFilePathName), MAX_LOG_FILE_PATH_NAME_LEN - 1);
+        (void)GetModuleFileName(NULL, CA2W(m_szLogFilePathName), MAX_LOG_FILE_PATH_NAME_LEN - 1);
         char* pszFind = ::strrchr(m_szLogFilePathName, '.');
         if (NULL == pszFind)
         {
