@@ -289,7 +289,7 @@ void as_task_manage::svc(void)
                                pThreadInfo->m_tvAliveTime,
                                m_ulRestartServer,
                                m_ulCoreDump);
-
+#if AS_APP_OS == AS_OS_LINUX
                     (void)system("dmesg -c");
                     (void)system("echo \"1\" >/proc/sys/kernel/sysrq");
                     (void)system("echo \"m\" >/proc/sysrq-trigger");
@@ -306,6 +306,7 @@ void as_task_manage::svc(void)
                             (void)kill(getpid(), SIGKILL);
                         }
                     }
+#endif
                 }
             }
         }
