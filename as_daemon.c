@@ -178,17 +178,14 @@ void sigquit_handle(int32_t signum)
 
     signum = signum;
 
-    //���ٽ���SIGCHLD�źţ���ֹ�ظ�����
     (void)signal(SIGCHLD, SIG_IGN);
 
     (void)system("echo \" fail to start service, please check log files!\" | wall");
 
-    //����������ȫ��ɱ��
     (void)kill(0 - child_pid, SIGTERM);
     (void)usleep(WAIT_KILL_ALL);
     (void)kill(0 - child_pid, SIGKILL);
 
-    //�ͷ��ӽ���ռ�õ�ϵͳ��Դ
     do
     {
         pid = waitpid(-1, NULL, WNOHANG | __WALL);
@@ -198,7 +195,6 @@ void sigquit_handle(int32_t signum)
     syslog(LOG_USER|LOG_WARNING,
         "daemon(pid=%d) exit.\n", getpid());
 
-    //daemon�Լ�Ҳ�˳�
     exit(1);
 }
 
@@ -214,7 +210,6 @@ void sigchld_handle(int32_t signum)
 
     uint32_t ulTempReStartTime = 0;
 
-    /*10��֮�����������Σ����ػ������˳�*/
     if(g_iReStartTimes > 3)
     {
         ulTempReStartTime = as_daemon_get_ticks( );
@@ -223,7 +218,6 @@ void sigchld_handle(int32_t signum)
             "daemon(pid=%d)  g_ulReStartTime = %lu ulTempReStartTime = %lu.\n",
              getpid(), g_ulReStartTime, ulTempReStartTime);
 
-        //��������ʼʱ������10��֮�ڳ���������daemon�����˳�
         if( (ulTempReStartTime - g_ulReStartTime) < 10 )
         {
             syslog(LOG_USER|LOG_WARNING,
@@ -231,11 +225,9 @@ void sigchld_handle(int32_t signum)
                 "because daemon restarted too many times in time(%lu).\n",
                 getpid(), (ulTempReStartTime - g_ulReStartTime));
 
-            //daemon�˳�
             exit(1);
         }
 
-        //�������κ����¼�������ʱ��
         g_iReStartTimes = 0;
         g_ulReStartTime = as_daemon_get_ticks();
 
@@ -245,31 +237,26 @@ void sigchld_handle(int32_t signum)
 
     signum = signum;
 
-    //����������ȫ��ɱ��
     (void)kill(0 - child_pid, SIGTERM);
     (void)usleep(WAIT_KILL_ALL);
     (void)kill(0 - child_pid, SIGKILL);
 
-    //�ͷ��ӽ���ռ�õ�ϵͳ��Դ
     do
     {
         pid = waitpid(-1, NULL, WNOHANG | __WALL);
     }
     while (pid > 0);
 
-    //�Ȼ�ԭSIGCHLD��������������fork�������ǽ�ʬ
     (void)signal(SIGCHLD, SIG_DFL);
-    //����2�룬��ֹƵ����ͣ
+    
     sleep(WAIT_RELAUNCH);
 
-    //daemon�����������������̣���ʱdaemon���̽���ع�������
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkʧ��
             syslog(LOG_USER|LOG_ERR,
                "Unable to fork worker process, exit.\n");
             exit(1);
@@ -277,8 +264,6 @@ void sigchld_handle(int32_t signum)
         }
         case 0:
         {
-            //�������̣���������
-
             (void)umask(PROCESS_MASK);
 
             (void)setpgid(0, getpid());
@@ -292,17 +277,14 @@ void sigchld_handle(int32_t signum)
         }
         default:
         {
-            //�ػ�����
             child_pid = pid;
 
             syslog(LOG_USER|LOG_WARNING,
                    "respawed new worker pid is  %d , daemon pid is %d\n",
                     child_pid, getpid());
 
-            //����ע��SIGCHLD��������
             (void)signal(SIGCHLD, sigchld_handle);
 
-            //����һ���ٴ�������ٶȣ���ֹ��������
             (void)sleep(WAIT_RELAUNCH);
             break;
         }
@@ -314,7 +296,6 @@ void send_sigquit_to_deamon()
     int32_t enback = 1;
     if (enback == g_iCfgDaemonlize)
     {
-        //�������̷�һ��SIGQUIT����ʾ��������һ���˳�
         (void)kill(getppid(), SIGQUIT);
 
         (void)sleep(WAIT_PARENT_KILL);
@@ -327,31 +308,27 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
     int32_t fdnull;
     pid_t pid;
 
-    //fork��deamon����
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkʧ��
             printf("Unable to fork()!\n");
             exit(1);
             break;
         }
         case 0:
         {
-            //�ӽ��̣�deemon���̣�����������
             break;
         }
         default:
         {
-            //daemon���̵ĸ����̣��˳�
             exit(0);
         }
     }
 
-    if(AS_TRUE != onlyone_process( service_conf_path, service_id))  //��ֻ֤��һ��ʵ������
+    if(AS_TRUE != onlyone_process( service_conf_path, service_id))
     {
         printf( "\nA instance is running[%s].\n\n", service_conf_path );
         exit(0);
@@ -369,31 +346,26 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
     (void)signal(SIGCHLD, sigchld_handle);
     (void)signal(SIGQUIT, sigquit_handle);
 
-    //deamon�����������������̣���ʱdeamon���̽���ع�������
     pid = fork();
 
     switch (pid)
     {
         case -1:
         {
-            //forkʧ��
             printf("Unable to fork()!\n");
             exit(1);
             break;
         }
         case 0:
         {
-            //�ӽ��̣�deemon���̣�����������
             break;
         }
         default:
         {
-            //�ػ�����
             child_pid = pid;
             syslog(LOG_USER|LOG_WARNING,
                 "create daemon pid=%d, worker pid=%d.\n", getpid(), child_pid);
 
-            //�����ź� ctrl+c
             (void)signal(SIGINT, SIG_IGN);
             (void)signal(SIGPIPE, SIG_IGN);
 
@@ -407,7 +379,6 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
 
             for(; ;)
             {
-                //��ѭ��������cpuʹ����
                 (void)sleep(WAIT_DAEMON);
             }
         }
@@ -426,7 +397,6 @@ int32_t create_daemon( const char* service_conf_path, int32_t service_id )
 
     (void)signal(SIGQUIT, SIG_DFL);
 
-    //ִ�й��������е�������
     workfunc();
 
     return DAEMO_SUCCESS;
@@ -490,16 +460,14 @@ void as_run_service(void (*pWorkFunc)(),
 
     g_iCfgDaemonlize = iRunningMod;
 
-     //��ʼ��daemon�� ע��ص�����
     init_daemon(pWorkFunc, pExitFunc);
     if (enBackGround == g_iCfgDaemonlize)
     {
-        //��������
         (void)create_daemon( service_conf_path, service_id );
     }
     else
     {
-         if(AS_TRUE !=  onlyone_process( service_conf_path, service_id))  //��ֻ֤��һ��ʵ������
+         if(AS_TRUE !=  onlyone_process( service_conf_path, service_id)) 
          {
              printf( "\nA instance is running[%s].\n\n", service_conf_path );
              exit(0);
