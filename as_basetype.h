@@ -12,7 +12,7 @@ typedef int SOCKET;
 typedef  unsigned long long     ULONGLONG ;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)
-typedef  unsigned __int64       ULONGLONG; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  unsigned __int64       ULONGLONG;
 #endif
 #endif
 
@@ -21,40 +21,40 @@ typedef  unsigned __int64       ULONGLONG; /*lint !e761*///���ظ����
 typedef  long long              LONGLONG;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)
-typedef  __int64                LONGLONG; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  __int64                LONGLONG;
 #endif
 #endif
 
 #ifndef  ULONG
-typedef  unsigned long          ULONG ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  unsigned long          ULONG ;
 #endif
 
 #ifndef  LONG
-typedef  long                   LONG; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  long                   LONG;
 #endif
 
 #ifndef  uint16_t
-typedef  unsigned short         uint16_t ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  unsigned short         uint16_t ;
 #endif
 
 #ifndef  SHORT
-typedef  short                  SHORT ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  short                  SHORT ;
 #endif
 
 #ifndef  UCHAR
-typedef  unsigned char          UCHAR ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  unsigned char          UCHAR ;
 #endif
 
 #ifndef  CHAR
-typedef  char                   CHAR ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  char                   CHAR ;
 #endif
 
 #ifndef  VOID
-typedef  void                   VOID ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  void                   VOID ;
 #endif
 
 #ifndef  UINT
-typedef  unsigned int          UINT ; /*lint !e761*///���ظ�����,��Բ�ͬ�Ĳ���ϵͳ
+typedef  unsigned int          UINT ;
 #endif
 
 #ifndef  AS_BOOLEAN
