@@ -124,6 +124,7 @@ int32_t as_safe_queue_push_front(as_safe_queue_t* s_queue,void* data)
     }while (0);
 
     as_mutex_unlock(s_queue->lock);
+    return nRet;
 }
 int32_t as_safe_queue_pop_front(as_safe_queue_t* s_queue,void** data)
 {
