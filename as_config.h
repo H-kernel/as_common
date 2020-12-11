@@ -31,6 +31,7 @@
 #define vsnprintf _vsnprintf
 #endif
 
+#include <Ws2tcpip.h>
 #include <WinSock2.h>
 #pragma comment(lib,"winsock32.lib")
 #pragma comment(lib,"Winmm.lib")
