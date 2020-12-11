@@ -45,7 +45,7 @@ uint32_t g_ulReStartTime   = 0;
 
 #define RLIMIT (1024 * 1024)
 
-#define SEM_PRMS  0644 //�ź�������Ȩ�ޣ�0644�����û�(����)�ɶ�д�����Ա��������Ա�ɶ�����д
+#define SEM_PRMS  0644
 
 
 AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
@@ -129,9 +129,9 @@ int32_t setResourceLimit()
     return DAEMO_SUCCESS;
 }
 
-static pid_t child_pid; //�������̵Ľ���ID
+static pid_t child_pid;
 
-//����Ϊ��
+
 uint32_t as_daemon_get_ticks ( void )
 {
     uint32_t ticks = 0 ;
