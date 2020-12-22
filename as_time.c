@@ -17,6 +17,7 @@ extern "C" {
 #pragma comment( lib,"winmm.lib" )
 #elif AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
+#include <unistd.h>
 #endif
 
 
