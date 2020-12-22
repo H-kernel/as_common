@@ -6,6 +6,8 @@ extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
 #include "as_config.h"
+#include "as_basetype.h"
+#include "as_common.h"
 
 
 #define DAEMO_SUCCESS    0
