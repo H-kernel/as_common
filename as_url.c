@@ -2,8 +2,11 @@
 void       as_init_url(as_url_t* url)
 {
     url->protocol[0] = '\0';
+    url->username[0] = '\0';
+    url->password[0] = '\0';
     url->host[0]     = '\0';
     url->port        = 0;
+    url->path[0]     = '\0';
     url->uri[0]      = '\0';
     url->args[0]     = '\0';
     
