@@ -3,7 +3,7 @@
 
 char *as_strsep(char **stringp, const char *delim)
 {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return strsep(stringp,delim);
 #elif AS_APP_OS == AS_OS_WIN32
     char *s;

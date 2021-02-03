@@ -1,7 +1,7 @@
 #include "as_thread.h"
 #include "as_config.h"
 #include "as_common.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <pthread.h>
 #elif AS_APP_OS == AS_OS_WIN32
 #endif

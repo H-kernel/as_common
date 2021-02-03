@@ -19,7 +19,7 @@ public:
     virtual int32_t activate(uint32_t ulThreadCount,uint32_t ulStackSize = AS_TASK_STACK_DEFAULT);
     virtual void    svc() = 0;
 protected:
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     static  void* task_thread(void *arg);
 #elif AS_APP_OS == AS_OS_WIN32
     static  uint32_t __stdcall task_thread(void *arg);

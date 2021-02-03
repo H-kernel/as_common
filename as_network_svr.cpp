@@ -70,7 +70,7 @@ as_handle::as_handle()
     m_lSockFD = InvalidSocket;
     m_pHandleNode = NULL;
     m_ulEvents = EPOLLIN;
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = InvalidFd;
 #endif //#if
 
@@ -112,7 +112,7 @@ int32_t as_handle::initHandle(void)
 
     m_lSockFD = InvalidSocket;
     m_pHandleNode = NULL;
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = InvalidFd;
 #endif
     m_ulEvents = EPOLLIN;
@@ -150,7 +150,7 @@ void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
 
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)m_pHandleNode;
@@ -191,7 +191,7 @@ void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
 
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)m_pHandleNode;
@@ -239,7 +239,7 @@ int32_t as_network_handle::initHandle(void)
     return AS_ERROR_CODE_OK;
 }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 int32_t as_network_handle::sendMsg(const struct msghdr *pMsg)
 {
     if (InvalidSocket == m_lSockFD)
@@ -355,7 +355,7 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
         errno = 0;
         if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)))
         {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
             char szServerAddr[INET_ADDRSTRLEN];
             if (NULL != inet_ntop(AF_INET, &serverAddr.sin_addr, szServerAddr,
                 sizeof(szServerAddr)))
@@ -383,7 +383,7 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
     errno = 0;
     if((enAsyncOp == bSyncConn) || (ulTimeOut > 0))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         if(fcntl(lSockFd, F_SETFL, fcntl(lSockFd, F_GETFL)|O_NONBLOCK) < 0)
 #elif AS_APP_OS == AS_OS_WIN32
         ULONG ulNoBlock = AS_TRUE;
@@ -474,7 +474,7 @@ int32_t as_tcp_conn_handle::conn(const as_network_addr *pLocalAddr,
 
     if((enAsyncOp == bSyncConn) || (ulTimeOut > 0))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         if(fcntl(lSockFd, F_SETFL, fcntl(lSockFd, F_GETFL&(~O_NONBLOCK))) < 0)
 #elif AS_APP_OS == AS_OS_WIN32
         ULONG ulBlock = 0;
@@ -657,7 +657,7 @@ int32_t as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
         return SendRecvError;
     }
 
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     struct timeval recvWaitTime;
     recvWaitTime.tv_sec = ulWaitTime/CONN_SECOND_IN_MS;
@@ -732,7 +732,7 @@ int32_t as_tcp_conn_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
         return SendRecvError;
     }
 
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     recvWaitTime.tv_sec = 0;
     recvWaitTime.tv_usec = 0;
@@ -772,7 +772,7 @@ void as_tcp_conn_handle::close(void)
 
         //The close of an fd will cause it to be removed from
         //all epoll sets automatically.
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)NULL;
@@ -866,7 +866,7 @@ int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
 
     if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *) &localAddr, sizeof (localAddr)))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         char szLocalAddr[INET_ADDRSTRLEN];
         if (NULL != inet_ntop(AF_INET, &localAddr.sin_addr, szLocalAddr,
             sizeof(szLocalAddr)))
@@ -889,7 +889,7 @@ int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     int32_t lReuseAddrFlag = 1;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
         sizeof(lReuseAddrFlag)) < 0)
@@ -921,7 +921,7 @@ int32_t as_udp_sock_handle::createSock(const as_network_addr *pLocalAddr,
         return AS_ERROR_CODE_FAIL;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     if(NULL != pMultiAddr)
     {
         struct ip_mreq mreq;
@@ -1100,7 +1100,7 @@ int32_t as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
         return SendRecvError;
     }
 
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     struct timeval recvWaitTime;
     recvWaitTime.tv_sec = ulWaitTime/CONN_SECOND_IN_MS;
@@ -1142,7 +1142,7 @@ int32_t as_udp_sock_handle::recvWithTimeout(char *pArrayData, as_network_addr *p
         return SendRecvError;
     }
 
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     recvWaitTime.tv_sec = 0;
     recvWaitTime.tv_usec = 0;
@@ -1221,7 +1221,7 @@ int32_t as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
         return AS_ERROR_CODE_FAIL;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     //setReuseAddr();
     int32_t lReuseAddrFlag = 1;
     if(setsockopt((SOCKET)lSockFd, SOL_SOCKET, SO_REUSEADDR, (char*)&lReuseAddrFlag,
@@ -1242,7 +1242,7 @@ int32_t as_tcp_server_handle::listen(const as_network_addr *pLocalAddr)
     errno = 0;
     if (0 > bind ((SOCKET)lSockFd, (struct sockaddr *)&serverAddr, sizeof(serverAddr)))
     {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         char szServerAddr[INET_ADDRSTRLEN];
         if (NULL != inet_ntop(AF_INET, &serverAddr.sin_addr, szServerAddr,
             sizeof(szServerAddr)))
@@ -1312,7 +1312,7 @@ void as_tcp_server_handle::close(void)
 as_handle_manager::as_handle_manager()
 {
     m_pMutexListOfHandle = NULL;
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = InvalidFd;
     memset(m_epEvents, 0, sizeof(m_epEvents));
 #elif AS_APP_OS == AS_OS_WIN32
@@ -1332,7 +1332,7 @@ as_handle_manager::~as_handle_manager()
 {
     try
     {
-    #if AS_APP_OS == AS_OS_LINUX
+    #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
             "as_handle_manager::~as_handle_manager: "
             "manager type: %s. thread = %d, m_lEpfd = %d",
@@ -1350,14 +1350,14 @@ as_handle_manager::~as_handle_manager()
             {
                 (*itListOfHandle)->m_pHandle->close();
             }
-    #if AS_APP_OS == AS_OS_LINUX
+    #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     #endif
             AS_DELETE(*itListOfHandle);
             ++itListOfHandle;
         }
 
-    #if AS_APP_OS == AS_OS_LINUX
+    #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         if (m_lEpfd != InvalidFd)
         {
             (void)CLOSESOCK(m_lEpfd);
@@ -1398,7 +1398,7 @@ int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
         m_ulSelectPeriod = ulSelectPeriod;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = epoll_create(MAX_EPOLL_FD_SIZE);
 
     if(m_lEpfd < 0)
@@ -1420,7 +1420,7 @@ int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
     if(NULL == m_pMutexListOfHandle)
     {
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         close(m_lEpfd);
         m_lEpfd = InvalidFd;
 #endif
@@ -1607,7 +1607,7 @@ void as_handle_manager::mainLoop()
 }
 #endif
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
 void as_handle_manager::mainLoop()
 {
@@ -1777,7 +1777,7 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
         }
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct epoll_event epEvent;
     memset(&epEvent, 0, sizeof(epEvent));
     epEvent.data.ptr = (void *)pHandleNode;
@@ -1805,11 +1805,11 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
 #endif
     pHandle->m_pHandleNode = pHandleNode;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     pHandle->m_lEpfd = m_lEpfd;
 #endif
     pHandleNode->m_pHandle = pHandle;
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
             "as_handle_manager::addHandle: "
             "new pHandleNode(0x%x) m_pHandle(0x%x) fd(%d) Epfd(%d)"

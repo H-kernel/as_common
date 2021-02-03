@@ -7,14 +7,14 @@ extern "C" {
 #endif /* __cpluscplus */
 #endif /* __cpluscplus */
 #include "as_config.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <dlfcn.h>
 #elif AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
 #endif
 
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 typedef struct tag_ASDllHandle
 {
     void* hDllInst;

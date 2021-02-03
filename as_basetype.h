@@ -1,14 +1,14 @@
 #ifndef AS_BASETYPE_H_INCLUDE
 #define AS_BASETYPE_H_INCLUDE
 #include <stdint.h>
-#if (AS_APP_OS == AS_OS_LINUX)
+#if ((AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX)
 #ifndef SOCKET
 typedef int SOCKET; 
 #endif
 #endif
 
 #ifndef  ULONGLONG
-#if (AS_APP_OS == AS_OS_LINUX)
+#if ((AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX)
 typedef  unsigned long long     ULONGLONG ;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)
@@ -17,7 +17,7 @@ typedef  unsigned __int64       ULONGLONG;
 #endif
 
 #ifndef  LONGLONG
-#if (AS_APP_OS == AS_OS_LINUX)
+#if ((AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX)
 typedef  long long              LONGLONG;
 #endif
 #if (AS_APP_OS == AS_OS_WIN32)

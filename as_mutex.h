@@ -12,7 +12,7 @@ extern "C" {
 #if AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
 #endif
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 typedef struct tagMKMutex
 {
     pthread_mutex_t     mutex;

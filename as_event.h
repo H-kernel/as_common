@@ -17,7 +17,7 @@ extern "C" {
 #endif
 
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 typedef struct tagASEvent
 {
     pthread_mutex_t EventMutex;

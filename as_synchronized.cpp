@@ -2,7 +2,7 @@
 
 #include "as.h"
 #include "as_synchronized.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <sys/time.h>
 #include <pthread.h>
 #include <errno.h>
@@ -140,7 +140,7 @@ int32_t as_synchronized::pushWait( int32_t timeout )
     return result;
 }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 int32_t as_synchronized::cond_timed_wait( pthread_cond_t *cond,pthread_mutex_t *monitor,struct timespec *ts) 
 {
     int32_t result;
@@ -365,7 +365,7 @@ int32_t as_synchronized::unlock()
 }
 #endif
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 AS_BOOLEAN as_synchronized::trylock()
 {
     int32_t result = AS_ERROR_CODE_OK;

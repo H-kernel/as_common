@@ -15,7 +15,7 @@ extern "C" {
 #include <windows.h>
 #include <mmsystem.h>
 #pragma comment( lib,"winmm.lib" )
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <sys/time.h>
 #include <unistd.h>
 #endif
@@ -57,7 +57,7 @@ uint32_t as_get_cur_msecond()
 /*1000 = 1second*/
 void  as_sleep(uint32_t ulMs )
 {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     usleep( ulMs*1000 );
 #elif AS_APP_OS == AS_OS_WIN32
     Sleep(ulMs);

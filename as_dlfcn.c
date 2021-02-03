@@ -52,7 +52,7 @@ as_dll_handle_t* as_load_library(const char* pszPath)
     strncat(szFullPath, pszPath, AS_FILE_FILE_SIZE);
 
     phandle->hDllInst = LoadLibrary( (LPSTR)&szFullPath[0], 0);
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     //phandle->hDllInst = dlopen(pszPath,RTLD_NOW);
     phandle->hDllInst = dlopen(pszPath,RTLD_LAZY);
 #endif
@@ -72,7 +72,7 @@ void* as_get_proc_addr(as_dll_handle_t* pHandle, const char* pszName)
     }
 #if AS_APP_OS == AS_OS_WIN32
     return GetProcAddress(pHandle->hDllInst, pszName);
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return dlsym(pHandle->hDllInst, pszName);
 #else
     return NULL;
@@ -87,7 +87,7 @@ void as_free_library(as_dll_handle_t* pHandle)
     }
 #if AS_APP_OS == AS_OS_WIN32
     (void)FreeLibrary(pHandle->hDllInst);
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     dlclose(pHandle->hDllInst);
 #endif
     free(pHandle);

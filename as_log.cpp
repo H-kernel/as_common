@@ -176,7 +176,7 @@ int32_t as_log::Start()
             return ASLOG_ERROR_FILE_NAME;
         }
         (void)::sprintf(pszFind, ".log");
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         (void)::sprintf(m_szLogFilePathName, "AS_Module.log");
 #endif
     }
@@ -334,7 +334,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
     }
 
     uint32_t ulThreadID = as_get_threadid();
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     uint32_t ulErr = 0;
 #elif AS_APP_OS == AS_OS_WIN32
     uint32_t ulErr = GetLastError();
@@ -347,7 +347,7 @@ int32_t as_log::Write(const char* szFile, int32_t lLine,
         szLogTime, pszLevel, pszFileName, lLine, ulThreadID, ulErr);
 
     uint32_t ulLen = ::strlen(szLogTmp);
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     (void)::vsnprintf(szLogTmp + ulLen, (MAX_LEN_OF_SINGLE_LOG - ulLen) - 1, format, argp);
 #elif AS_APP_OS == AS_OS_WIN32
     (void)::_vsnprintf(szLogTmp + ulLen, (MAX_LEN_OF_SINGLE_LOG - ulLen) - 1, format, argp);
@@ -562,7 +562,7 @@ void as_log::WriteLogFileThread()
             {
                 break;
             }
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
             break;
 #endif
         }
@@ -580,7 +580,7 @@ void as_log::WriteLogFileThread()
             {
                 break;
             }
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
             break;
 #endif
         }

@@ -15,7 +15,7 @@ extern "C" {
 
 #define  AS_DEFAULT_STACK_SIZE (2*1024*1024)
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 typedef  void* ( * AS_THREAD_FUNC)(void *);
 typedef struct tagASThread
 {
@@ -39,7 +39,7 @@ void     as_destory_thread(as_thread_t *pstMKThread);
 int32_t  as_join_thread(as_thread_t *pstMKThread);
 void     as_thread_exit(void *retval);
 uint32_t as_get_threadid();
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 pthread_t  as_thread_self();
 #elif AS_APP_OS == AS_OS_WIN32
 HANDLE as_thread_self(void);

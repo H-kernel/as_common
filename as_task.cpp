@@ -56,7 +56,7 @@ int32_t as_task::activate(uint32_t ulThreadCount,uint32_t ulStackSize)
 }
 
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
  void* as_task::task_thread(void *arg)
 #elif AS_APP_OS == AS_OS_WIN32
  uint32_t __stdcall as_task::task_thread(void *arg)
@@ -64,7 +64,7 @@ int32_t as_task::activate(uint32_t ulThreadCount,uint32_t ulStackSize)
 {
     as_task* pTask = (as_task*)arg;
     pTask->svc();
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return NULL;
 #elif AS_APP_OS == AS_OS_WIN32
     return 0;

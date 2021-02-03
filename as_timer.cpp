@@ -13,7 +13,7 @@ ITimerLog *g_pTimerLog = NULL;
 
 #if AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
-#elif AS_APP_OS == AS_OS_LINUX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #define TIMER_SECOND_IN_MS 1000
 #define TIMER_MS_IN_US 1000
 #endif

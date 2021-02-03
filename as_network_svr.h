@@ -48,7 +48,7 @@ extern "C"{
 #define NETWORK_ADDR_STR_LEN 32
 
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #define CONN_ERR_TIMEO      ETIMEDOUT
 #define CONN_ERR_EBADF      EBADF
 #elif AS_APP_OS == AS_OS_WIN32
@@ -56,7 +56,7 @@ extern "C"{
 #define CONN_ERR_TIMEO      WSAETIMEDOUT
 #endif
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #define CLOSESOCK(x) ::close(x)
 #define SOCK_OPT_TYPE void
 #define CONN_ERRNO errno
@@ -183,7 +183,7 @@ public:
     AS_BOOLEAN m_bWriteSelected;
 #endif  //#if
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     int32_t m_lEpfd;
 #endif  //#if
     ULONG m_ulEvents;
@@ -220,7 +220,7 @@ public:
     {
         m_lSockFD = lSockFD;
     };
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     int32_t sendMsg(const struct msghdr *pMsg);
 #endif
     virtual int32_t recv(char *pArrayData, as_network_addr *pPeerAddr, const ULONG ulDataSize,
@@ -320,7 +320,7 @@ public:
     ListOfHandle m_listHandle;
     as_mutex_t *m_pMutexListOfHandle;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     int32_t m_lEpfd;
     struct epoll_event m_epEvents[EPOLL_MAX_EVENT];
 #elif AS_APP_OS == AS_OS_WIN32

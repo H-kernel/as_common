@@ -88,7 +88,7 @@ public:
 
     int32_t open();
 protected:
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     static  void* deamon_monitor_thread(void *arg);
 #elif AS_APP_OS == AS_OS_WIN32
     static  uint32_t __stdcall deamon_monitor_thread(void *arg);

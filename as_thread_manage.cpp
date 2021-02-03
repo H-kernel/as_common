@@ -4,7 +4,7 @@
 #include "as_time.h"
 #include <time.h>
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/time.h>
@@ -200,7 +200,7 @@ int32_t as_task_manage::open()
 }
 
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
  void* as_task_manage::deamon_monitor_thread(void *arg)
 #elif AS_APP_OS == AS_OS_WIN32
  uint32_t __stdcall as_task_manage::deamon_monitor_thread(void *arg)
@@ -208,7 +208,7 @@ int32_t as_task_manage::open()
 {
     as_task_manage* pMgr = (as_task_manage*)arg;
     pMgr->svc();
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return NULL;
 #elif AS_APP_OS == AS_OS_WIN32
     return 0;
@@ -289,7 +289,7 @@ void as_task_manage::svc(void)
                                pThreadInfo->m_tvAliveTime,
                                m_ulRestartServer,
                                m_ulCoreDump);
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
                     (void)system("dmesg -c");
                     (void)system("echo \"1\" >/proc/sys/kernel/sysrq");
                     (void)system("echo \"m\" >/proc/sysrq-trigger");

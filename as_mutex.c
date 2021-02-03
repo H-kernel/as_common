@@ -1,7 +1,7 @@
 #include "as_mutex.h"
 #include "as_config.h"
 #include "as_common.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <pthread.h>
 #elif AS_APP_OS == AS_OS_WIN32
 #endif
@@ -18,7 +18,7 @@ as_mutex_t *as_create_mutex()
     {
         return NULL ;
     }
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     if(pthread_mutexattr_init(&pstMutex->attr) != 0)
     {
         return NULL ;
@@ -48,7 +48,7 @@ int32_t as_destroy_mutex( as_mutex_t *pstMutex )
 {
     int32_t ulResult = AS_ERROR_CODE_OK ;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     pthread_mutex_destroy( &pstMutex->mutex );
 #elif AS_APP_OS == AS_OS_WIN32
     (void)CloseHandle(pstMutex->mutex);
@@ -68,7 +68,7 @@ int32_t as_mutex_lock( as_mutex_t *pstMutex )
         return AS_ERROR_CODE_FAIL;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     ulResult = (int32_t)pthread_mutex_lock(&pstMutex->mutex);
     if( AS_ERROR_CODE_OK != ulResult )
     {
@@ -88,7 +88,7 @@ int32_t as_mutex_unlock( as_mutex_t *pstMutex )
 {
     int32_t ulResult = AS_ERROR_CODE_OK ;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     ulResult = (int32_t)pthread_mutex_unlock(&pstMutex->mutex);
     if( AS_ERROR_CODE_OK != ulResult )
     {

@@ -7,7 +7,7 @@ extern "C" {
 #include "as_basetype.h"
 #include "as_common.h"
 #include "as_event.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <sys/time.h>
 #include <pthread.h>
 #include <errno.h>
@@ -26,7 +26,7 @@ as_event_t* as_create_event()
         return NULL;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
     result = pthread_mutex_init(&pstASEvent->EventMutex, 0);
     if( AS_ERROR_CODE_OK != result )
@@ -60,7 +60,7 @@ int32_t as_wait_event(as_event_t *pstASEvent, int32_t lTimeOut)
 {
     int32_t lResult = AS_ERROR_CODE_OK;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct timespec ts;
     struct timeval  tv;
 
@@ -144,7 +144,7 @@ int32_t as_set_event(as_event_t *pstASEvent)
 {
     int32_t lResult = AS_ERROR_CODE_OK;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     lResult = pthread_cond_signal(&pstASEvent->EventCond);
     if(AS_ERROR_CODE_OK != lResult)
     {
@@ -172,7 +172,7 @@ int32_t as_reset_event(as_event_t *pstASEvent)
 {
     int32_t lResult = AS_ERROR_CODE_OK;
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     lResult = pthread_mutex_init(&pstASEvent->EventMutex, 0);
     if( AS_ERROR_CODE_OK != lResult )
     {
@@ -210,7 +210,7 @@ int32_t as_destroy_event(as_event_t *pstASEvent )
         return AS_ERROR_CODE_PARAM;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     pthread_cond_destroy(&pstASEvent->EventCond);
     pthread_mutex_destroy(&pstASEvent->EventMutex);
 #elif AS_APP_OS == AS_OS_WIN32

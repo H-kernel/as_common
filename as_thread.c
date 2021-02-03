@@ -1,7 +1,7 @@
 #include "as_thread.h"
 #include "as_config.h"
 #include "as_common.h"
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <pthread.h>
 #elif AS_APP_OS == AS_OS_WIN32
 #endif
@@ -17,7 +17,7 @@ int32_t  as_create_thread( AS_THREAD_FUNC pfnThread, void *args, as_thread_t **p
         return AS_ERROR_CODE_MEM;
     }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     if ( pthread_attr_init(&pstThread->attr) != 0 )
     {
         free(pstThread);
@@ -62,7 +62,7 @@ void  as_destory_thread(as_thread_t *pstMKThread)
 }
 int32_t as_join_thread(as_thread_t *pstMKThread)
 {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     pthread_join(pstMKThread->pthead, 0);
 #elif AS_APP_OS == AS_OS_WIN32
     (void)WaitForSingleObject(pstMKThread->pthead, 0);
@@ -73,7 +73,7 @@ int32_t as_join_thread(as_thread_t *pstMKThread)
 
 void     as_thread_exit(void *retval)
 {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     pthread_exit(retval);
 #elif AS_APP_OS == AS_OS_WIN32
     (void)retval;
@@ -82,14 +82,14 @@ void     as_thread_exit(void *retval)
 }
 uint32_t as_get_threadid()
 {
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return pthread_self();
 #elif AS_APP_OS == AS_OS_WIN32
     return GetCurrentThreadId();
 #endif
 }
 
-#if AS_APP_OS == AS_OS_LINUX
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 pthread_t  as_thread_self()
 {
     return pthread_self();
