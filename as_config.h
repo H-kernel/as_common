@@ -56,9 +56,7 @@
 
 #if TARGET_OS_IPHONE
 #define   AS_APP_OS                     AS_OS_IOS
-#endif
-
-#if TARGET_OS_MAC
+#elif TARGET_OS_MAC
 #define   AS_APP_OS                     AS_OS_MAC
 #endif
 
