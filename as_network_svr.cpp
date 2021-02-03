@@ -70,7 +70,7 @@ as_handle::as_handle()
     m_lSockFD = InvalidSocket;
     m_pHandleNode = NULL;
     m_ulEvents = EPOLLIN;
-#if #if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
     m_bReadSelected = AS_FALSE;
     m_bWriteSelected = AS_FALSE;
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
