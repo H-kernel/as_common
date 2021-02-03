@@ -15,6 +15,7 @@ extern "C" {
 #include <mmsystem.h>
 #pragma comment( lib,"winmm.lib" )
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#include <time.h>
 #include <sys/time.h>
 #include <unistd.h>
 #endif
