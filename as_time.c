@@ -24,7 +24,7 @@ extern "C" {
 static uint32_t g_ulSysStart = 0 ;
 
 
-uint32_t as_get_ticks ()
+uint32_t as_get_ticks (void)
 {
     ULONG ticks = 0 ;
 
@@ -39,7 +39,7 @@ uint32_t as_get_ticks ()
     return( ticks );
 }
 
-uint32_t as_get_cur_msecond()
+uint32_t as_get_cur_msecond(void)
 {
     ULONG ticks = 0;
 
