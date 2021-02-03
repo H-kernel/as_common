@@ -10,6 +10,7 @@ extern "C" {
 
 
 #if AS_APP_OS == AS_OS_WIN32
+#include <time.h>
 #include <windows.h>
 #include <mmsystem.h>
 #pragma comment( lib,"winmm.lib" )
@@ -18,7 +19,7 @@ extern "C" {
 #include <unistd.h>
 #endif
 
-#include <time.h>
+
 #include <errno.h>
 
 static uint32_t g_ulSysStart = 0 ;
