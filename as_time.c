@@ -28,9 +28,9 @@ uint32_t as_get_ticks (void)
 {
     ULONG ticks = 0 ;
 
-#ifdef WIN32
+#if AS_APP_OS ==  AS_OS_WIN32
     ticks = timeGetTime()/1000;
-#else
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct timeval now;
     gettimeofday(&now, AS_NULL);
     ticks=now.tv_sec;
@@ -43,9 +43,9 @@ uint32_t as_get_cur_msecond(void)
 {
     ULONG ticks = 0;
 
-#ifdef WIN32
+#if AS_APP_OS ==  AS_OS_WIN32
     ticks = timeGetTime();
-#else
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct timeval now;
     gettimeofday(&now, AS_NULL);
     ticks = now.tv_sec*1000+now.tv_usec/1000;
