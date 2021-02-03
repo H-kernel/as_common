@@ -1,4 +1,4 @@
-#ifndef WIN32
+#if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
 #include <sys/epoll.h>
 #include <netinet/tcp.h>
 #endif
