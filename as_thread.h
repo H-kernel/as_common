@@ -38,9 +38,9 @@ void     as_destory_thread(as_thread_t *pstMKThread);
 
 int32_t  as_join_thread(as_thread_t *pstMKThread);
 void     as_thread_exit(void *retval);
-uint32_t as_get_threadid();
+uint32_t as_get_threadid(void);
 #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-pthread_t  as_thread_self();
+pthread_t  as_thread_self(void);
 #elif AS_APP_OS == AS_OS_WIN32
 HANDLE as_thread_self(void);
 #endif

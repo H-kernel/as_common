@@ -80,7 +80,7 @@ void     as_thread_exit(void *retval)
     ExitThread(0);
 #endif
 }
-uint32_t as_get_threadid()
+uint32_t as_get_threadid(void)
 {
 #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     return pthread_self();
@@ -90,7 +90,7 @@ uint32_t as_get_threadid()
 }
 
 #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-pthread_t  as_thread_self()
+pthread_t  as_thread_self(void)
 {
     return pthread_self();
 }
