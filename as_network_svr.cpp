@@ -70,14 +70,14 @@ as_handle::as_handle()
     m_lSockFD = InvalidSocket;
     m_pHandleNode = NULL;
     m_ulEvents = EPOLLIN;
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if #if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
+    m_bReadSelected = AS_FALSE;
+    m_bWriteSelected = AS_FALSE;
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = InvalidFd;
 #endif //#if
 
-#if AS_APP_OS == AS_OS_WIN32
-    m_bReadSelected = AS_FALSE;
-    m_bWriteSelected = AS_FALSE;
-#endif  //#if
+
 
     m_pMutexHandle = as_create_mutex();
 }
@@ -112,7 +112,7 @@ int32_t as_handle::initHandle(void)
 
     m_lSockFD = InvalidSocket;
     m_pHandleNode = NULL;
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
     m_lEpfd = InvalidFd;
 #endif
     m_ulEvents = EPOLLIN;
@@ -1312,14 +1312,14 @@ void as_tcp_server_handle::close(void)
 as_handle_manager::as_handle_manager()
 {
     m_pMutexListOfHandle = NULL;
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-    m_lEpfd = InvalidFd;
-    memset(m_epEvents, 0, sizeof(m_epEvents));
-#elif AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
     FD_ZERO(&m_readSet);
     FD_ZERO(&m_writeSet);
     m_stSelectPeriod.tv_sec = 0;
     m_stSelectPeriod.tv_usec = 0;
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+    m_lEpfd = InvalidFd;
+    memset(m_epEvents, 0, sizeof(m_epEvents));    
 #endif
     m_ulSelectPeriod = DEFAULT_SELECT_PERIOD;
     m_pSVSThread = NULL;
@@ -1397,8 +1397,12 @@ int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
     {
         m_ulSelectPeriod = ulSelectPeriod;
     }
-
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC  || AS_APP_OS == AS_OS_IOS
+    m_stSelectPeriod.tv_sec = (int32_t)(ulSelectPeriod / CONN_SECOND_IN_MS);
+    m_stSelectPeriod.tv_usec = (ulSelectPeriod % CONN_SECOND_IN_MS) * CONN_MS_IN_US;
+    FD_ZERO(&m_readSet);
+    FD_ZERO(&m_writeSet);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     m_lEpfd = epoll_create(MAX_EPOLL_FD_SIZE);
 
     if(m_lEpfd < 0)
@@ -1408,12 +1412,7 @@ int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
             "as_handle_manager::init: create file handle for epoll fail. "
             "manager type: %s", _FL_, m_szMgrType);
         return AS_ERROR_CODE_FAIL;
-    }
-#elif AS_APP_OS == AS_OS_WIN32
-    m_stSelectPeriod.tv_sec = (int32_t)(ulSelectPeriod / CONN_SECOND_IN_MS);
-    m_stSelectPeriod.tv_usec = (ulSelectPeriod % CONN_SECOND_IN_MS) * CONN_MS_IN_US;
-    FD_ZERO(&m_readSet);
-    FD_ZERO(&m_writeSet);
+    }    
 #endif
 
     m_pMutexListOfHandle = as_create_mutex();
@@ -1463,7 +1462,7 @@ void *as_handle_manager::invoke(void *argc)
 
     return NULL;
 }
-#if AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC  || AS_APP_OS == AS_OS_IOS
 void as_handle_manager::mainLoop()
 {
     while(AS_FALSE == m_bExit)
@@ -1605,9 +1604,8 @@ void as_handle_manager::mainLoop()
 
     return;
 }
-#endif
 
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 
 void as_handle_manager::mainLoop()
 {

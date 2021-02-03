@@ -78,7 +78,7 @@ extern "C"{
 
 
 
-#if AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
 enum tagSockEvent
 {
     EPOLLIN  = 0x1,
@@ -105,7 +105,7 @@ enum tagSockEvent
 typedef int socklen_t;
 #endif
 
-#endif //#if win32
+#endif //#if win32 ios mac
 
 class as_network_addr
 {
@@ -178,12 +178,10 @@ public:
     as_handle_node *m_pHandleNode;
     as_network_addr m_localAddr;
 
-#if AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
     AS_BOOLEAN m_bReadSelected;
     AS_BOOLEAN m_bWriteSelected;
-#endif  //#if
-
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     int32_t m_lEpfd;
 #endif  //#if
     ULONG m_ulEvents;
@@ -320,13 +318,13 @@ public:
     ListOfHandle m_listHandle;
     as_mutex_t *m_pMutexListOfHandle;
 
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-    int32_t m_lEpfd;
-    struct epoll_event m_epEvents[EPOLL_MAX_EVENT];
-#elif AS_APP_OS == AS_OS_WIN32
+#if AS_APP_OS == AS_OS_WIN32 || AS_APP_OS == AS_OS_MAC || AS_APP_OS == AS_OS_IOS
     fd_set m_readSet;
     fd_set m_writeSet;
     timeval m_stSelectPeriod;
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+    int32_t m_lEpfd;
+    struct epoll_event m_epEvents[EPOLL_MAX_EVENT];    
 #endif
 
     ULONG m_ulSelectPeriod;
