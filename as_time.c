@@ -6,8 +6,6 @@ extern "C" {
 #include "as_config.h"
 #include "as_basetype.h"
 #include "as_common.h"
-#include <time.h>
-#include <errno.h>
 #include "as_time.h"
 
 
@@ -20,6 +18,8 @@ extern "C" {
 #include <unistd.h>
 #endif
 
+#include <time.h>
+#include <errno.h>
 
 static uint32_t g_ulSysStart = 0 ;
 
