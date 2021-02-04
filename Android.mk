@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
-AS_INCLUDE := ${LOCAL_PATH}/../inc/
-AS_SOURCE  := ${LOCAL_PATH}/../src/
+AS_INCLUDE := ${LOCAL_PATH}/inc/
+AS_SOURCE  := ${LOCAL_PATH}/src/
 
 NDK_TOOLCHAIN_VERSION := clang
 
