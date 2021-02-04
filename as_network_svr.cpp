@@ -1,9 +1,9 @@
+#include "as_network_svr.h"
+
 #if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
 #include <sys/epoll.h>
 #include <netinet/tcp.h>
 #endif
-
-#include "as_network_svr.h"
 
 #include <stdarg.h>
 
