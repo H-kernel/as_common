@@ -1777,7 +1777,7 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
         }
     }
 
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
     struct epoll_event epEvent;
     memset(&epEvent, 0, sizeof(epEvent));
     epEvent.data.ptr = (void *)pHandleNode;
@@ -1805,7 +1805,7 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
 #endif
     pHandle->m_pHandleNode = pHandleNode;
 
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
     pHandle->m_lEpfd = m_lEpfd;
 #endif
     pHandleNode->m_pHandle = pHandle;
