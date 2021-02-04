@@ -1,20 +1,6 @@
 #ifndef __AS_CONN_MGR_H_INCLUDE__
 #define __AS_CONN_MGR_H_INCLUDE__
 
-#ifdef ENV_LINUX
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/epoll.h>
-#include <unistd.h>
-#endif //AS_OS_LINUX
-
- #ifdef WIN32
- //#include <winsock2.h>
- #endif
-//#pragma comment(lib,"ws2_32.lib")
-
 #include <list>
 #include <fcntl.h>
 #include <string.h>
@@ -28,6 +14,26 @@ extern "C"{
 }
 
 #include "as_mem.h"
+
+#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#endif //AS_OS_UNIX
+
+#if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
+#include <sys/epoll.h>
+#endif
+
+#endif
+ #ifdef WIN32
+ //#include <winsock2.h>
+ #endif
+//#pragma comment(lib,"ws2_32.lib")
+
+
 #define InvalidFd -1
 #define InvalidSocket -1
 #define InvalidIp INADDR_ANY
