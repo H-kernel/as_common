@@ -36,7 +36,7 @@ uint32_t as_get_ticks (void)
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct timeval now;
     gettimeofday(&now, AS_NULL);
-    ticks=now.tv_sec;
+    ticks=(uint32_t)now.tv_sec;
 #endif
 
     return( ticks );
