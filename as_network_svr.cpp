@@ -25,10 +25,12 @@ void CONN_WRITE_LOG(int32_t lLevel, const char *format, ...)
     char buff[MAX_CONN_LOG_LENTH + 1];
     buff[0] = '\0';
 
+    uint64_t ullTreadId = (uint64_t)as_thread_self();
+
     va_list args;
     va_start (args, format);
-    int32_t lPrefix = snprintf (buff, MAX_CONN_LOG_LENTH, "errno:%d.thread(%lu):",
-        CONN_ERRNO, (int32_t)as_thread_self());
+    int32_t lPrefix = snprintf (buff, MAX_CONN_LOG_LENTH, "errno:%d.thread(%llu):",
+        CONN_ERRNO, ullTreadId);
     if(lPrefix < MAX_CONN_LOG_LENTH)
     {
         (void)vsnprintf (buff + lPrefix, (ULONG)(MAX_CONN_LOG_LENTH - lPrefix),
@@ -150,7 +152,7 @@ void as_handle::setHandleSend(AS_BOOLEAN bHandleSend)
 
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)m_pHandleNode;
@@ -772,7 +774,7 @@ void as_tcp_conn_handle::close(void)
 
         //The close of an fd will cause it to be removed from
         //all epoll sets automatically.
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)NULL;
@@ -1335,8 +1337,8 @@ as_handle_manager::~as_handle_manager()
     #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
         CONN_WRITE_LOG(CONN_WARNING,  (char *)"FILE(%s)LINE(%d): "
             "as_handle_manager::~as_handle_manager: "
-            "manager type: %s. thread = %d, m_lEpfd = %d",
-            _FL_, m_szMgrType, as_thread_self(), m_lEpfd);
+            "manager type: %s. thread = %d.",
+            _FL_, m_szMgrType, as_thread_self());
     #elif AS_APP_OS == AS_OS_WIN32
         CONN_WRITE_LOG(CONN_WARNING,   (char *)"FILE(%s)LINE(%d): "
             "as_handle_manager::~as_handle_manager: "
@@ -1419,7 +1421,7 @@ int32_t as_handle_manager::init(const ULONG ulSelectPeriod)
     if(NULL == m_pMutexListOfHandle)
     {
 
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
         close(m_lEpfd);
         m_lEpfd = InvalidFd;
 #endif
