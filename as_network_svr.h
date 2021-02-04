@@ -90,7 +90,9 @@ enum tagSockEvent
     EPOLLIN  = 0x1,
     EPOLLOUT = 0x2
 };
+#endif
 
+#if AS_APP_OS == AS_OS_WIN32
 #ifndef INET_ADDRSTRLEN
 #define  INET_ADDRSTRLEN 16
 #endif
