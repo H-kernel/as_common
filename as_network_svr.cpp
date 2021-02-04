@@ -193,7 +193,7 @@ void as_handle::setHandleRecv(AS_BOOLEAN bHandleRecv)
 
     if((m_pHandleNode != NULL) && (m_lSockFD != InvalidSocket))
     {
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
         struct epoll_event epEvent;
         memset(&epEvent, 0, sizeof(epEvent));
         epEvent.data.ptr = (void *)m_pHandleNode;
@@ -1359,7 +1359,7 @@ as_handle_manager::~as_handle_manager()
             ++itListOfHandle;
         }
 
-    #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+    #if (AS_APP_OS  == AS_OS_LINUX || AS_APP_OS  == AS_OS_ANDROID)
         if (m_lEpfd != InvalidFd)
         {
             (void)CLOSESOCK(m_lEpfd);
@@ -1534,7 +1534,7 @@ void as_handle_manager::mainLoop()
 
         if ((0 == m_readSet.fd_count) && (0 == m_writeSet.fd_count))
         {
-            Sleep(1);
+            as_sleep(1);
             continue;
         }
         else
