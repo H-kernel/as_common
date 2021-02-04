@@ -1561,7 +1561,11 @@ void as_handle_manager::mainLoop()
         {
             continue;
         }
+#if AS_APP_OS == AS_APP_WIN32
         if (SOCKET_ERROR == lWaitFds)
+#else
+        if (0 > lWaitFds)
+#endif
         {
             CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
                 "select failed: manager type: %s. errno = %d",
