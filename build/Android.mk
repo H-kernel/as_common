@@ -11,4 +11,4 @@ LOCAL_SRC_FILES := $(wildcard ../src/*.c)
 LOCAL_SRC_FILES += $(wildcard ../src/*.cpp)
 
 LOCAL_MODULE := common
-include $(BUILD_STATIC_LIBRARY)
+include $(BUILD_SHARED_LIBRARY)
