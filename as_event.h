@@ -15,7 +15,7 @@ extern "C" {
 #if AS_APP_OS == AS_OS_WIN32
 #include <windows.h>
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-#include<pthread.h>
+#include <pthread.h>
 #endif
 
 
