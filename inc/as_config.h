@@ -50,6 +50,11 @@
 
 #endif
 
+#ifdef OS_ANDROID
+#define   AS_APP_OS                     AS_OS_ANDROID
+#define   AS_BYTE_ORDER                 AS_LITTLE_ENDIAN
+#endif
+
 #ifdef __APPLE__
 
 #include <TargetConditionals.h>
