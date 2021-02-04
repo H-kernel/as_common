@@ -2,7 +2,7 @@
 #include "as_config.h"
 #include "as_basetype.h"
 #include "as_common.h"
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if AS_APP_OS == AS_OS_LINUX
 #include <sys/time.h>
 #include <sys/resource.h>
 #include <unistd.h>

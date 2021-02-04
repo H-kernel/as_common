@@ -18,7 +18,7 @@ typedef enum
     enForeGround          = 0, 
     enBackGround          = 1 
 }RUNNING_MOD;
-#if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
+#if AS_APP_OS == AS_OS_LINUX
 void as_run_service(void(*pWorkFunc)(),
                     int32_t iRunningMod,
                     void (*pExitFunc)(),
