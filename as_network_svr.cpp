@@ -1530,7 +1530,7 @@ void as_handle_manager::mainLoop()
         }
         (void)as_mutex_unlock(m_pMutexListOfHandle);
 
-
+#if AS_APP_OS == AS_APP_WIN32
         if ((0 == m_readSet.fd_count) && (0 == m_writeSet.fd_count))
         {
             as_sleep(1);
@@ -1550,11 +1550,13 @@ void as_handle_manager::mainLoop()
                 }
                 else
                 {
+#endif
                     lWaitFds = select(0,&m_readSet,&m_writeSet,NULL,&m_stSelectPeriod);
+#if AS_APP_OS == AS_APP_WIN32
                 }
             }
         }
-
+#endif
         if (0 == lWaitFds)
         {
             continue;
@@ -1811,10 +1813,10 @@ int32_t as_handle_manager::addHandle(as_handle *pHandle,
 #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     CONN_WRITE_LOG(CONN_DEBUG,  (char *)"FILE(%s)LINE(%d): "
             "as_handle_manager::addHandle: "
-            "new pHandleNode(0x%x) m_pHandle(0x%x) fd(%d) Epfd(%d)"
+            "new pHandleNode(0x%x) m_pHandle(0x%x) fd(%d)"
             "peer_ip(0x%x) peer_port(%d)",
             _FL_, pHandleNode, pHandleNode->m_pHandle,
-            pHandleNode->m_pHandle->m_lSockFD, pHandleNode->m_pHandle->m_lEpfd,
+            pHandleNode->m_pHandle->m_lSockFD,
             pHandleNode->m_pHandle->m_localAddr.m_ulIpAddr,
             pHandleNode->m_pHandle->m_localAddr.m_usPort);
 #elif AS_APP_OS == AS_OS_WIN32

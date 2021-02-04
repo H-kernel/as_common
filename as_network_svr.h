@@ -25,6 +25,8 @@ extern "C"{
 
 #if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
 #include <sys/epoll.h>
+#elif AS_APP_OS == AS_OS_IOS || AS_APP_OS == AS_OS_MAC
+#include <sys/select.h>
 #endif
 
  #ifdef WIN32
