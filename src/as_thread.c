@@ -83,7 +83,7 @@ void     as_thread_exit(void *retval)
 uint32_t as_get_threadid(void)
 {
 #if (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-    return pthread_self();
+    return (uint32_t)pthread_self();
 #elif AS_APP_OS == AS_OS_WIN32
     return GetCurrentThreadId();
 #endif
