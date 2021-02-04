@@ -6,5 +6,7 @@ APP_MODULES = common
 # 指定目标Android平台的名称
 APP_PLATFORM = android-26
 
+APP_STL := gnustl_static
+
 # 为项目中的所有C++编译传递的标记
 APP_CPPFLAGS := -frtti -fexceptions -std=c++11
