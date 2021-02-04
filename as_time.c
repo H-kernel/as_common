@@ -29,10 +29,10 @@ static uint32_t g_ulSysStart = 0 ;
 
 uint32_t as_get_ticks (void)
 {
-    ULONG ticks = 0 ;
+    uint32_t ticks = 0 ;
 
 #if AS_APP_OS ==  AS_OS_WIN32
-    ticks = timeGetTime()/1000;
+    ticks = (uint32_t)(timeGetTime()/1000);
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct timeval now;
     gettimeofday(&now, AS_NULL);
