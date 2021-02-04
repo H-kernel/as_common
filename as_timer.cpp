@@ -30,10 +30,12 @@ void TIMER_WRITE_LOG(int32_t lLevel, const char *format, ...)
     char buff[MAX_TIMER_LOG_LENTH + 1];
     buff[0] = '\0';
 
+    uint64_t ullThreadId = (uint64_t)as_thread_self();
+
     va_list args;
     va_start (args, format);
-    int32_t lPrefix = snprintf (buff, MAX_TIMER_LOG_LENTH, "errno:%d.thread(%u):",
-        errno, (int32_t)as_thread_self());
+    int32_t lPrefix = snprintf (buff, MAX_TIMER_LOG_LENTH, "errno:%d.thread(%llu):",
+        errno, ullThreadId);
     if(lPrefix < MAX_TIMER_LOG_LENTH)
     {
         (void)vsnprintf (buff + lPrefix,
