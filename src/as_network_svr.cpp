@@ -3,7 +3,11 @@
 #if AS_APP_OS == AS_OS_LINUX || AS_APP_OS == AS_OS_ANDROID
 #include <sys/epoll.h>
 #endif
+
+#if ((AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX)
 #include <netinet/tcp.h>
+#endif
+
 #include <stdarg.h>
 
 as_conn_mgr_log *g_pAsConnMgrLog = NULL;
