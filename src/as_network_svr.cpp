@@ -1534,7 +1534,7 @@ void as_handle_manager::mainLoop()
         }
         (void)as_mutex_unlock(m_pMutexListOfHandle);
 
-#if AS_APP_OS == AS_APP_WIN32
+#if AS_APP_OS == AS_OS_WIN32
         if ((0 == m_readSet.fd_count) && (0 == m_writeSet.fd_count))
         {
             as_sleep(1);
@@ -1556,7 +1556,7 @@ void as_handle_manager::mainLoop()
                 {
 #endif
                     lWaitFds = select(0,&m_readSet,&m_writeSet,NULL,&m_stSelectPeriod);
-#if AS_APP_OS == AS_APP_WIN32
+#if AS_APP_OS == AS_OS_WIN32
                 }
             }
         }
@@ -1565,7 +1565,7 @@ void as_handle_manager::mainLoop()
         {
             continue;
         }
-#if AS_APP_OS == AS_APP_WIN32
+#if AS_APP_OS == AS_OS_WIN32
         if (SOCKET_ERROR == lWaitFds)
 #else
         if (0 > lWaitFds)
