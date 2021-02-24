@@ -36,6 +36,8 @@ ASLOG_API void ASWrite(const char* szFileName, int32_t lLine,
 ASLOG_API void ASWriteLog(int32_t lLevel,const char* szLog);
 ASLOG_API void ASStopLog(void);
 
+ASLOG_API void ASBackupLog(const char *strOldFileName);
+
 class CDefaultWriter
 {
     public:

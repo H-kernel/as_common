@@ -744,4 +744,25 @@ ASLOG_API void ASSetLogFileLengthLimit(uint32_t ulLimitLengthKB)
     as_log::Instance().SetFileLengthLimit(ulLimitLengthKB);
 }
 
+ASLOG_API void ASBackupLog(const char *strOldFileName)
+{
+    char strNewFileName[512];
+    time_t t = time(NULL);
+    struct tm tmv;
+
+    (void)localtime_r( &t, &tmv );
+
+    (void)snprintf(strNewFileName,
+                     sizeof(strNewFileName),
+                     "%s%04d_%02d_%02d_%02d_%02d_%02d",
+                     strOldFileName,
+                     tmv.tm_year + 1900,
+                     tmv.tm_mon + 1,
+                     tmv.tm_mday,
+                     tmv.tm_hour,
+                     tmv.tm_min,
+                     tmv.tm_sec);
+
+    (void)rename(strOldFileName, strNewFileName);
+}
 
