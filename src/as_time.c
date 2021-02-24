@@ -209,24 +209,6 @@ char* as_time2manstr(char *pDestBuf, int32_t nbuflen, const time_t t)
 
     return pDestBuf;
 }
-char *as_time2str(char *pDestBuf, int32_t nbuflen, const time_t *calptr)
-{
-    struct tm tmv;
-
-    (void)localtime_r( calptr, &tmv );
-
-    (void)snprintf(pDestBuf,
-                     (size_t)nbuflen,
-                     "%04d%02d%02d%02d%02d%02d",
-                     tmv.tm_year + 1900,
-                     tmv.tm_mon + 1,
-                     tmv.tm_mday,
-                     tmv.tm_hour,
-                     tmv.tm_min,
-                     tmv.tm_sec);
-
-    return pDestBuf;
-}
 
 char *as_time2str(char *pDestBuf, int32_t nbuflen, const time_t t)
 {

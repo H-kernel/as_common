@@ -20,7 +20,6 @@ struct tm* as_Localtime(time_t* ulTime);
 time_t     as_gwtime2sdtime(const time_t gwTime);
 time_t     as_stdstr2time(const char *pStr);//YYYY-MM-DD HH:mm:SS
 char*      as_time2manstr(char *pDestBuf, int32_t nbuflen, const time_t t);
-char*      as_time2str(char *pDestBuf, int32_t nbuflen, const time_t *calptr);
 char*      as_time2str(char *pDestBuf, int32_t nbuflen, const time_t t);
 char*      as_time2stdstr(char *pDestBuf, int32_t nbuflen, const time_t t);
 char*      as_time2stdstrwith_t(char *pDestBuf, int32_t nbuflen, const time_t t);
