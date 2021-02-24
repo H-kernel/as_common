@@ -187,3 +187,132 @@ int32_t    as_find_arg(as_url_t* url,const char* name,as_url_arg_t* arg)
     }
     return AS_ERROR_CODE_FAIL; /* not find */
 }
+
+
+void as_unescape_uri(uint8_t **dst, uint8_t **src, size_t size, uint32_t type)
+{
+    uint8_t  *d, *s, ch, c, decoded;
+    enum {
+        sw_usual = 0,
+        sw_quoted,
+        sw_quoted_second
+    } state;
+
+    d = *dst;
+    s = *src;
+
+    state = sw_usual;
+    decoded = 0;
+
+    while (size--) {
+
+        ch = *s++;
+
+        switch (state) {
+        case sw_usual:
+            if (ch == '?'
+                && (type & (AS_UNESCAPE_URI|AS_UNESCAPE_REDIRECT)))
+            {
+                *d++ = ch;
+                goto done;
+            }
+
+            if (ch == '%') {
+                state = sw_quoted;
+                break;
+            }
+
+            *d++ = ch;
+            break;
+
+        case sw_quoted:
+
+            if (ch >= '0' && ch <= '9') {
+                decoded = (uint8_t) (ch - '0');
+                state = sw_quoted_second;
+                break;
+            }
+
+            c = (uint8_t) (ch | 0x20);
+            if (c >= 'a' && c <= 'f') {
+                decoded = (uint8_t) (c - 'a' + 10);
+                state = sw_quoted_second;
+                break;
+            }
+
+            /* the invalid quoted character */
+
+            state = sw_usual;
+
+            *d++ = ch;
+
+            break;
+
+        case sw_quoted_second:
+
+            state = sw_usual;
+
+            if (ch >= '0' && ch <= '9') {
+                ch = (uint8_t) ((decoded << 4) + (ch - '0'));
+
+                if (type & AS_UNESCAPE_REDIRECT) {
+                    if (ch > '%' && ch < 0x7f) {
+                        *d++ = ch;
+                        break;
+                    }
+
+                    *d++ = '%'; *d++ = *(s - 2); *d++ = *(s - 1);
+
+                    break;
+                }
+
+                *d++ = ch;
+
+                break;
+            }
+
+            c = (uint8_t) (ch | 0x20);
+            if (c >= 'a' && c <= 'f') {
+                ch = (uint8_t) ((decoded << 4) + (c - 'a') + 10);
+
+                if (type & AS_UNESCAPE_URI) {
+                    if (ch == '?') {
+                        *d++ = ch;
+                        goto done;
+                    }
+
+                    *d++ = ch;
+                    break;
+                }
+
+                if (type & AS_UNESCAPE_REDIRECT) {
+                    if (ch == '?') {
+                        *d++ = ch;
+                        goto done;
+                    }
+
+                    if (ch > '%' && ch < 0x7f) {
+                        *d++ = ch;
+                        break;
+                    }
+
+                    *d++ = '%'; *d++ = *(s - 2); *d++ = *(s - 1);
+                    break;
+                }
+
+                *d++ = ch;
+
+                break;
+            }
+
+            /* the invalid quoted character */
+
+            break;
+        }
+    }
+
+done:
+
+    *dst = d;
+    *src = s;
+}

@@ -10,7 +10,11 @@ extern "C" {
 #include "as_common.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <signal.h>
+#include <signal.h
+
+#define AS_UNESCAPE_URI       1
+#define AS_UNESCAPE_REDIRECT  2
+
 #define AS_ULR_PROTOCOL_LEN  8
 #define AS_URL_MAX_LEN       512
 #define AS_URL_ARG_NAME_LEN  64
@@ -40,6 +44,8 @@ int32_t    as_parse_url(const char* url,as_url_t* info);
 int32_t    as_first_arg(as_url_t* url,as_url_arg_t* arg);
 int32_t    as_next_arg(as_url_arg_t* arg,as_url_arg_t* next);
 int32_t    as_find_arg(as_url_t* url,const char* name,as_url_arg_t* arg);
+
+void       as_unescape_uri(uint8_t **dst, uint8_t **src, size_t size, uint32_t type);
 
 #ifdef __cplusplus
 #if __cplusplus

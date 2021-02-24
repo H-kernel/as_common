@@ -27,6 +27,11 @@
 
 
 enum AS_ERROR_CODE {
+    AS_ERROR_CODE_ABORT       = -6,
+    AS_ERROR_CODE_DECLINED    = -5,
+    AS_ERROR_CODE_DONE        = -4,
+    AS_ERROR_CODE_BUSY        = -3,
+    AS_ERROR_CODE_AGAIN       = -2,
     AS_ERROR_CODE_FAIL        = -1,
     AS_ERROR_CODE_OK          = 0x00,
     AS_ERROR_CODE_MEM         = 0x01,
