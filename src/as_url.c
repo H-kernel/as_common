@@ -1,15 +1,7 @@
 #include "as_url.h"
 void       as_init_url(as_url_t* url)
 {
-    url->protocol[0] = '\0';
-    url->username[0] = '\0';
-    url->password[0] = '\0';
-    url->host[0]     = '\0';
-    url->port        = 0;
-    url->path[0]     = '\0';
-    url->uri[0]      = '\0';
-    url->args[0]     = '\0';
-    
+    memset(url,0,sizeof(as_url_t));    
 }
 int32_t    as_parse_url(const char* url,as_url_t* info)
 {
