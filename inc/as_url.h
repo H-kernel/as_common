@@ -10,7 +10,7 @@ extern "C" {
 #include "as_common.h"
 #include <stdint.h>
 #include <stdio.h>
-#include <signal.h
+#include <signal.h>
 
 #define AS_UNESCAPE_URI       1
 #define AS_UNESCAPE_REDIRECT  2
