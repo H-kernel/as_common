@@ -21,10 +21,26 @@ extern "C" {
 #include <unistd.h>
 #endif
 
-
 #include <errno.h>
 
 static uint32_t g_ulSysStart = 0 ;
+
+typedef struct _AS_TIMESTR_STRUCT
+{
+    uint8_t Year[4];
+    uint8_t Month[2];
+    uint8_t Day[2];
+    uint8_t Hour[2];
+    uint8_t Minute[2];
+    uint8_t Second[2];
+}AS_TIMESTR_STRUCT, *PAS_TIMESTR_STRUCT;
+
+typedef struct _EDGE_STR_HH24MISS_STRUCT
+{
+    char Hour[2];
+    char Min[2];
+    char Sec[2];
+}AS_STR_HH24MISS_STRUCT, *PAS_STR_HH24MISS_STRUCT;
 
 
 uint32_t as_get_ticks (void)
@@ -85,8 +101,7 @@ struct tm* as_Localtime(time_t* ulTime)
 }
 
 
-//����20040629182030��ʱ�䴮ת��������Ϊ��λ������ʱ��,
-//���Թ��ʱ�׼ʱ�乫Ԫ1970��1��1��00:00:00����������������
+//YYYYMMDDHHmmSS
 time_t as_str2time(const char *pStr)
 {
     struct tm tmvalue;
@@ -127,7 +142,207 @@ time_t as_str2time(const char *pStr)
     return mktime(&tmvalue);
 }
 
+time_t as_gwtime2sdtime(const time_t gwTime)
+{
+    struct tm tmv;
+    char buff[15] = {0,};
+    (void)gmtime_r(&gwTime,&tmv);
+    (void)strftime(buff,sizeof(buff),"%Y%m%d%H%M%S",&tmv);
+    return str2time(buff);
+}
 
+time_t as_stdstr2time(const char *pStr)
+{
+    struct tm tmvalue;
+
+    (void)memset(&tmvalue, 0, sizeof(tmvalue));
+
+    const char *pch = pStr;
+    char tmpstr[8];
+    memcpy(tmpstr, pch, 4);
+    tmpstr[4] = '\0';
+    tmvalue.tm_year = atoi(tmpstr) - 1900;
+    pch += 5;
+
+    memcpy(tmpstr, pch, 2);
+    tmpstr[2] = '\0';
+    tmvalue.tm_mon = atoi(tmpstr) - 1;
+    pch += 3;
+
+    memcpy(tmpstr, pch, 2);
+    tmpstr[2] = '\0';
+    tmvalue.tm_mday = atoi(tmpstr);
+    pch += 3;
+
+    memcpy(tmpstr, pch, 2);
+    tmpstr[2] = '\0';
+    tmvalue.tm_hour = atoi(tmpstr);
+    pch += 3;
+
+    memcpy(tmpstr, pch, 2);
+    tmpstr[2] = '\0';
+    tmvalue.tm_min = atoi(tmpstr);
+    pch += 3;
+
+    memcpy(tmpstr, pch, 2);
+    tmpstr[2] = '\0';
+    tmvalue.tm_sec = atoi(tmpstr);
+
+    return mktime(&tmvalue);
+}
+
+
+char* as_time2manstr(char *pDestBuf, int32_t nbuflen, const time_t t)
+{
+    struct tm tmv;
+    (void)localtime_r(&t, &tmv );
+
+    (void)snprintf(   pDestBuf,
+                        (size_t)nbuflen,
+                        "%04d-%02d-%02d %02d:%02d:%02d",
+                        tmv.tm_year + 1900,
+                        tmv.tm_mon + 1,
+                        tmv.tm_mday,
+                        tmv.tm_hour,
+                        tmv.tm_min,
+                        tmv.tm_sec);
+
+    return pDestBuf;
+}
+char *as_time2str(char *pDestBuf, int32_t nbuflen, const time_t *calptr)
+{
+    struct tm tmv;
+
+    (void)localtime_r( calptr, &tmv );
+
+    (void)snprintf(pDestBuf,
+                     (size_t)nbuflen,
+                     "%04d%02d%02d%02d%02d%02d",
+                     tmv.tm_year + 1900,
+                     tmv.tm_mon + 1,
+                     tmv.tm_mday,
+                     tmv.tm_hour,
+                     tmv.tm_min,
+                     tmv.tm_sec);
+
+    return pDestBuf;
+}
+
+char *as_time2str(char *pDestBuf, int32_t nbuflen, const time_t t)
+{
+    struct tm tmv;
+
+    (void)localtime_r( &t, &tmv );
+
+    (void)snprintf(pDestBuf,
+                     (size_t)nbuflen,
+                     "%04d%02d%02d%02d%02d%02d",
+                     tmv.tm_year + 1900,
+                     tmv.tm_mon + 1,
+                     tmv.tm_mday,
+                     tmv.tm_hour,
+                     tmv.tm_min,
+                     tmv.tm_sec);
+
+    return pDestBuf;
+}
+
+char *as_time2stdstr(char *pDestBuf, int32_t nbuflen, const time_t t)
+{
+    struct tm tmv;
+
+    (void)localtime_r( &t, &tmv );
+
+    (void)snprintf(pDestBuf,
+                     (size_t)nbuflen,
+                     "%04d-%02d-%02d %02d:%02d:%02d",
+                     tmv.tm_year + 1900,
+                     tmv.tm_mon + 1,
+                     tmv.tm_mday,
+                     tmv.tm_hour,
+                     tmv.tm_min,
+                     tmv.tm_sec);
+
+    return pDestBuf;
+}
+char *as_time2stdstrwith_t(char *pDestBuf, int32_t nbuflen, const time_t t)
+{
+    struct tm tmv;
+
+    (void)localtime_r( &t, &tmv );
+
+    (void)snprintf(pDestBuf,
+                     (size_t)nbuflen,
+                     "%04d-%02d-%02dT%02d:%02d:%02d",
+                     tmv.tm_year + 1900,
+                     tmv.tm_mon + 1,
+                     tmv.tm_mday,
+                     tmv.tm_hour,
+                     tmv.tm_min,
+                     tmv.tm_sec);
+
+    return pDestBuf;
+}
+
+
+char *as_time2with_str(char *pDestBuf, int32_t nbuflen, const time_t *calptr)
+{
+    struct tm tmv;
+
+    (void)localtime_r( calptr, &tmv );
+
+    (void)snprintf(   pDestBuf,
+                        (size_t)nbuflen,
+                        "%04d_%02d_%02d_%02d_%02d_%02d",
+                        tmv.tm_year + 1900,
+                        tmv.tm_mon + 1,
+                        tmv.tm_mday,
+                        tmv.tm_hour,
+                        tmv.tm_min,
+                        tmv.tm_sec);
+
+    return pDestBuf;
+}
+time_t as_hh24miss2second(const char *strTime)
+{
+    if (NULL == strTime)
+    {
+        return 0;
+    }
+
+    const int32_t hh24missLen = 6;
+    char buf[24];
+    (void)memcpy(buf, strTime, hh24missLen);
+    buf[hh24missLen] = '\0';
+    time_t ret = atoi(((PAS_STR_HH24MISS_STRUCT)buf)->Sec);  //seconds
+
+    if ((0 > ret) || (60 <= ret))
+    {
+        return 0;
+    }
+
+    {
+        ((PAS_STR_HH24MISS_STRUCT)buf)->Sec[0] = '\0';
+        time_t tmMinute = atoi(((PAS_STR_HH24MISS_STRUCT)buf)->Min);
+
+        if ((0 > tmMinute) || (60 <= tmMinute))
+        {
+            return 0;
+        }
+
+        ret += (tmMinute * 60);
+
+        ((PAS_STR_HH24MISS_STRUCT)buf)->Min[0] = '\0';
+        time_t tmHour = atoi(((PAS_STR_HH24MISS_STRUCT)buf)->Hour);  //Сʱ
+
+        if ((0 > tmHour) || (24 < tmHour))
+        {
+            return 0;
+        }
+        ret += (tmHour * 60 * 60);
+    }
+    return ret;
+}
 #ifdef __cplusplus
 #if __cplusplus
 }

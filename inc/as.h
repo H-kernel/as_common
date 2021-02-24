@@ -23,6 +23,7 @@ extern "C" {
 #include "as_dlfcn.h"
 #include "as_url.h"
 #include "as_string.h"
+#include "as_filesys.h"
 
 #ifdef __cplusplus
 #if __cplusplus
