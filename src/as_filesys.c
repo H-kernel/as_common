@@ -106,21 +106,18 @@ int32_t as_remove_dir(const char *dir)
             continue;
         }
 
-        // ��Ŀ¼��ֱ��ɾ��
         (void)snprintf(strBuffer, sizeof(strBuffer),
                            "%s/%s",
                            dir,
                            pDirent->d_name);
-        if(!is_directory(strBuffer))
+        if(AS_FALSE == as_is_directory(strBuffer))
         {
             (void)::unlink(strBuffer);
             continue;
         }
         
-        /* delete the subfile and dir */
-        (void)remove_dir(strBuffer);
+        (void)as_remove_dir(strBuffer);
     }
-    // �ر�Ŀ¼
     (void)::closedir(pDir);
     ::rmdir(dir);
     return 0;
