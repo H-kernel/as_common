@@ -142,15 +142,6 @@ time_t as_str2time(const char *pStr)
     return mktime(&tmvalue);
 }
 
-time_t as_gwtime2sdtime(const time_t gwTime)
-{
-    struct tm tmv;
-    char buff[15] = {0,};
-    (void)gmtime_r(&gwTime,&tmv);
-    (void)strftime(buff,sizeof(buff),"%Y%m%d%H%M%S",&tmv);
-    return as_str2time(buff);
-}
-
 time_t as_stdstr2time(const char *pStr)
 {
     struct tm tmvalue;
