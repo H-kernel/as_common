@@ -96,10 +96,37 @@ AS_BOOLEAN as_is_directory(const char *strDir)
 
 int32_t as_remove_dir(const char *dir)
 {
+    char strBuffer[AS_MAX_FILE_PATH_LEN];
+    char szCurPath[AS_MAX_FILE_PATH_LEN];
+#if AS_APP_OS == AS_OS_WIN32
+    _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", dir);    //匹配格式为*.*,即该目录下的所有文件
+    WIN32_FIND_DATAA FindFileData;
+    ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
+    HANDLE hFile = FindFirstFileA(szCurPath, &FindFileData);
+    BOOL IsFinded = TRUE;
+    while (IsFinded)
+    {
+        IsFinded = FindNextFileA(hFile, &FindFileData);    //递归搜索其他的文件
+        if (strcmp(FindFileData.cFileName, ".") && strcmp(FindFileData.cFileName, "..")) //如果不是"." ".."目录
+        {
+            _snprintf(strBuffer, AS_MAX_FILE_PATH_LEN, "%s//%s", dir，FindFileData.cFileName); 
+            if (AS_TRUE == as_is_directory(strBuffer)) //如果是目录，则递归地调用
+            {
+                as_remove_dir(strBuffer);
+            }
+            else
+            {
+                DeleteFileA(strBuffer);
+            }
+        }
+    }
+    FindClose(hFile);
 
+    RemoveDirectoryA(dir);
+    
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     DIR* pDir = NULL;
     struct dirent *pDirent = NULL;
-    char strBuffer[AS_MAX_FILE_PATH_LEN];
 
     if (NULL == (pDir = ::opendir(dir)))
     {
@@ -127,7 +154,8 @@ int32_t as_remove_dir(const char *dir)
     }
     (void)::closedir(pDir);
     ::rmdir(dir);
-    return 0;
+#endif
+    return AS_ERROR_CODE_OK;
 }
 
 int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
