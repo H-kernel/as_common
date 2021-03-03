@@ -195,8 +195,11 @@ time_t as_stdstr2time(const char *pStr)
 char* as_time2manstr(char *pDestBuf, int32_t nbuflen, const time_t t)
 {
     struct tm tmv;
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,&t);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
     (void)localtime_r(&t, &tmv );
-
+#endif
     (void)snprintf(   pDestBuf,
                         (size_t)nbuflen,
                         "%04d-%02d-%02d %02d:%02d:%02d",
@@ -214,8 +217,11 @@ char *as_time2str(char *pDestBuf, int32_t nbuflen, const time_t t)
 {
     struct tm tmv;
 
-    (void)localtime_r( &t, &tmv );
-
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,&t);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
+    (void)localtime_r(&t, &tmv );
+#endif
     (void)snprintf(pDestBuf,
                      (size_t)nbuflen,
                      "%04d%02d%02d%02d%02d%02d",
@@ -233,8 +239,11 @@ char *as_time2stdstr(char *pDestBuf, int32_t nbuflen, const time_t t)
 {
     struct tm tmv;
 
-    (void)localtime_r( &t, &tmv );
-
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,&t);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
+    (void)localtime_r(&t, &tmv );
+#endif
     (void)snprintf(pDestBuf,
                      (size_t)nbuflen,
                      "%04d-%02d-%02d %02d:%02d:%02d",
@@ -251,8 +260,11 @@ char *as_time2stdstrwith_t(char *pDestBuf, int32_t nbuflen, const time_t t)
 {
     struct tm tmv;
 
-    (void)localtime_r( &t, &tmv );
-
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,&t);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
+    (void)localtime_r(&t, &tmv );
+#endif
     (void)snprintf(pDestBuf,
                      (size_t)nbuflen,
                      "%04d-%02d-%02dT%02d:%02d:%02d",
@@ -271,8 +283,11 @@ char *as_time2with_str(char *pDestBuf, int32_t nbuflen, const time_t *calptr)
 {
     struct tm tmv;
 
-    (void)localtime_r( calptr, &tmv );
-
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,calptr);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
+    (void)localtime_r(calptr, &tmv );
+#endif
     (void)snprintf(   pDestBuf,
                         (size_t)nbuflen,
                         "%04d_%02d_%02d_%02d_%02d_%02d",
