@@ -11,6 +11,7 @@
         "time.h": "c",
         "as_filesys.h": "c",
         "types.h": "c",
-        "dirent.h": "c"
+        "dirent.h": "c",
+        "stdlib.h": "c"
     }
 }

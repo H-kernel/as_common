@@ -11,9 +11,10 @@ extern "C" {
 #include <sys/time.h>
 #include <pthread.h>
 #include <errno.h>
+#include <unistd.h>
 #endif
 #include <stdlib.h>
-#include <unistd.h>
+
 #include <sys/stat.h>
 #include <fcntl.h>
 
