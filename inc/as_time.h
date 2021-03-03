@@ -17,7 +17,6 @@ uint32_t   as_get_cur_msecond(void);
 void       as_strftime(char * pszTimeStr, uint32_t ulLens, char* pszFormat, time_t ulTime);
 time_t     as_str2time(const char *pStr);//YYYYMMDDHHmmSS
 struct tm* as_Localtime(time_t* ulTime);
-time_t     as_gwtime2sdtime(const time_t gwTime);
 time_t     as_stdstr2time(const char *pStr);//YYYY-MM-DD HH:mm:SS
 char*      as_time2manstr(char *pDestBuf, int32_t nbuflen, const time_t t);
 char*      as_time2str(char *pDestBuf, int32_t nbuflen, const time_t t);
