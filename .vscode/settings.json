@@ -13,6 +13,8 @@
         "types.h": "c",
         "dirent.h": "c",
         "stdlib.h": "c",
-        "typeinfo": "c"
+        "typeinfo": "c",
+        "initializer_list": "c",
+        "utility": "c"
     }
 }

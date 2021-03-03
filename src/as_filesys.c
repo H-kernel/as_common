@@ -233,7 +233,11 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
         if ((S_ISREG(info.st_mode)) && (NULL != ctx->file_handler)) {
 
             ctx->size    = info.st_size;
+#if AS_APP_OS == AS_OS_WIN32
+            ctx->fs_size = info.st_size;
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
             ctx->fs_size = (info.st_size < info.st_blocks * 512) ? (info.st_blocks * 512) : (info.st_size);
+#endif
             ctx->access  = info.st_mode & 0777;
             ctx->mtime   = info.st_mtime;
 
