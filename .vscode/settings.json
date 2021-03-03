@@ -12,6 +12,7 @@
         "as_filesys.h": "c",
         "types.h": "c",
         "dirent.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "typeinfo": "c"
     }
 }

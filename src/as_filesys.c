@@ -99,18 +99,18 @@ int32_t as_remove_dir(const char *dir)
     char strBuffer[AS_MAX_FILE_PATH_LEN];
     char szCurPath[AS_MAX_FILE_PATH_LEN];
 #if AS_APP_OS == AS_OS_WIN32
-    _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", dir);    //匹配格式为*.*,即该目录下的所有文件
+    _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", dir);
     WIN32_FIND_DATAA FindFileData;
     ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
     HANDLE hFile = FindFirstFileA(szCurPath, &FindFileData);
     BOOL IsFinded = TRUE;
     while (IsFinded)
     {
-        IsFinded = FindNextFileA(hFile, &FindFileData);    //递归搜索其他的文件
-        if (strcmp(FindFileData.cFileName, ".") && strcmp(FindFileData.cFileName, "..")) //如果不是"." ".."目录
+        IsFinded = FindNextFileA(hFile, &FindFileData);
+        if (strcmp(FindFileData.cFileName, ".") && strcmp(FindFileData.cFileName, "..")) 
         {
-            _snprintf(strBuffer, AS_MAX_FILE_PATH_LEN, "%s//%s", dir，FindFileData.cFileName); 
-            if (AS_TRUE == as_is_directory(strBuffer)) //如果是目录，则递归地调用
+            _snprintf(strBuffer, AS_MAX_FILE_PATH_LEN, "%s//%s", dir,FindFileData.cFileName); 
+            if (AS_TRUE == as_is_directory(strBuffer))
             {
                 as_remove_dir(strBuffer);
             }
@@ -123,7 +123,7 @@ int32_t as_remove_dir(const char *dir)
     FindClose(hFile);
 
     RemoveDirectoryA(dir);
-    
+
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     DIR* pDir = NULL;
     struct dirent *pDirent = NULL;
@@ -163,20 +163,37 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
     char            *name;
     size_t           len;
     int              rc;
-    int32_t          err;
+    int32_t          err;    
+    char             path[AS_MAX_FILE_PATH_LEN] = {0};
+    char             szCurPath[AS_MAX_FILE_PATH_LEN];
+
+    rc = AS_ERROR_CODE_OK;
+
+ #if AS_APP_OS == AS_OS_WIN32
+    BOOL IsFinded = TRUE;
+    struct _stat info;
+    _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", tree);
+    WIN32_FIND_DATAA FindFileData;
+    ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
+    HANDLE hFile = FindFirstFileA(szCurPath, &FindFileData);
+ #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX   
     DIR             *dir;
     struct dirent   *de;
     struct stat      info;
-    char             path[AS_MAX_FILE_PATH_LEN] = {0};
-    
-    rc = AS_ERROR_CODE_OK;
-
     dir = opendir(tree);
     if (NULL == dir) {
         return AS_ERROR_CODE_FAIL;
     }
-
+#endif
     for ( ;; ) {
+#if AS_APP_OS == AS_OS_WIN32
+    if(IsFinded) {
+        goto done;
+    }
+    IsFinded = FindNextFileA(hFile, &FindFileData);    
+    name = (char*)&FindFileData.cFileName[0];
+    len = strlen(name);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
         errno = 0;
         de = readdir(dir);
 
@@ -193,7 +210,7 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
 
         len = strlen(de->d_name);
         name = (char*)de->d_name;
-
+#endif
         if (len == 1 && name[0] == '.') {
             continue;
         }
@@ -202,12 +219,17 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
             continue;
         }
 
-        snprintf(path,AS_MAX_FILE_PATH_LEN,"%s/%s",tree,de->d_name);
-
+        snprintf(path,AS_MAX_FILE_PATH_LEN,"%s/%s",tree,name);
+#if AS_APP_OS == AS_OS_WIN32
+        if(0 != _stat(path, &info))
+        {
+            return AS_FALSE;
+        }
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
         if( -1 == stat((const char *)&path[0],&info)) {
             return AS_ERROR_CODE_FAIL;
         }
-
+#endif
         if ((S_ISREG(info.st_mode)) && (NULL != ctx->file_handler)) {
 
             ctx->size    = info.st_size;
@@ -260,10 +282,13 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
 failed:
     rc = AS_ERROR_CODE_ABORT;
 done:
+#if AS_APP_OS == AS_OS_WIN32
+    return rc;
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
     closedir(dir);
     dir = NULL;
-
     return rc;
+#endif
 }
 
 #ifdef __cplusplus
