@@ -75,11 +75,10 @@ int32_t as_mkdir_full(unsigned char *dir, uint32_t access)
 AS_BOOLEAN as_is_directory(const char *strDir) 
 {
 #if AS_APP_OS == AS_OS_WIN32
-    WIN32_FIND_DATAA FindFileData;
-    FindFirstFileA(strDir,&FindFileData);
-    if(FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    struct _stat sstat;
+    if(0 != _stat(strDir, &sstat))
     {
-        return AS_TRUE;
+        return AS_FALSE;
     }
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
     struct stat64 sstat;
@@ -87,12 +86,11 @@ AS_BOOLEAN as_is_directory(const char *strDir)
     {
         return AS_FALSE;
     }
-
+#endif
     if(0 != (S_IFDIR & sstat.st_mode))
     {
         return AS_TRUE;
     }
-#endif
     return AS_FALSE;
 }
 
