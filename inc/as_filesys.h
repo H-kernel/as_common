@@ -17,9 +17,9 @@ extern "C" {
 #include <windows.h>
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
 #include <pthread.h>
+#include <dirent.h>
 #endif
 #include <sys/types.h>
-#include <dirent.h>
 
 #define AS_MAX_FILE_PATH_LEN 512
 
