@@ -751,9 +751,11 @@ ASLOG_API void ASBackupLog(const char *strOldFileName)
     char strNewFileName[512];
     time_t t = time(NULL);
     struct tm tmv;
-
+#if AS_APP_OS == AS_OS_WIN32
+    (void)localtime_s( &tmv ,&t);
+#elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX  
     (void)localtime_r( &t, &tmv );
-
+#endif
     (void)snprintf(strNewFileName,
                      sizeof(strNewFileName),
                      "%s%04d_%02d_%02d_%02d_%02d_%02d",
