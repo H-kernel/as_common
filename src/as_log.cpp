@@ -16,7 +16,9 @@ extern "C"{
 #if AS_APP_OS == AS_OS_WIN32
 #include <libloaderapi.h>
 #include "atlstr.h"
+#include <time.h>
 #include <windows.h>
+#include <mmsystem.h>
 #endif
 
 #define ASLOG_ERROR_OK             0    
