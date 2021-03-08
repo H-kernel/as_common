@@ -59,17 +59,15 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     }
 
     sem_id_ = semget(key_, 0, 0);
-    if (sem_id_ == -1)
+    if (sem_id_ != -1)
     {
-        return AS_FALSE;
-    }
-
-    //union semun semctl_arg;
-    unsigned short array = NULL;
-    if(semctl(sem_id_, 0, GETVAL, array) > 0)
-    {
-        syslog(LOG_USER|LOG_WARNING,"A instance is running, semaphore ID[%d].", sem_id_);
-        return AS_FALSE;
+        //union semun semctl_arg;
+        unsigned short array = NULL;
+        if(semctl(sem_id_, 0, GETVAL, array) > 0)
+        {
+            syslog(LOG_USER|LOG_WARNING,"A instance is running, semaphore ID[%d].", sem_id_);
+            return AS_FALSE;
+        }
     }
 
     sem_id_ = semget(key_, 0, 0);
@@ -87,19 +85,11 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     buf[1].sem_op = 1;
     buf[1].sem_flg = SEM_UNDO;
 
-    if( semop(sem_id_, &buf[0], 2) == 0)
+    if( semop(sem_id_, &buf[0], 2) ！= 0)
     {
-        return AS_TRUE;
-    }
-    else {
         return AS_FALSE;
     }
 
-    if (0 != semop(sem_id_, &buf[0], 2))
-    {
-        syslog(LOG_USER|LOG_WARNING,"Fail to create semaphore to avoid re-run, semaphore ID[%d].", sem_id_);
-        return AS_FALSE;
-    }
     return AS_TRUE;
 }
 

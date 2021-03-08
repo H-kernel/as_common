@@ -128,12 +128,12 @@ int32_t as_remove_dir(const char *dir)
     DIR* pDir = NULL;
     struct dirent *pDirent = NULL;
 
-    if (NULL == (pDir = ::opendir(dir)))
+    if (NULL == (pDir = opendir(dir)))
     {
         return -1;
     }
 
-    while (NULL != (pDirent = ::readdir(pDir)))
+    while (NULL != (pDirent = readdir(pDir)))
     {
         if ( (0 == strcmp(pDirent->d_name, ".")) || (0 == strcmp(pDirent->d_name, "..")))
         {
@@ -146,14 +146,14 @@ int32_t as_remove_dir(const char *dir)
                            pDirent->d_name);
         if(AS_FALSE == as_is_directory(strBuffer))
         {
-            (void)::unlink(strBuffer);
+            (void)unlink(strBuffer);
             continue;
         }
         
         (void)as_remove_dir(strBuffer);
     }
-    (void)::closedir(pDir);
-    ::rmdir(dir);
+    (void)closedir(pDir);
+    rmdir(dir);
 #endif
     return AS_ERROR_CODE_OK;
 }
