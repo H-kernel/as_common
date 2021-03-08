@@ -85,7 +85,7 @@ AS_BOOLEAN onlyone_process(const char *strFileName,int32_t key)
     buf[1].sem_op = 1;
     buf[1].sem_flg = SEM_UNDO;
 
-    if( semop(sem_id_, &buf[0], 2) ！= 0)
+    if( semop(sem_id_, &buf[0], 2) != 0 )
     {
         return AS_FALSE;
     }
