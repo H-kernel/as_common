@@ -96,9 +96,9 @@ AS_BOOLEAN as_is_directory(const char *strDir)
 
 int32_t as_remove_dir(const char *dir)
 {
-    char strBuffer[AS_MAX_FILE_PATH_LEN];
-    char szCurPath[AS_MAX_FILE_PATH_LEN];
+    char strBuffer[AS_MAX_FILE_PATH_LEN];    
 #if AS_APP_OS == AS_OS_WIN32
+    char szCurPath[AS_MAX_FILE_PATH_LEN];
     _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", dir);
     WIN32_FIND_DATAA FindFileData;
     ZeroMemory(&FindFileData, sizeof(WIN32_FIND_DATAA));
@@ -165,11 +165,12 @@ int32_t as_walk_tree(as_tree_ctx_t *ctx, const char *tree)
     int              rc;
     int32_t          err;    
     char             path[AS_MAX_FILE_PATH_LEN] = {0};
-    char             szCurPath[AS_MAX_FILE_PATH_LEN];
+    
 
     rc = AS_ERROR_CODE_OK;
 
  #if AS_APP_OS == AS_OS_WIN32
+    char             szCurPath[AS_MAX_FILE_PATH_LEN];
     BOOL IsFinded = TRUE;
     struct _stat info;
     _snprintf(szCurPath, AS_MAX_FILE_PATH_LEN, "%s//*.*", tree);
