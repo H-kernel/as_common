@@ -62,6 +62,8 @@
 		0463CDAB25CC1176008903CD /* as_timer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0463CD9325CC1175008903CD /* as_timer.cpp */; };
 		0463CDAC25CC1176008903CD /* as_tinyxml2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0463CD9425CC1175008903CD /* as_tinyxml2.cpp */; };
 		0463CDAD25CC1176008903CD /* as_url.c in Sources */ = {isa = PBXBuildFile; fileRef = 0463CD9525CC1175008903CD /* as_url.c */; };
+		049258E525FB04B900CF0D5A /* as_filesys.h in Headers */ = {isa = PBXBuildFile; fileRef = 049258E425FB04B900CF0D5A /* as_filesys.h */; };
+		049258E825FB04CC00CF0D5A /* as_filesys.c in Sources */ = {isa = PBXBuildFile; fileRef = 049258E725FB04CC00CF0D5A /* as_filesys.c */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -121,6 +123,8 @@
 		0463CD9325CC1175008903CD /* as_timer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = as_timer.cpp; sourceTree = "<group>"; };
 		0463CD9425CC1175008903CD /* as_tinyxml2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = as_tinyxml2.cpp; sourceTree = "<group>"; };
 		0463CD9525CC1175008903CD /* as_url.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = as_url.c; sourceTree = "<group>"; };
+		049258E425FB04B900CF0D5A /* as_filesys.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = as_filesys.h; sourceTree = "<group>"; };
+		049258E725FB04CC00CF0D5A /* as_filesys.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = as_filesys.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -154,6 +158,7 @@
 		0463CD3D25CC116A008903CD /* inc */ = {
 			isa = PBXGroup;
 			children = (
+				049258E425FB04B900CF0D5A /* as_filesys.h */,
 				0463CD3E25CC116A008903CD /* as.h */,
 				0463CD3F25CC116A008903CD /* as_atomic.h */,
 				0463CD4025CC116A008903CD /* as_base64.h */,
@@ -193,6 +198,7 @@
 		0463CD7D25CC1175008903CD /* src */ = {
 			isa = PBXGroup;
 			children = (
+				049258E725FB04CC00CF0D5A /* as_filesys.c */,
 				0463CD7E25CC1175008903CD /* as_base64.c */,
 				0463CD7F25CC1175008903CD /* as_buffer_cache.cpp */,
 				0463CD8025CC1175008903CD /* as_daemon.c */,
@@ -249,6 +255,7 @@
 				0463CD6725CC116A008903CD /* as_http_digest.h in Headers */,
 				0463CD6625CC116A008903CD /* as_event.h in Headers */,
 				0463CD6125CC116A008903CD /* as_buffer_cache.h in Headers */,
+				049258E525FB04B900CF0D5A /* as_filesys.h in Headers */,
 				0463CD7A25CC116A008903CD /* as_tinyxml2.h in Headers */,
 				0463CD6325CC116A008903CD /* as_config.h in Headers */,
 				0463CD7925CC116A008903CD /* as_timer.h in Headers */,
@@ -340,6 +347,7 @@
 				0463CD9E25CC1175008903CD /* as_lock_guard.cpp in Sources */,
 				0463CD9625CC1175008903CD /* as_base64.c in Sources */,
 				0463CDA325CC1175008903CD /* as_queue_safe.c in Sources */,
+				049258E825FB04CC00CF0D5A /* as_filesys.c in Sources */,
 				0463CD9D25CC1175008903CD /* as_json.c in Sources */,
 				0463CDAC25CC1176008903CD /* as_tinyxml2.cpp in Sources */,
 				0463CDAD25CC1176008903CD /* as_url.c in Sources */,

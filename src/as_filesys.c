@@ -81,8 +81,8 @@ AS_BOOLEAN as_is_directory(const char *strDir)
         return AS_FALSE;
     }
 #elif (AS_APP_OS & AS_OS_UNIX) == AS_OS_UNIX
-    struct stat64 sstat;
-    if(0 != stat64(strDir, &sstat))
+    struct stat sstat;
+    if(0 != stat(strDir, &sstat))
     {
         return AS_FALSE;
     }
